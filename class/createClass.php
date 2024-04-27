@@ -139,10 +139,37 @@ input[type="submit"]:active {
                 <input type="text" name="classSection" />
 
                 <p>Eg- A, B, C etc </p>
-                <input type="submit" name="sumbit" />
+                <input type="submit" name="submit" />
             </form>
         </div>
     </div>
 </body>
 
 </html>
+
+<?php
+include("connection.php");
+if (isset($_POST['submit'])) {
+
+    $className = $_POST['className'];
+    $classSection = $_POST['classSection'];
+
+
+
+    $query = "INSERT INTO tbl_classes ('className','classSection') VALUES ($className, $classSection)";
+
+    $data = mysqli_query($conn, $query);
+
+   if($data){
+    echo "<script>alert('Data inserted to tbl_classes ');</script>";
+   }
+   else{
+    echo "<script>alert('fail to insert Data');</script>";
+   }
+
+}
+
+    
+
+
+?>
