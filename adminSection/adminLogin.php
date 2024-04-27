@@ -6,7 +6,7 @@ if(isset($_SESSION['$username']))
     header("loacation:dashboard.php");
 }
 
-include("includes/connection.php");
+include("connection.php");
 
 
 if (isset($_POST['login'])) {
@@ -46,7 +46,7 @@ if (isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login page</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="adminLogin.css">
 </head>
 
 <body>

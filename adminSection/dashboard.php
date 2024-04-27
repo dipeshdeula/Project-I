@@ -148,10 +148,10 @@
                 <li class="has-children" onclick="toggleChildNav(this)">
                     <a href="#"><i class='bi bi-journal-text'></i><span>Subjects</span></a>
                     <ul class="child-nav">
-                        <li><a href="#" onclick="loadContent('subject/createSubject.php')"><i class="fa fa-bars"></i> Create Subject</a></li>
-                        <li><a href="#" onclick="loadContent('subject/manageSubject.php')"><i class="fa fa-server"></i> Manage Subject</a></li>
-                        <li><a href="#" onclick="loadContent('subject/addSubjectCombination.php')"><i class="fa fa-newspaper-o"></i> Add Subject Combination</a></li>
-                        <li><a href="#" onclick="loadContent('subject/manageSubjectCombination.php')"><i class="fa fa-newspaper-o"></i> Manage Subject Combination</a></li>
+                        <li><a href="#" onclick="loadContent('http://localhost/student_project/subject/manageSubject.php')"><i class="fa fa-server"></i> Manage Subject</a></li>
+                        <li><a href="#" onclick="loadContent('http://localhost/student_project/subject/addSubjectCombination.php')"><i class="fa fa-newspaper-o"></i> Add Subject Combination</a></li>
+                        <li><a href="#" onclick="loadContent('http://localhost/student_project/subject/manageSubject.php')"><i class="fa fa-newspaper-o"></i> Manage Subject Combination</a></li>
+                        <li><a href="#" onclick="loadContent('http://localhost/student_project/subject/createSubject.php')"><i class="fa fa-bars"></i> Create Subject</a></li>
                     </ul>
                 </li>
 
@@ -159,8 +159,8 @@
                 <li class="has-children" onclick="toggleChildNav(this)">
                     <a href="#"><i class='bi bi-person'></i><span>Students</span></a>
                     <ul class="child-nav">
-                        <li><a href="#" onclick="loadContent('http://localhost/student_project/student/manageStudent.php')"><i class="fa fa-bars"></i> Add Student</a></li>
-                        <li><a href="#" onclick="loadContent('student/manageStudent.php')"><i class="fa fa-server"></i> Manage Students</a></li>
+                        <li><a href="#" onclick="loadContent('http://localhost/student_project/student/addStudent.php')"><i class="fa fa-bars"></i> Add Student</a></li>
+                        <li><a href="#" onclick="loadContent('http://localhost/student_project/student/manageStudent.php')"><i class="fa fa-server"></i> Manage Students</a></li>
                     </ul>
                 </li>
 
@@ -168,8 +168,8 @@
                 <li class="has-children" onclick="toggleChildNav(this)">
                     <a href="#"><i class='bi bi-bar-chart'></i><span>Results</span></a>
                     <ul class="child-nav">
-                        <li><a href="#" onclick="loadContent('result/addResult.php')"><i class="fa fa-bars"></i> Add Result</a></li>
-                        <li><a href="#" onclick="loadContent('result/manageResult.php')"><i class="fa fa-server"></i> Manage Result</a></li>
+                        <li><a href="#" onclick="loadContent('http://localhost/student_project/result/addResult.php')"><i class="fa fa-bars"></i> Add Result</a></li>
+                        <li><a href="#" onclick="loadContent('http://localhost/student_project/manageStudent.php')"><i class="fa fa-server"></i> Manage Result</a></li>
                     </ul>
                 </li>
 
