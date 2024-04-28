@@ -1,3 +1,12 @@
+<?php
+session_start();
+if(!isset($_SESSION['className']))
+{
+    header("Location:adminLogin.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -155,9 +164,12 @@ if (isset($_POST['submit'])) {
     $className = $_POST['className'];
     $classSection = $_POST['classSection'];
 
+    $_SESSION['className'] = $className;
 
 
-    $query = "INSERT INTO tbl_classes ('className','classSection') VALUES ($className, $classSection)";
+
+    $query = "INSERT INTO tbl_classes (className,classSection) VALUES ('$className', '$classSection')";
+    echo $query;
 
     $data = mysqli_query($conn, $query);
 
