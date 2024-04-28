@@ -10,122 +10,138 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-       /* Global Styling */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5; /* Light gray background */
-}
+      /* Global Styling */
+      body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5; /* Light gray background */
+        }
 
-/* Header Styling */
-header {
-    background-color: #0072ff; /* Dark blue */
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px; /* Space below header */
-    overflow: hidden;
-}
+        /* Header Styling */
+        header {
+            background-color: #0072ff; /* Dark blue */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px; /* Space below header */
+            overflow: hidden;
+        }
 
-/* Navigation Styling */
-.nav {
-    padding: 10px 20px; /* Padding around navigation */
-    background: #333; /* Dark gray background */
-    overflow: hidden;
-}
+        /* Navigation Styling */
+        .nav {
+            padding: 10px 20px; /* Padding around navigation */
+            background: #333; /* Dark gray background */
+            overflow: hidden;
+        }
 
-.nav a {
-    color: white; /* White text color */
-    text-decoration: none; /* No underline */
-    transition: all 0.3s ease;
-}
+        .nav a {
+            color: white; /* White text color */
+            text-decoration: none; /* No underline */
+            transition: all 0.3s ease;
+        }
 
-.nav a:hover {
-    text-decoration: underline; /* Underline on hover */
-}
+        .nav a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
 
-/* Breadcrumb Styling */
-.breadcrumb {
-    padding: 10px; /* Padding inside breadcrumb */
-    background: none; /* No background */
-}
+        /* Breadcrumb Styling */
+        .breadcrumb {
+            padding: 10px; /* Padding inside breadcrumb */
+            background: none; /* No background */
+            margin-bottom: 20px; /* Space below breadcrumb */
+        }
 
-.breadcrumb-item {
-    margin-right: 10px; /* Space between breadcrumb items */
-}
+        .breadcrumb-item {
+            margin-right: 10px; /* Space between breadcrumb items */
+        }
 
-/* Container Layout */
-.container {
-    max-width: 1200px; /* Maximum width */
-    margin: 20px auto; /* Center container */
-    padding: 20px; /* Padding around container */
-    background: white; /* White background */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
-}
+        /* Container Layout */
+        .container {
+            max-width: 1200px; /* Maximum width */
+            margin: 20px auto; /* Center container */
+            padding: 20px; /* Padding around container */
+            background: white; /* White background */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
+        }
 
-/* Form Styling */
-.form {
-    margin-bottom: 20px; /* Space below form */
-}
+        /* Form Styling */
+        .form {
+            margin-bottom: 20px; /* Space below form */
+        }
 
-.form input[type="search"] {
-    display: flex;
-    padding: 8px 12px; /* Padding for search input */
-    border: 1px solid #ccc; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    width: 35%; /* Full width */
-    box-sizing: border-box; /* Include padding in width */
-    margin: 12px 0;
+        .form input[type="search"] {
+            padding: 8px 12px; /* Padding for search input */
+            border: 1px solid #ccc; /* Border color */
+            border-radius: 5px; /* Rounded corners */
+            width: 100%; /* Full width */
+            box-sizing: border-box; /* Include padding in width */
+        }
 
+        .form select {
+            padding: 8px 12px; /* Padding for select */
+            border: 1px solid #ccc; /* Border color */
+            border-radius: 5px; /* Rounded corners */
+        }
 
-}
+        /* Table Design */
+        table {
+            width: 100%; /* Full width */
+            border-collapse: collapse; /* Collapse borders */
+            text-align: left; /* Align text to the left */
+            background: white; /* Background for table */
+        }
 
-/* Table Design */
-table {
-    width: 100%; /* Full width */
-    border-collapse: collapse; /* Collapse borders */
-    text-align: left; /* Align text to the left */
-}
+        table th,
+        table td {
+            padding: 10px; /* Padding around table cells */
+            border: 1px solid #ddd; /* Border color */
+        }
 
-table th, table td {
-    padding: 10px; /* Padding around table cells */
-    border: 1px solid #ddd; /* Border color */
-}
+        table th {
+            background-color: #f0f0f0; /* Light gray background for header */
+        }
 
-table th {
-    background-color: #f0f0f0; /* Light gray background for header */
-}
+        /* Responsive Design with Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px; /* Reduced padding for smaller screens */
+            }
 
-/* Responsive Design with Media Queries */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px; /* Reduced padding for smaller screens */
-    }
+            .breadcrumb {
+                font-size: 14px; /* Smaller font size */
+            }
 
-    .breadcrumb {
-        font-size: 14px; /* Smaller font size */
-    }
+            .form input[type="search"] {
+                width: 100%; /* Full width for smaller screens */
+            }
 
-    .form input[type="search"] {
-        width: 100%; /* Full width for smaller screens */
-    }
+            table {
+                overflow-x: auto; /* Horizontal scrolling for small screens */
+                display: block; /* Ensure table is block-level for scrolling */
+            }
 
-    table {
-        overflow-x: auto; /* Horizontal scrolling for small screens */
-        display: block; /* Ensure table is block-level for scrolling */
-    }
-}
+            table th,
+            table td {
+                padding: 8px; /* Adjusted padding for smaller screens */
+            }
 
+            /* Align actions vertically for smaller screens */
+            .actions {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 
 <body>
     <header>
-        
-    <h3>Manage Students </h3>
+
+        <h3>Manage Students </h3>
 
     </header>
 
@@ -146,38 +162,16 @@ table th {
     <div class="container">
         <div class="form">
             <form action="#" method=="POST">
-            <p>View Student Info </p>
-        Show <select name="" id=""></select> entries
-        <br><br>
-     <input type="search" placeholder="search" name="search" >
-     
-
-     <table>
-        <tr>
-            <th>StdId</th>
-            <th>Photo</th>
-            <th>Student Name</th>
-            <th>Roll NO.</th>
-            <th>Class</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Gender</th>
-            <th>D.O.B</th>
+                <p>View Student Info </p>
+                Show <select name="" id=""></select> entries
+                <br><br>
+                <input type="search" placeholder="search" name="search">
 
 
-
-
-        </tr>
-     </table>
-
-     <?php
-     
-     ?>
 
             </form>
         </div>
-       
+
 
     </div>
 
@@ -188,3 +182,60 @@ table th {
 </body>
 
 </html>
+
+<?php
+include ("../connection.php");
+
+//query to fetch all data from the 'tbl_student' table
+
+$query = "SELECT * FROM tbl_Student";
+
+//Execute the query
+$data = mysqli_query($conn, $query);
+
+// Check the number of rows returned
+$total = mysqli_num_rows($data);
+if ($total > 0) {
+    ?>
+    <table>
+        <tr>
+            <th>StdId</th>
+            <th>Photo</th>
+            <th>Student Name</th>
+            <th>Roll NO.</th>
+            <th>Class</th>
+            <th>Email</th>
+            <th>password</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Address</th>
+        </tr>
+    </table>
+
+
+    <?php
+
+    while($result = mysqli_fetch_assoc($data))
+    {
+        echo "<tr>
+        <td>" . $result['stdId'] . "</td>
+        <td><img src = '" . $result['std_image'] . "' height='100px' width='100px' /></td>
+        <td>" . $result['stdname'] . "</td>
+        <td>" . $result['class'] . "</td>
+        <td>" . $result['email'] . "</td>
+        <td>" . $result['password'] . "</td>
+        <td>" . $result['gender'] . "</td>
+        <td>" . $result['phone'] . "</td>
+        <td>" . $result['address'] . "</td>
+       
+        <td><a id='update' href='update.php?id=$result[stdId]'>
+        <input type='submit' value='update' class='update'></a>
+
+        <a id='update' href='delete.php?id=$result[stdId]'>
+        <input type='submit' value='delete' class='delete'
+         onclick = 'return checkdelete();' ></a>
+      
+       ";
+    }
+}
+?>
