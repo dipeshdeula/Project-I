@@ -6,7 +6,7 @@ if(isset($_SESSION['$username']))
     header("loacation:dashboard.php");
 }
 
-include("connection.php");
+include("../connection.php");
 
 
 if (isset($_POST['login'])) {

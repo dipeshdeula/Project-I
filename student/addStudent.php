@@ -1,6 +1,4 @@
-<?php
-include('connection.php');
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -341,8 +339,9 @@ include('connection.php');
 </html>
 
 <?php
-// include('./connection.php');
-// error_reporting(0);
+
+include("../connection.php");
+error_reporting(0);
 if(isset($_POST['register']))
 {
     //for uploading images
@@ -363,9 +362,7 @@ if(isset($_POST['register']))
 
     //connect database
 
-    $conn = mysqli_connect("localhost","root","","studentproject");
-
-    if($conn){
+    
 
         
     //server side validation
@@ -382,14 +379,17 @@ if(isset($_POST['register']))
        $query = "INSERT INTO tbl_student (std_image,stdname,stdId,
        email,password,gender, phone,address)
         VALUES 
-        ('$folder', '$stdname, '$stdId', '$email', '$password', '$gender',
-       '$phone','$address')";
+        ('$folder', '$stdname', '$stdId', '$email', '$password', '$gender',
+       '$phone','$address')" ;
 
+    // echo $query;
        $data = mysqli_query($conn, $query);
 
-       if($data)
+       $result = mysqli_num_rows($data);
+
+       if($result >0)
        {
-           echo "<script>alert('Data inserted into the Database');</script>";
+           echo "<script>alert('Student Info inserted into the Database');</script>";
        }
        else{
            echo "<script>alert('failed to insert data into the Database');</script>";
@@ -398,12 +398,7 @@ if(isset($_POST['register']))
 
 
     }
-    else{
-        die('connection failed');
-    }
-    
 
 
-}
 
 ?>

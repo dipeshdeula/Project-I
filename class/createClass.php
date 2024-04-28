@@ -148,7 +148,8 @@ input[type="submit"]:active {
 </html>
 
 <?php
-include("connection.php");
+
+include("../connection.php");
 if (isset($_POST['submit'])) {
 
     $className = $_POST['className'];

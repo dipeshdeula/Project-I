@@ -154,7 +154,7 @@ table th {
 
      <table>
         <tr>
-            <th>Id</th>
+            <th>StdId</th>
             <th>Photo</th>
             <th>Student Name</th>
             <th>Roll NO.</th>
@@ -166,8 +166,14 @@ table th {
             <th>D.O.B</th>
 
 
+
+
         </tr>
      </table>
+
+     <?php
+     
+     ?>
 
             </form>
         </div>

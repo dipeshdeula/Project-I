@@ -15,7 +15,8 @@
 </html>
 
 <?php
-include('connection.php');
+
+include("../connection.php");
 
 $query = "SELECT * FROM tbl_classes";
 
