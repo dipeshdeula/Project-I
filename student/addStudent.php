@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -142,15 +140,15 @@
             /* Include padding in width */
         }
 
-        .terms p{
-           
+        .terms p {
+
             display: flex;
             /* Use flexbox for alignment */
             align-items: center;
             /* Center checkbox and text */
-            margin:0px 12px;
+            margin: 0px 12px;
         }
-       
+
         .checkmark {
             width: 20px;
             /* Checkbox size */
@@ -229,7 +227,7 @@
 
             .textarea {
                 height: 60px;
-                width:auto;
+                width: auto;
                 resize: none;
                 /* Reduce height for smaller screens */
             }
@@ -292,6 +290,23 @@
                 </div>
 
                 <div class="input_field">
+                    <label>Class Name</label>
+                    <input type="text" class="input" name="classname">
+                </div>
+                <!-- <div class="input_field">
+                    <label for="className">Class</label>
+                    <div class="custom_select">
+                        <select name="className" id="className">
+                            <option value="Not Selected">Select</option>
+                            <option value="className">
+
+                            </option>
+                        </select>
+                    </div>
+
+                </div> -->
+
+                <div class="input_field">
                     <label>Gender</label>
                     <div class="custom_select">
                         <select name="gender">
@@ -315,10 +330,11 @@
 
                 <div class="input_field terms">
                     <label class="check">
-                        <input type="checkbox"><p>Agree to terms and conditions</p>
+                        <input type="checkbox">
+                        <p>Agree to terms and conditions</p>
 
                     </label>
-                  
+
                 </div>
 
                 <div class="input_field">
@@ -340,21 +356,21 @@
 
 <?php
 
-include("../connection.php");
+include ("../connection.php");
 error_reporting(0);
-if(isset($_POST['register']))
-{
+if (isset($_POST['register'])) {
     //for uploading images
 
     $filename = $_FILES["uploadfile"]["name"];
     $tempname = $_FILES["uploadfile"]["tmp_name"];
-    $folder = "images/".$filename;
-    move_uploaded_file($tempname,$folder);
+    $folder = "images/" . $filename;
+    move_uploaded_file($tempname, $folder);
 
     $stdname = $_POST['stdname'];
     $stdId = $_POST['stdId'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $classname = $_POST['classname'];
     $gender = $_POST['gender'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
@@ -362,42 +378,41 @@ if(isset($_POST['register']))
 
     //connect database
 
-    
 
-        
+
+
     //server side validation
 
-    if($stdname == null && $stdId == null && $email == null
-    &&  $password == null && $gender == null 
-    && $phone == null && $address==null){
+    if (
+        $stdname == null && $stdId == null && $email == null
+        && $password == null && $classname == null && $gender == null
+        && $phone == null && $address == null
+    ) {
 
-       echo "<script>alert('all form required to filled!!');</script>";
-    }
-    else{
-       //data insert into the database
+        echo "<script>alert('all form required to filled!!');</script>";
+    } else {
+        //data insert into the database
 
-       $query = "INSERT INTO tbl_student (std_image,stdname,stdId,
-       email,password,gender, phone,address)
+        $query = "INSERT INTO tbl_student (std_image,stdname,stdId,
+       email,password,classname,gender, phone,address)
         VALUES 
-        ('$folder', '$stdname', '$stdId', '$email', '$password', '$gender',
-       '$phone','$address')" ;
+        ('$folder', '$stdname', '$stdId', '$email', '$password','$classname' ,'$gender',
+       '$phone','$address')";
 
-    // echo $query;
-       $data = mysqli_query($conn, $query);
+        // echo $query;
+        $data = mysqli_query($conn, $query);
 
-       $result = mysqli_num_rows($data);
+        $result = mysqli_num_rows($data);
 
-       if($result >0)
-       {
-           echo "<script>alert('Student Info inserted into the Database');</script>";
-       }
-       else{
-           echo "<script>alert('failed to insert data into the Database');</script>";
-       }
+        if ($result > 0) {
+            echo "<script>alert('Student Info inserted into the Database');</script>";
+        } else {
+            echo "<script>alert('failed to insert data into the Database');</script>";
+        }
     }
 
 
-    }
+}
 
 
 
