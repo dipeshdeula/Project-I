@@ -196,12 +196,12 @@ input[type="submit"]:active {
 
                 <div class="input_field">
                     <label>Subject Name</label>
-                    <input type="text" name="subname" placeholder="Subject Name" />
+                    <input type="text" name="subName" placeholder="Subject Name" />
                 </div>
 
                 <div class="input_field">
                     <label>Subject Code</label>
-                    <input type="text" name="subcode" placeholder="Subject Code" />
+                    <input type="text" name="subCode" placeholder="Subject Code" />
                 </div>
             </div>
 
@@ -221,3 +221,39 @@ input[type="submit"]:active {
 </body>
 
 </html>
+
+<?php
+    include("../connection.php");
+    if(isset($_POST['register']))
+    {
+        $subName = $_POST['subName'];
+        $subCode = $_POST['subCode'];
+
+       
+         if($subName == null && $subCode == null)
+         { 
+            echo "<script>alert('All field are required to filled');</script>";
+
+         }
+         else{
+            $query = "INSERT INTO tbl_subjects (subCode,subName)
+            VALUES ('$subCode','$subName')";
+   
+            $data = mysqli_query($conn,$query);
+            if($data)
+            {
+                echo "<script>alert('Student Subject Created');</script>";
+
+            }
+            else{
+                echo "<script>alert('Unable to create student subject');</script>";
+            }
+   
+
+         }
+
+
+    }
+
+   
+?>
