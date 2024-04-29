@@ -11,153 +11,213 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-<style>
-    /* Global Styling */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5; /* Light gray background */
-}
+    <style>
+        /* Global Styling */
+        body {
+            font-family: 'poppins';
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            /* Light gray background */
+        }
 
-/* Header Styling */
-header {
-    background-color: #0072ff; /* Dark blue */
-    color: white; /* White text */
-    padding: 15px 20px; /* Adequate padding */
-    text-align: center; /* Center align text */
-    font-size: 24px; /* Larger font */
-    margin-bottom: 20px; /* Space below header */
-}
+        /* Header Styling */
+        header {
+            background-color: #0072ff;
+            /* Dark blue */
+            color: white;
+            /* White text */
+            padding: 15px 20px;
+            /* Adequate padding */
+            text-align: center;
+            /* Center align text */
+            font-size: 24px;
+            /* Larger font */
+            /* Space below header */
+        }
 
-/* Navigation Styling */
-.nav {
-    padding: 10px 20px; /* Padding for navigation */
-    background: #333; /* Dark gray background */
-}
+        /* Navigation Styling */
+        .nav {
+            margin: 0;
+            padding: 10px 20px;
+            /* Padding for navigation */
+            background: #333;
+            /* Dark gray background */
+        }
 
-.nav a {
-    color: white; /* White text */
-    text-decoration: none; /* No underline */
-    transition: all 0.3s ease; /* Smooth transitions */
-}
+        .nav a {
+            color: white;
+            /* White text */
+            text-decoration: none;
+            /* No underline */
+            transition: all 0.3s ease;
+            /* Smooth transitions */
+        }
 
-.nav a:hover {
-    text-decoration: underline; /* Underline on hover */
-}
+        .nav a:hover {
+            text-decoration: underline;
+            /* Underline on hover */
+        }
 
-/* Breadcrumb Styling */
-.breadcrumb {
-    padding: 10px; /* Padding for breadcrumb */
-    background: none; /* No background */
-    margin-bottom: 20px; /* Space below breadcrumb */
-}
+        /* Breadcrumb Styling */
+        .breadcrumb {
+            padding: 10px;
+            /* Padding for breadcrumb */
+            background: none;
+            /* No background */
+            margin-bottom: 20px;
+            /* Space below breadcrumb */
+        }
 
-.breadcrumb-item {
-    margin-right: 10px; /* Space between items */
-}
+        .breadcrumb-item {
+            margin-right: 10px;
+            /* Space between items */
+        }
 
-/* Container Layout */
-.container {
-    max-width: 600px; /* Moderate width */
-    margin: 0 auto; /* Center the container */
-    padding: 20px; /* Padding around the container */
-    background: white; /* White background */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
-}
+        /* Container Layout */
+        .container {
+            max-width: 600px;
+            /* Moderate width */
+            margin: 40px auto;
+            /* Center the container */
+            padding: 20px;
+            /* Padding around the container */
+            background: white;
+            /* White background */
+            border-radius: 10px;
+            /* Rounded corners */
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            /* Shadow effect */
+        }
 
-/* Form Styling */
-.form {
-    display: flex; /* Use flexbox */
-    flex-direction: column; /* Vertical alignment */
-    align-items: stretch; /* Align to container width */
-}
+        .title {
+            font-size: 24px;
+        }
 
-/* Custom Select Field Styling */
-.custom_select {
-    margin-bottom: 15px; /* Space between elements */
-}
+        /* Form Styling */
+        .form {
+            display: flex;
+            /* Use flexbox */
+            flex-direction: column;
+            /* Vertical alignment */
+            align-items: stretch;
+            /* Align to container width */
+        }
 
-.custom_select label {
-    font-weight: bold; /* Bold labels */
-    color: #555; /* Dark gray color */
-}
+        /* Custom Select Field Styling */
+        .custom_select {
+            margin-bottom: 15px;
+            /* Space between elements */
+        }
 
-select {
-    width: 100%; /* Full width */
-    padding: 10px; /* Padding for select fields */
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Adequate font size */
-    transition: all 0.3s ease; /* Smooth transitions */
-}
+        .custom_select label {
+            font-weight: bold;
+            /* Bold labels */
+            color: #555;
+            /* Dark gray color */
+        }
 
-select:focus {
-    border-color: #0072ff; /* Blue border on focus */
-    outline: none; /* No default outline */
-}
+        select {
+            width: 100%;
+            /* Full width */
+            padding: 10px;
+            /* Padding for select fields */
+            border: 1px solid #ccc;
+            /* Light gray border */
+            border-radius: 5px;
+            /* Rounded corners */
+            font-size: 16px;
+            /* Adequate font size */
+            transition: all 0.3s ease;
+            /* Smooth transitions */
+        }
 
-/* Submit Button Styling */
-input[type="submit"] {
-    background: #0072ff; /* Blue background */
-    color: white; /* White text */
-    padding: 10px 20px; /* Padding for the button */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Consistent font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: all 0.3s ease; /* Smooth transitions */
-    width: 100%; /* Full width */
-}
+        select:focus {
+            border-color: #0072ff;
+            /* Blue border on focus */
+            outline: none;
+            /* No default outline */
+        }
 
-input[type="submit"]:hover {
-    background: #005bb5; /* Darker blue on hover */
-}
+        /* Submit Button Styling */
+        input[type="submit"] {
+            background: #0072ff;
+            /* Blue background */
+            color: white;
+            /* White text */
+            padding: 10px 20px;
+            /* Padding for the button */
+            border-radius: 5px;
+            /* Rounded corners */
+            font-size: 16px;
+            /* Consistent font size */
+            cursor: pointer;
+            /* Pointer cursor on hover */
+            transition: all 0.3s ease;
+            /* Smooth transitions */
+            width: 100%;
+            /* Full width */
+        }
 
-input[type="submit"]:active {
-    transform: scale(0.95); /* Slight shrink on click (active state) */
-}
+        input[type="submit"]:hover {
+            background: #005bb5;
+            /* Darker blue on hover */
+        }
 
-/* Responsive Design with Media Queries */
-@media (max-width: 768px) {
-    .container {
-        padding: 15px; /* Adjusted padding for smaller screens */
-    }
+        input[type="submit"]:active {
+            transform: scale(0.95);
+            /* Slight shrink on click (active state) */
+        }
 
-    .form {
-        align-items: stretch; /* Ensure items align to the container */
-    }
+        /* Responsive Design with Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                /* Adjusted padding for smaller screens */
+            }
 
-    .custom_select {
-        margin-bottom: 10px; /* Adjust spacing for smaller screens */
-    }
+            .form {
+                align-items: stretch;
+                /* Ensure items align to the container */
+            }
 
-    select {
-        padding: 8px 12px; /* Adjusted padding for smaller screens */
-        font-size: 14px; /* Smaller font size */
-    }
+            .custom_select {
+                margin-bottom: 10px;
+                /* Adjust spacing for smaller screens */
+            }
 
-    input[type="submit"] {
-        padding: 8px 16px; /* Adjusted padding */
-        font-size: 14px; /* Smaller font size */
-    }
-}
+            select {
+                padding: 8px 12px;
+                /* Adjusted padding for smaller screens */
+                font-size: 14px;
+                /* Smaller font size */
+            }
 
-@media (max-width: 480px) {
-    header {
-        font-size: 20px; /* Smaller font size for smaller screens */
-    }
+            input[type="submit"] {
+                padding: 8px 16px;
+                /* Adjusted padding */
+                font-size: 14px;
+                /* Smaller font size */
+            }
+        }
 
-    .container {
-        padding: 10px; /* Reduced padding */
-    }
+        @media (max-width: 480px) {
+            header {
+                font-size: 20px;
+                /* Smaller font size for smaller screens */
+            }
 
-    .breadcrumb {
-        font-size: 14px; /* Smaller font size */
-    }
-}
+            .container {
+                padding: 10px;
+                /* Reduced padding */
+            }
 
-</style>
+            .breadcrumb {
+                font-size: 14px;
+                /* Smaller font size */
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -190,13 +250,52 @@ input[type="submit"]:active {
 
                 <div class="custom_select">
                     <label>class</label>
-                    <select name="selectClass" id="selectClass">Select Class</select>
+                    <select name="classname" id="selectClass">Select Class
+                        <option value="$classname"
+                        <?php if($result1['classname'] == '$classname')
+                        {
+                            echo "selected";
+                        }?>
+                        ></option>
+                    </select>
+                </div>
+
+                <div class="title-child">for ex:- taking each class has 5 subjects</div>
+
+
+                <div class="custom_select">
+                    <label>Subject 1</label>
+                    <select name="selectSubject" id="selectSubject">Select Subject</select>
                 </div>
 
                 <div class="custom_select">
-                    <label>Subject</label>
+                    <label>Subject 2</label>
+                    <select name="subName" id="selectSubject">Select Subject
+                        <option value="$subName"
+                        <?php
+                        if($result2['subName'] =='$subName')
+                    {
+                        echo "selected";
+                    }
+                        ?>
+                        ><?php echo $subName?></option>
+                    </select>
+                </div>
+                <div class="custom_select">
+                    <label>Subject 3</label>
                     <select name="selectSubject" id="selectSubject">Select Subject</select>
                 </div>
+                <div class="custom_select">
+                    <label>Subject 4</label>
+                    <select name="selectSubject" id="selectSubject">Select Subject</select>
+                </div>
+                <div class="custom_select">
+                    <label>Subject 5</label>
+                    <select name="selectSubject" id="selectSubject">Select Subject</select>
+                </div>
+
+
+
 
 
                 <div class="input_field">
@@ -215,3 +314,61 @@ input[type="submit"]:active {
 </body>
 
 </html>
+
+<?php
+include ("../connection.php");
+
+
+$cid = isset($_GET['id']) ? $_GET['id'] : null;
+$subCode = isset($_GET['subCode']) ? $_GET['subCode'] : null;
+
+if($cid && $subCode)
+{
+
+//fetching className data from tbl_classes
+$query1 = "SELECT className FROM tbl_classes";
+
+//executing className data
+$data1 = mysqli_query($conn, $query1);
+
+
+//fetching subName data from tbl_subjects
+$query2 = "SELECT subName from tbl_subjects";
+
+$data2 = mysqli_query($conn,$query2);
+
+if($data1 && $data2)
+{
+    $result1 = mysqli_fetch_assoc($data1);
+    $result2 = mysqli_fetch_assoc($data2);
+    if (isset($_POST['Add'])) {
+        $classname = $_POST['classname'];
+        $subName = $_POST['$subName'];
+
+        $query1 = $query2= "INSERT INTO tbl_sub_combination (classname,subName) VALUES ('$className','$subName')";
+
+        $data = mysqli_query($conn, $query1);
+
+        if($data)
+        {
+            echo "<script>alert('subject's assigned to the class');</script>";
+        }
+        else{
+            echo "<script>alert('unable to assigned subject');</script>";
+        }
+
+    }
+  echo "ERROR fetching data:". mysqli_error($conn);
+  return;
+    
+
+}
+}
+else{
+    echo "NO Id provided.";
+    return;
+
+}
+
+
+?>

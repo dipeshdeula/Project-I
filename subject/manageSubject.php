@@ -9,14 +9,139 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    /* Global Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5; /* Light gray background */
+}
 
+/* Header Styling */
+header {
+    background-color: #0072ff; /* Dark blue */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px; /* Space below header */
+    overflow: hidden;
+}
+
+/* Navigation Styling */
+.nav {
+    padding: 10px 20px; /* Padding for navigation */
+    background: #333; /* Dark gray background */
+    overflow: hidden;
+}
+
+.nav a {
+    color: white; /* White text */
+    text-decoration: none; /* No underline */
+    transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.nav a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Breadcrumb Styling */
+.breadcrumb {
+    padding: 10px; /* Padding for breadcrumb */
+    background: none; /* No background */
+    margin-bottom: 15px; /* Space below breadcrumb */
+}
+
+.breadcrumb-item {
+    margin-right: 10px; /* Space between breadcrumb items */
+}
+
+/* Container Layout */
+.container {
+    max-width: 1200px; /* Maximum width */
+    margin: 20px auto; /* Center container */
+    padding: 20px; /* Padding around container */
+    background: white; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
+}
+
+/* Table Design */
+table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Collapse borders */
+    text-align: left; /* Align text to the left */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Add shadow */
+}
+
+table th, table td {
+    padding: 10px; /* Padding around table cells */
+    border: 1px solid #ddd; /* Border color */
+}
+
+table th {
+    background-color: #0072ff; /* Dark blue for header */
+    color: white; /* White text for header */
+}
+
+table td {
+    text-align: center; /* Center-align data in table */
+}
+
+.actions {
+    display: inline-block; /* Actions should be inline */
+}
+
+/* Submit Button Styling */
+.update, .delete {
+    background: #0072ff; /* Dark blue background */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Adequate padding */
+    text-transform: uppercase; /* Capitalize text */
+    transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.update:hover {
+    background: #005bb5; /* Darker blue on hover */
+}
+
+.delete {
+    background: #e74c3c; /* Red background for delete */
+}
+
+.delete:hover {
+    background: #c0392b; /* Darker red on hover */
+}
+
+/* Responsive Design with Media Queries */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px; /* Reduced padding for smaller screens */
+    }
+
+    .breadcrumb {
+        font-size: 14px; /* Smaller font size */
+    }
+
+    table {
+        overflow-x: auto; /* Horizontal scrolling for small screens */
+    }
+
+    table th, table td {
+        padding: 8px; /* Adjusted padding for smaller screens */
+    }
+}
+</style>
 </head>
 
 <body>
 
     <header>
 
-        <h3>Register Subjects</h3>
+        <h3>Manage Subjects</h3>
 
     </header>
 
@@ -31,6 +156,7 @@
             </ol>
         </nav>
     </div>
+    
     <div class="container">
         <div class="form">
             <form action="#">
