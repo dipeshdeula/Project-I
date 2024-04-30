@@ -41,15 +41,13 @@ if (isset($_POST['update'])) {
     $query = "UPDATE tbl_classes set className='$className',
      classSection = '$classSection' WHERE id = '$cid'";
 
-     //execute the query and check for sucess
-     $data = mysqli_query($conn,$query);
-     if($data)
-     {
+    //execute the query and check for sucess
+    $data = mysqli_query($conn, $query);
+    if ($data) {
         echo "<script>alert('Data updated Successfully');</script>";
-     }
-     else{
+    } else {
         echo "<script>alert('failed to update data');</script>";
-     }
+    }
 }
 
 ?>
@@ -88,8 +86,7 @@ if (isset($_POST['update'])) {
             /* Center align text */
             font-size: 24px;
             /* Larger font size */
-            margin-bottom: 20px;
-            /* Space below header */
+           
         }
 
         /* Navigation Styling */
@@ -101,6 +98,7 @@ if (isset($_POST['update'])) {
         }
 
         .nav a {
+            margin-left: 23px;
             display: inline-flex;
             list-style: none;
             color: white;
@@ -286,10 +284,11 @@ if (isset($_POST['update'])) {
 </head>
 
 <body>
-    <?php
-    include ('../includes/topbar.php');
-    include ('../includes/leftbar.php');
-    ?>
+    <header>
+
+        <h3>Update Student Class</h3>
+
+    </header>
 
 
 
@@ -304,7 +303,12 @@ if (isset($_POST['update'])) {
             </ul>
         </nav>
     </div>
-    <div class="container">
+
+
+    <div class="main">
+        <div class="dashboard">
+            <?php include("../includes/leftbar.php"); ?>
+        <div class="container">
         <h3>Update Student Class</h3>
         <hr>
         <div class="form">
@@ -322,6 +326,10 @@ if (isset($_POST['update'])) {
             </form>
         </div>
     </div>
+            
+        </div>
+    </div>
+    
 </body>
 
 </html>

@@ -20,198 +20,281 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-    /* Global Styling */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5; /* Light gray background */
-}
+        /* Global Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            /* Light gray background */
+        }
 
-/* Header Styling */
-header {
-    background-color: #0072ff; /* Dark blue */
-    color: white; /* White text */
-    padding: 10px; /* Adequate padding */
-    text-align: center; /* Center align text */
-    font-size: 24px; /* Larger font size */
-    margin-bottom: 20px; /* Space below header */
-}
+        /* Header Styling */
+        header {
+            background-color: #0072ff;
+            /* Dark blue */
+            color: white;
+            /* White text */
+            padding: 10px;
+            /* Adequate padding */
+            text-align: center;
+            /* Center align text */
+            font-size: 24px;
+            /* Larger font size */
+           
+        }
 
-/* Navigation Styling */
-.nav {
-    padding: 10px 20px; /* Padding for navigation */
-    background: #333; /* Dark gray background */
-}
+        /* Navigation Styling */
+        .nav {
+            padding: 10px 20px;
+            /* Padding for navigation */
+            background: #333;
+            /* Dark gray background */
+        }
 
-.nav a {
-    display: inline-flex;
-    list-style: none;
-    color: white; /* White text */
-    text-decoration: none; /* No underline */
-    transition: all 0.3s ease; /* Smooth transitions */
-    margin:2px;
-}
+        .nav a {
+           
+            display: inline-flex;
+            list-style: none;
+            color: white;
+            /* White text */
+            text-decoration: none;
+            /* No underline */
+            transition: all 0.3s ease;
+            /* Smooth transitions */
+            
+        }
 
-.nav a:hover {
-    text-decoration: underline; /* Underline on hover */
-}
+        .nav a:hover {
+            text-decoration: underline;
+            /* Underline on hover */
+        }
 
-/* Breadcrumb Styling */
-.breadcrumb {
-   
-    padding: 10px; /* Padding for breadcrumb */
-    background: none; /* No background */
-    margin-bottom: 15px; /* Space below breadcrumb */
-    text-decoration: none;
-    
-}
+        /* Breadcrumb Styling */
+        .breadcrumb {
 
-.breadcrumb-item {
-    margin-right: 10px; /* Space between breadcrumb items */
-}
+            padding: 10px;
+            /* Padding for breadcrumb */
+            background: none;
+            /* No background */
+            margin-bottom: 15px;
+            /* Space below breadcrumb */
+            text-decoration: none;
 
-/* Container Layout */
-.container {
-    max-width: 600px; /* Moderate width */
-    margin: 5% auto; /* Center the container */
-    padding: 30px; /* Adequate padding */
-    background: white; /* White background */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
-    text-align: center; /* Center align text */
-   
-}
+        }
 
-/* Form Styling */
-.form {
-    display: flex; /* Use flexbox */
-    flex-direction: column; /* Vertical alignment */
-    align-items: stretch; /* Align to container's width */
-}
+        .breadcrumb-item {
+            margin-right: 10px;
+            /* Space between breadcrumb items */
+        }
+        .main{
+            display: flex;
+            flex-direction: row;
 
-/* Label Styling */
-label {
-    font-weight: bold; /* Bold text for labels */
-    color: #555; /* Dark gray color */
-    margin-bottom: 10px; /* Space below labels */
-}
+        }
+        .dashboard{
+            width:auto;
+            margin-right: 10px;
+        }
+        /* Container Layout */
+        .container {
+            width:50
+            max-width: 600px;
+            /* Moderate width */
+            margin: 5% auto;
+            /* Center the container */
+            padding: 30px;
+            /* Adequate padding */
+            background: white;
+            /* White background */
+            border-radius: 10px;
+            /* Rounded corners */
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            /* Shadow effect */
+           
 
-input[type="text"] {
-    width: 100%; /* Full width */
-    padding: 12px; /* Adequate padding */
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Adequate font size */
-    transition: all 0.3s ease; /* Smooth transitions */
-}
+        }
 
-input[type="text"]:focus {
-    border-color: #0072ff; /* Blue border on focus */
-    outline: none; /* No default outline */
-}
+        /* Form Styling */
+        .form {
+            display: flex;
+            /* Use flexbox */
+            flex-direction: column;
+            /* Vertical alignment */
+            align-items: stretch;
+            /* Align to container's width */
+        }
 
-/* Paragraph Styling */
-p {
-    color: #777; /* Light gray text */
-    font-size: 14px; /* Slightly smaller font size */
-    text-align: start; /* Align left */
-    margin-bottom: 15px; /* Space below paragraph */
-}
+        /* Label Styling */
+        label {
+            font-weight: bold;
+            /* Bold text for labels */
+            color: #555;
+            /* Dark gray color */
+            margin-bottom: 10px;
+            /* Space below labels */
+        }
 
-/* Submit Button Styling */
-input[type="submit"] {
-    background: #0072ff; /* dark blue background */
-    color: white; /* White text */
-    padding: 12px; /* Adequate padding */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Consistent font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: all 0.3s ease; /* Smooth transitions */
-    width: 100%; /* Full width */
-}
+        input[type="text"] {
+            width: 100%;
+            /* Full width */
+            padding: 12px;
+            /* Adequate padding */
+            border: 1px solid #ccc;
+            /* Light gray border */
+            border-radius: 5px;
+            /* Rounded corners */
+            font-size: 16px;
+            /* Adequate font size */
+            transition: all 0.3s ease;
+            /* Smooth transitions */
+        }
 
-input[type="submit"]:hover {
-    background: #388E3C; /* Darker green on hover */
-}
+        input[type="text"]:focus {
+            border-color: #0072ff;
+            /* Blue border on focus */
+            outline: none;
+            /* No default outline */
+        }
 
-input[type="submit"]:active {
-    transform: scale(0.95); /* Slight shrink on click (active state) */
-}
+        /* Paragraph Styling */
+        p {
+            color: #777;
+            /* Light gray text */
+            font-size: 14px;
+            /* Slightly smaller font size */
+            text-align: start;
+            /* Align left */
+            margin-bottom: 15px;
+            /* Space below paragraph */
+        }
 
-/* Responsive Design with Media Queries */
-@media (max-width: 768px) {
-    .container {
-        padding: 20px; /* Reduced padding for smaller screens */
-        max-width: 100%; /* Full width on smaller screens */
-    }
+        /* Submit Button Styling */
+        input[type="submit"] {
+           
+            background: #0072ff;
+            /* dark blue background */
+            color: white;
+            /* White text */
+            padding: 12px;
+            /* Adequate padding */
+            border: none;
+            /* No border */
+            border-radius: 5px;
+            /* Rounded corners */
+            font-size: 16px;
+            /* Consistent font size */
+            cursor: pointer;
+            /* Pointer cursor on hover */
+            transition: all 0.3s ease;
+            /* Smooth transitions */
+            width: 100%;
+            /* Full width */
+        }
 
-    input[type="text"] {
-        padding: 10px; /* Adjusted padding */
-        font-size: 14px; /* Smaller font size */
-    }
+        input[type="submit"]:hover {
+            background: #388E3C;
+            /* Darker green on hover */
+        }
 
-    input[type="submit"] {
-        padding: 10px 16px; /* Adjusted padding */
-        font-size: 14px; /* Smaller font size */
-    }
-}
+        input[type="submit"]:active {
+            transform: scale(0.95);
+            /* Slight shrink on click (active state) */
+        }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 15px; /* Further reduced padding */
-    }
+        /* Responsive Design with Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                /* Reduced padding for smaller screens */
+                max-width: 100%;
+                /* Full width on smaller screens */
+            }
 
-    .form {
-        flex-direction: column; /* Stack form elements */
-        align-items: stretch; /* Align to full width */
-    }
+            input[type="text"] {
+                padding: 10px;
+                /* Adjusted padding */
+                font-size: 14px;
+                /* Smaller font size */
+            }
 
-    input[type="text"] {
-        padding: 8px 10px; /* Smaller padding */
-    }
-}
+            input[type="submit"] {
+                padding: 10px 16px;
+                /* Adjusted padding */
+                font-size: 14px;
+                /* Smaller font size */
+            }
+        }
 
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                /* Further reduced padding */
+            }
+
+            .form {
+                flex-direction: column;
+                /* Stack form elements */
+                align-items: stretch;
+                /* Align to full width */
+            }
+
+            input[type="text"] {
+                padding: 8px 10px;
+                /* Smaller padding */
+            }
+        }
     </style>
 </head>
 
 <body>
-    <?php
-    include ('../includes/topbar.php');
-    include ('../includes/leftbar.php');
-    ?>
 
 
+<header>
+
+<h3>Register Student's Classes</h3>
+
+</header>
+   
 
     <div class="nav">
 
         <nav aria-label="breadcrumb" text-decoration="none">
             <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home" ></i>  Home</a></li>
+                <li class="breadcrumb-item"><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-home"></i>&nbsp; Home</a></li>
                 <li class="breadcrumb-item"><a href="#">classes</a></li>
                 <li class="breadcrumb-item"><a href="#">create class</a></li>
 
             </ul>
         </nav>
     </div>
-    <div class="container">
-        <h3>Create Student Class</h3>
-        <hr>
-        <div class="form">
-            <form action="#" method="POST">
-                <label for="className">Class Name</label>
-                <input type="text" name="className" />
 
-                <p>Eg-BCAI,BIM IV, BBS III etc </p>
-                <label for="classSection">Section</label>
-                <input type="text" name="classSection" />
-
-                <p>Eg- A, B, C etc </p>
-                <input type="submit" name="submit" />
-            </form>
+    <div class="main">
+        <div class="dashboard">
+            <?php
+            include('../includes/leftbar.php');
+            ?>
         </div>
+        <div class="container">
+            <h3>Create Student Class</h3>
+            <hr>
+            <div class="form">
+                <form action="#" method="POST">
+                    <label for="className">Class Name</label>
+                    <input type="text" name="className" />
+
+                    <p>Eg-BCAI,BIM IV, BBS III etc </p>
+                    <label for="classSection">Section</label>
+                    <input type="text" name="classSection" />
+
+                    <p>Eg- A, B, C etc </p>
+                    <input type="submit" name="submit" />
+                </form>
+            </div>
+        </div>
+
     </div>
+
 </body>
 
 </html>
@@ -227,25 +310,22 @@ if (isset($_POST['submit'])) {
     // $_SESSION['className'] = $className;
 
 
-    if($className == null && $classSection == null)
-    {
+    if ($className == null && $classSection == null) {
         echo "<script>alert('All filled required to filled');</script>";
-    }
-
-    else{
-
-
-    $query = "INSERT INTO tbl_classes (className,classSection) VALUES ('$className', '$classSection')";
-    echo $query;
-
-    $data = mysqli_query($conn, $query);
-
-    if ($data != null) {
-        echo "<script>alert('Data inserted to tbl_classes ');</script>";
     } else {
-        echo "<script>alert('fail to insert Data');</script>";
+
+
+        $query = "INSERT INTO tbl_classes (className,classSection) VALUES ('$className', '$classSection')";
+        echo $query;
+
+        $data = mysqli_query($conn, $query);
+
+        if ($data != null) {
+            echo "<script>alert('Data inserted to tbl_classes ');</script>";
+        } else {
+            echo "<script>alert('fail to insert Data');</script>";
+        }
     }
-}
 
 }
 
