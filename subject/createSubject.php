@@ -28,7 +28,7 @@ header {
     padding: 15px 20px; /* Adequate padding */
     text-align: center;
     font-size: 24px; /* Larger text for emphasis */
-    margin-bottom: 20px; /* Space below header */
+    
 }
 
 /* Navigation Styling */
@@ -57,14 +57,30 @@ header {
     margin-right: 10px; /* Space between items */
 }
 
+.main{
+    display: flex;
+    flex-direction: row;
+    
+
+}
+.dashboard{
+    width:auto;
+    display: flex;
+    flex-direction: column;
+}
+
 /* Container Layout */
 .container {
-    max-width: 600px; /* Moderate width */
-    margin: 0 auto; /* Center the container */
-    padding: 20px; /* Padding around the container */
+    flex-direction: row;
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Vertical alignment */
+    height: 50vh; /* Full height */
+    width:10vh;
     background: white; /* White background */
     border-radius: 10px; /* Rounded corners */
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    margin-top: 40px; /* Space above the container */
+  
 }
 
 /* Form Styling */
@@ -186,7 +202,11 @@ input[type="submit"]:active {
             </ol>
         </nav>
     </div>
-
+<div class="main">
+    <div class="dashboard">
+        <?php include("../includes/leftbar.php"); ?>
+        
+</div>
     <div class="container">
         <form action="#" method="POST" enctype="multipart/form-data">
             <div class="title">Register Subject's</div>
@@ -211,6 +231,9 @@ input[type="submit"]:active {
 
                 </div>
         </form>
+    </div>
+
+
     </div>
 
     <!-- Bootstrap JS -->
