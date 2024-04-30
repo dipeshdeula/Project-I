@@ -67,21 +67,50 @@
             /* Space between breadcrumb items */
         }
 
-        /* Container Layout */
-        .container {
-            max-width: 1200px;
-            /* Maximum width */
-            margin: 20px auto;
-            /* Center container */
+        /* Main container for dashboard and content */
+        .main {
+            display: flex;
+            /* Flexbox layout */
+            flex-direction: row;
+            /* Elements should be side-by-side */
+            align-items: flex-start;
+            /* Align at the top */
+            justify-content: flex-start;
+            /* No extra space between elements */
             padding: 20px;
-            /* Padding around container */
+            /* Ensure some padding around the layout */
+        }
+
+        /* Dashboard Sidebar */
+        .dashboard {
+            
+            width: 20%;
+            /* Sidebar occupies 20% of the total width */
+            background: #f0f0f0;
+            /* Light gray background */
+            padding: 20px;
+            /* Padding for spacing */
+            box-sizing: border-box;
+            /* Ensure padding is included in the width */
+            background-color: yellow;
+        }
+
+        /* Main content container */
+        .container {
+            flex: 1;
+            /* Takes the rest of the space */
+            padding: 20px;
+            /* Padding around the content */
             background: white;
-            /* White background */
+            /* Background color */
             border-radius: 10px;
             /* Rounded corners */
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-            /* Shadow effect */
+            /* Shadow for depth */
+            width: 10%;
         }
+
+
 
         /* Form Styling */
         .form {
@@ -205,9 +234,19 @@
 
         /* Responsive Design with Media Queries */
         @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+                /* Stacks elements vertically */
+            }
+
+            .dashboard {
+                width: 100%;
+                /* Sidebar takes full width on smaller screens */
+            }
+
             .container {
-                padding: 10px;
-                /* Reduced padding for smaller screens */
+                width: 100%;
+                /* Container also takes full width */
             }
 
             .breadcrumb {
@@ -255,45 +294,50 @@
         </nav>
     </div>
 
-    <div class="container">
-        <form action="#" method="POST" enctype="multipart/form-data">
-            <div class="title">Insert Student Details</div>
+    <div class="main">
+        <div class="dashboard">
+            <?php include ('../includes/leftbar.php'); ?>
+        </div>
+
+        <div class="container">
+            <form action="#" method="POST" enctype="multipart/form-data">
+                <div class="title">Insert Student Details</div>
 
 
-            <div class="form">
+                <div class="form">
 
-                <div class="input_field">
-                    <label>Upload Image</label>
-                    <input type="file" name="uploadfile" style="width:100%;">
-                </div>
+                    <div class="input_field">
+                        <label>Upload Image</label>
+                        <input type="file" name="uploadfile" style="width:100%;">
+                    </div>
 
-                <div class="input_field">
-                    <label>Student Name</label>
-                    <input type="text" class="input" name="stdname">
-                </div>
+                    <div class="input_field">
+                        <label>Student Name</label>
+                        <input type="text" class="input" name="stdname">
+                    </div>
 
-                <div class="input_field">
-                    <label>Student Id</label>
-                    <input type="text" class="input" name="stdId">
-                </div>
+                    <div class="input_field">
+                        <label>Student Id</label>
+                        <input type="text" class="input" name="stdId">
+                    </div>
 
 
 
-                <div class="input_field">
-                    <label>Email</label>
-                    <input type="text" class="input" name="email">
-                </div>
+                    <div class="input_field">
+                        <label>Email</label>
+                        <input type="text" class="input" name="email">
+                    </div>
 
-                <div class="input_field">
-                    <label>Password</label>
-                    <input type="password" class="input" name="password">
-                </div>
+                    <div class="input_field">
+                        <label>Password</label>
+                        <input type="password" class="input" name="password">
+                    </div>
 
-                <div class="input_field">
-                    <label>Class Name</label>
-                    <input type="text" class="input" name="classname">
-                </div>
-                <!-- <div class="input_field">
+                    <div class="input_field">
+                        <label>Class Name</label>
+                        <input type="text" class="input" name="classname">
+                    </div>
+                    <!-- <div class="input_field">
                     <label for="className">Class</label>
                     <div class="custom_select">
                         <select name="className" id="className">
@@ -306,45 +350,49 @@
 
                 </div> -->
 
-                <div class="input_field">
-                    <label>Gender</label>
-                    <div class="custom_select">
-                        <select name="gender">
-                            <option value="Not Selected">Select</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other's">Other's</option>
-                        </select>
+                    <div class="input_field">
+                        <label>Gender</label>
+                        <div class="custom_select">
+                            <select name="gender">
+                                <option value="Not Selected">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other's">Other's</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input_field">
+                        <label>Phone</label>
+                        <input type="text" class="input" name="phone">
+                    </div>
+
+                    <div class="input_field">
+                        <label>Address</label>
+                        <textarea class="textarea" name="address"></textarea>
+                    </div>
+
+                    <div class="input_field terms">
+                        <label class="check">
+                            <input type="checkbox">
+                            <p>Agree to terms and conditions</p>
+
+                        </label>
+
+                    </div>
+
+                    <div class="input_field">
+                        <input type="submit" value="Register" class="btn" name="register" />
+                        <!-- <button type="submit" name="register" class="btn" value="Register"> Register</button> -->
+
                     </div>
                 </div>
+            </form>
+        </div>
 
-                <div class="input_field">
-                    <label>Phone</label>
-                    <input type="text" class="input" name="phone">
-                </div>
-
-                <div class="input_field">
-                    <label>Address</label>
-                    <textarea class="textarea" name="address"></textarea>
-                </div>
-
-                <div class="input_field terms">
-                    <label class="check">
-                        <input type="checkbox">
-                        <p>Agree to terms and conditions</p>
-
-                    </label>
-
-                </div>
-
-                <div class="input_field">
-                    <input type="submit" value="Register" class="btn" name="register" />
-                    <!-- <button type="submit" name="register" class="btn" value="Register"> Register</button> -->
-
-                </div>
-            </div>
-        </form>
     </div>
+
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
