@@ -1,3 +1,23 @@
+<?php
+include("../connection.php");
+
+// Initialize the variable with a default value
+$total_students = 0; // Default value in case of query failure
+
+// Try to fetch the total number of registered students
+$query = "SELECT COUNT(*) AS total_students FROM tbl_student";
+$result = mysqli_query($conn, $query);
+
+// Check if the query executed successfully
+if ($result) {
+    // Fetch the data
+    $row = mysqli_fetch_assoc($result);
+    if ($row) {
+        // Assign the total count
+        $total_students = $row['total_students'];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +47,7 @@
             padding: 10px 20px;
             text-align: center;
             font-size: 28px;
-            margin-bottom: 20px;
+
             /* Space below header */
             overflow: hidden;
         }
@@ -36,7 +56,7 @@
         .nav {
             padding: 10px 20px;
             /* Padding around navigation */
-            background: #333;
+            background: #0072ff;
             /* Dark gray background */
             overflow: hidden;
             font-size: 26px;
@@ -51,43 +71,72 @@
         }
 
         .nav a:hover {
-            text-decoration: underline;
+            text-decoration: none;
             /* Underline on hover */
         }
 
         /* Breadcrumb Styling */
         .breadcrumb {
+
             padding: 10px;
             /* Padding inside breadcrumb */
-            background: none;
+
             /* No background */
             margin-bottom: 20px;
             /* Space below breadcrumb */
+
         }
 
         .breadcrumb-item {
-            margin-right: 10px;
+            margin-right: 20px;
 
 
             /* Space between breadcrumb items */
         }
+/* Main container class for dashboard and content */
+.main {
+    display: flex; /* Flex layout to position sidebar and content */
+    align-items: flex-start; /* Align content at the top */
+    justify-content: flex-start; /* Ensure sidebar and content are side-by-side */
+}
 
-        /* Container Layout */
-        .container {
-            width: 70%;
-            /* Maximum width */
-            margin: 20px auto;
-            /* Center container */
-            padding: 20px;
-            /* Padding around container */
-            background: white;
-            /* White background */
-            border-radius: 10px;
-            /* Rounded corners */
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-            /* Shadow effect */
-            font-size: 16px;
-        }
+/* Sidebar (dashboard) */
+.dashboard {
+    
+    width: 70%; /* Sidebar width */
+   
+}
+
+/* Main content container */
+.container {
+    margin:40px auto;
+    flex: 0 1 auto; /* Allow the main content to expand */
+    padding: 12px; /* Padding around content */
+    background: white; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
+
+
+    transform: translate(-10%, 2%);
+
+
+}
+
+/* Responsive Design with Media Queries */
+@media (max-width: 768px) {
+    .main {
+        flex-direction: column; /* Vertical layout for smaller screens */
+    }
+
+    .container {
+        padding: 10px; /* Reduced padding for smaller screens */
+    }
+
+    .dashboard {
+        width: 100%; /* Full width for sidebar in smaller screens */
+    }
+}
+
 
         /* Form Styling */
         .form {
@@ -102,7 +151,7 @@
             /* Border color */
             border-radius: 5px;
             /* Rounded corners */
-            width: 100%;
+            width: 75%;
             /* Full width */
             box-sizing: border-box;
             /* Include padding in width */
@@ -121,7 +170,7 @@
         table {
             align-items: center;
             justify-content: center;
-            width: 90%;
+            width: 70%;
             /* Full width */
             border-collapse: collapse;
             /* Collapse borders */
@@ -129,10 +178,10 @@
             /* Align text to the left */
             background: white;
             /* Background for table */
-            border:  2px solid blue;
+            border: 2px solid blue;
             margin: 20px 40px;
-           
-           
+
+
 
 
         }
@@ -154,7 +203,8 @@
 
         /* button css */
 
-       a .update, .delete {
+        a .update,
+        .delete {
             width: 90%;
             background: #0072ff;
             color: white;
@@ -165,7 +215,7 @@
             font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
-        
+
         }
 
         .update:hover {
@@ -176,22 +226,23 @@
             transform: scale(0.95);
         }
 
-        
+
 
         a .delete {
             background-color: red;
-          
-           
+
+
         }
 
-        .delete:hover{
+        .delete:hover {
             background: tomato;
         }
 
 
-        .delete:active{
+        .delete:active {
             transform: scale(0.95);
         }
+
         /* Responsive Design with Media Queries */
         @media (max-width: 768px) {
             .container {
@@ -234,128 +285,91 @@
 
 <body>
     <header>
-
-        <h3>Manage Students </h3>
-
+        <h3>Manage Students</h3>
     </header>
 
     <div class="nav">
-
         <nav aria-label="breadcrumb" text-decoration="none">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="#">&nbsp;&nbsp;&nbsp;<i class="fa fa-home"></i>&nbsp;&nbsp;Home</a>
+                </li>
                 <li class="breadcrumb-item"><a href="#">Students</a></li>
                 <li class="breadcrumb-item"><a href="#">Manage Students</a></li>
-
             </ol>
         </nav>
     </div>
 
+    <!-- Here we add the main container to hold the sidebar and the main content -->
+    <div class="main">
+        <!-- Sidebar for Dashboard -->
+        <div class="dashboard">
+            <!-- Include leftbar or other sidebar content -->
+            <?php include ('../includes/leftbar.php'); ?>
+        </div>
 
+        <!-- Main content container -->
+        <div class="container">
+            <div class="form">
+                <form action="#" method="POST">
+                    <p>View Student Info </p>
+                    Show
+                    <select name="" id="">
+                       <option value="
+                       <?php echo $total_students; ?>"></option> 
+                    </select>
+                    entries
+                    <br><br>
+                    <input type="search" placeholder="search" name="search">
 
-    <div class="container">
-        <div class="form">
-            <form action="#" method="POST">
-                <p>View Student Info </p>
-                Show <select name="" id="">
-                    <?php
-                    echo $total;
-                    ?>
-                </select> entries
-                <br><br>
-                <input type="search" placeholder="search" name="search">
-
-                <table border="2px">
-                    <tr>
-                        <th>StdId</th>
-                        <th>Photo</th>
-                        <th>Student Name</th>
-                        <th>Email</th>
-                        <th>password</th>
-                        <th>Class </th>
-                        <th>Gender</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Operations</th>
-                    </tr>
-
-                    <?php
-                    include ("../connection.php");
-
-                    //query to fetch all data from the 'tbl_student' table
-                    
-                    $query = "SELECT * FROM tbl_student";
-
-
-                    //Execute the query
-                    $data = mysqli_query($conn, $query);
-
-                    // Check the number of rows returned
-                    $total = mysqli_num_rows($data);
-
-                    echo $total;
-
-                    if ($total > 0) {
-                        ?>
-                        <!-- 
-                    <table border="2px">
+                    <table>
                         <tr>
                             <th>StdId</th>
                             <th>Photo</th>
                             <th>Student Name</th>
                             <th>Email</th>
-                            <th>password</th>
-                            <th>Class </th>
+                            <th>Password</th>
+                            <th>Class</th>
                             <th>Gender</th>
                             <th>Phone</th>
                             <th>Address</th>
                             <th>Operations</th>
-                        </tr> -->
+                        </tr>
 
+                        <!-- Existing PHP code to fetch and display data from the database -->
                         <?php
-
-                        while ($result = mysqli_fetch_assoc($data)) {
-
-                            echo
-                                "<tr>
-
-                                    <td>" . $result['stdId'] . "</td>
-                                    <td><img src = " . $result['std_image'] . "  height='100px' width='100px' /></td>
-                                    <td>" . $result['stdname'] . "</td>
-                                    <td>" . $result['email'] . "</td>
-                                    <td>" . $result['password'] . "</td>
-                                    <td>" . $result['classname'] . "</td>
-                                    <td>" . $result['gender'] . "</td>
-                                    <td>" . $result['phone'] . "</td>
-                                    <td>" . $result['address'] . "</td>
+                        include ("../connection.php");
+                        $query = "SELECT * FROM tbl_student";
+                        $data = mysqli_query($conn, $query);
+                        $total = mysqli_num_rows($data);
+                        if ($total > 0) {
+                            while ($result = mysqli_fetch_assoc($data)) {
+                                echo "<tr>
+                                    <td>{$result['stdId']}</td>
+                                    <td><img src=\"{$result['std_image']}\" height='100px' width='100px' /></td>
+                                    <td>{$result['stdname']}</td>
+                                    <td>{$result['email']}</td>
+                                    <td>{$result['password']}</td>
+                                    <td>{$result['classname']}</td>
+                                    <td>{$result['gender']}</td>
+                                    <td>{$result['phone']}</td>
+                                    <td>{$result['address']}</td>
                                     <td>
-                                        <a id='update' href='update.php?id=$result[stdId]'>
+                                        <a id='update' href='update.php?id={$result['stdId']}'>
                                             <input type='submit' value='update' class='update'>
                                         </a>
-                                        <a id='delete' href='http://localhost/student_project/student/deleteStudent.php?id=$result[stdId]'>
+                                        <a id='delete' href='http://localhost/student_project/student/deleteStudent.php?id={$result['stdId']}'>
                                             <input type='submit' value='delete' class='delete' onclick='return checkdelete();'>
                                         </a>
                                     </td>
                                 </tr>";
-                            ?>
-
-
-                            <?php
+                            }
                         }
-                    }
-                    ?>
-                </table>
-            </form>
+                        ?>
+                    </table>
+                </form>
+            </div>
         </div>
-
-
     </div>
-
-    <script>
-        function checkdelete() {
-            return confirm("Are you sure want to delete ??");
-        }
-    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
