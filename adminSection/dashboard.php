@@ -113,6 +113,38 @@ if ($result && $result1 && $result2) {
 
         }
 
+        .card-row{
+            display: flex;
+        
+            justify-content: space-between;
+        }
+
+        .card {
+            margin: 10px;
+            /* Space between cards */
+            flex-basis: 18rem;
+            /* Ensure consistent card width */
+            flex-grow: 1;
+            /* Cards grow to fill space */
+            background-color: #ffffff;
+            /* White background for cards */
+            border: none;
+            /* No border */
+            border-radius: 10px;
+            /* Rounded corners */
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            /* Soft shadow */
+            padding:10px;
+
+        }
+        .card a{
+            margin-top: 25px;
+        }
+        .card:hover{
+            box-shadow: 0px 5px 15px #0072ff;
+           
+        }
+
         /* Sidebar list styling */
         .sidebar ul {
             list-style-type: none;
@@ -178,6 +210,51 @@ if ($result && $result1 && $result2) {
             /* Dark text color */
         }
 
+        /* Alert box styling */
+        .alert {
+            background: #0072ff;
+            /* Dark blue background */
+            color: white;
+            /* White text color */
+            padding: 10px 20px;
+            /* Padding around the alert */
+            border-radius: 5px;
+            /* Rounded corners */
+            display: none;
+            /* Initially hidden */
+            position: fixed;
+            /* Fix position on the screen */
+            top: 20px;
+            /* Position near the top */
+            left: 50%;
+            /* Center horizontally */
+            transform: translateX(-50%);
+            /* Center the alert */
+            z-index: 1000;
+            /* Ensure alert is on top */
+            text-align: center;
+            /* Center the text */
+        }
+
+        /* Animation for the alert box */
+        .alert.show {
+            display: block;
+            /* Show the alert */
+            animation: fade-in 1s;
+            /* Fade-in effect */
+        }
+
+        /* Animation keyframes for fade-in effect */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
         /* Responsive design with media queries */
         @media (max-width: 768px) {
             .dashboard {
@@ -210,6 +287,13 @@ if ($result && $result1 && $result2) {
         <h2>Student Result Management System | Admin</h2>
         <a href="#"><i class="bi bi-box-arrow-right"></i> Logout</a> <!-- Logout link in the navbar -->
     </div>
+
+
+    <!-- Alert box for welcome message -->
+    <div class="alert" id="welcome-alert">
+        Welcome to the Dashboard!
+    </div>
+
 
     <!-- Dashboard with two columns -->
     <div class="dashboard"> <!-- Two-column layout -->
@@ -276,68 +360,76 @@ if ($result && $result1 && $result2) {
             ?>
             <p>Select an item from the sidebar to see detailed information.</p>
 
+            <div class="card-row">
+                <!-- Bootstrap card to display the total number of registered students -->
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Registered Students</h5>
+                        <!-- Display the total count -->
 
 
-            <!-- Bootstrap card to display the total number of registered students -->
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Total Registered Students</h5>
-                    <!-- Display the total count -->
-
-
-                    <span class="bg-icon">
-                        <i class="fa fa-users"></i>
-                    </span> <span class="name">Regd Users: </span><?php echo $total_students; ?>
-                    <a href="http://localhost/student_project/student/manageStudent.php" class="btn btn-primary">Manage
-                        Students</a>
+                        <span class="bg-icon">
+                            <i class="fa fa-users"></i>
+                        </span> <span class="name">Regd Users: </span><?php echo $total_students; ?>
+                        <a href="http://localhost/student_project/student/manageStudent.php"
+                            class="btn btn-primary">Manage
+                            Students</a>
+                    </div>
                 </div>
+
+
+                <!-- Bootstrap card to display the total number of registered Subjects -->
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Registered Subjects</h5>
+                        <!-- Display the total count -->
+
+
+                        <span class="bg-icon">
+                            <i class="fa fa-book"></i>
+                        </span> <span class="name">Regd Subjects: </span><?php echo $total_subjects; ?>
+                        <a href="http://localhost/student_project/subject/manageSubject.php"
+                            class="btn btn-primary">Manage
+                            Subjects</a>
+                    </div>
+                </div>
+
+
+                <!-- Bootstrap card to display the total number of registered class -->
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Registered Class</h5>
+                        <!-- Display the total count -->
+
+
+                        <span class="bg-icon">
+                            <i class="fa fa-library"></i>
+                        </span> <span class="name">Regd Class: </span><?php echo $total_class; ?>
+                        <a href="http://localhost/student_project/subject/manageSubject.php"
+                            class="btn btn-primary">Manage
+                            Class</a>
+                    </div>
+                </div>
+
+                <!-- Bootstrap card to display the total number of declared result -->
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Result Declared: </h5>
+                        <!-- Display the total count -->
+
+
+                        <span class="bg-icon">
+                            <i class="fa fa-class"></i>
+                        </span> <span class="name">Result Declared: </span><?php echo $total_results; ?>
+                        <a href="http://localhost/student_project/subject/manageSubject.php"
+                            class="btn btn-primary">Manage
+                            Results</a>
+                    </div>
+                </div>
+
             </div>
 
 
-            <!-- Bootstrap card to display the total number of registered Subjects -->
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Total Registered Subjects</h5>
-                    <!-- Display the total count -->
-
-
-                    <span class="bg-icon">
-                        <i class="fa fa-book"></i>
-                    </span> <span class="name">Regd Subjects: </span><?php echo $total_subjects; ?>
-                    <a href="http://localhost/student_project/subject/manageSubject.php" class="btn btn-primary">Manage
-                        Subjects</a>
-                </div>
-            </div>
-
-            <!-- Bootstrap card to display the total number of registered class -->
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Total Registered Class</h5>
-                    <!-- Display the total count -->
-
-
-                    <span class="bg-icon">
-                        <i class="fa fa-library"></i>
-                    </span> <span class="name">Regd Class: </span><?php echo $total_class; ?>
-                    <a href="http://localhost/student_project/subject/manageSubject.php" class="btn btn-primary">Manage
-                        Class</a>
-                </div>
-            </div>
-
-            <!-- Bootstrap card to display the total number of declared result -->
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Total Result Declared: </h5>
-                    <!-- Display the total count -->
-
-
-                    <span class="bg-icon">
-                        <i class="fa fa-class"></i>
-                    </span> <span class="name">Result Declared: </span><?php echo $total_results; ?>
-                    <a href="http://localhost/student_project/subject/manageSubject.php" class="btn btn-primary">Manage
-                        Results</a>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -360,6 +452,17 @@ if ($result && $result1 && $result2) {
                     contentArea.innerHTML = "<p>Failed to load content. Please try again later.</p>";
                 });
         }
+
+        // Function to show an alert when the page loads
+        window.onload = function () {
+            const alertBox = document.getElementById("welcome-alert");
+            if (alertBox) {
+                alertBox.classList.add("show"); /* Trigger the alert box */
+                setTimeout(() => {
+                    alertBox.classList.remove("show"); /* Hide the alert after 5 seconds */
+                }, 5000); // Duration of alert display
+            }
+        };
     </script>
 
     <!-- Bootstrap JS -->
