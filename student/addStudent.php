@@ -12,7 +12,7 @@
     <style>
         /* Global Styling */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: poppins, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -73,26 +73,17 @@
             /* Flexbox layout */
             flex-direction: row;
             /* Elements should be side-by-side */
-            align-items: flex-start;
-            /* Align at the top */
-            justify-content: flex-start;
-            /* No extra space between elements */
-            padding: 20px;
-            /* Ensure some padding around the layout */
+          
+
         }
 
         /* Dashboard Sidebar */
         .dashboard {
+            margin: 0;
+            display: flex;
+            flex: column;
+            width: auto;
             
-            width: 20%;
-            /* Sidebar occupies 20% of the total width */
-            background: #f0f0f0;
-            /* Light gray background */
-            padding: 20px;
-            /* Padding for spacing */
-            box-sizing: border-box;
-            /* Ensure padding is included in the width */
-            background-color: yellow;
         }
 
         /* Main content container */
@@ -107,7 +98,7 @@
             /* Rounded corners */
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
             /* Shadow for depth */
-            width: 10%;
+            
         }
 
 
@@ -175,7 +166,7 @@
             /* Use flexbox for alignment */
             align-items: center;
             /* Center checkbox and text */
-            margin: 0px 12px;
+            margin: -23px 22px;
         }
 
         .checkmark {
@@ -206,12 +197,13 @@
             /* Initially hidden */
         }
 
-        .check input:checked+.checkmark:after {
+        .check input:checked.checkmark:after {
             display: block;
             /* Show when checked */
         }
 
         .btn {
+           
             background: #0072ff;
             /* Blue background */
             color: white;
@@ -383,7 +375,7 @@
 
                     <div class="input_field">
                         <input type="submit" value="Register" class="btn" name="register" />
-                        <!-- <button type="submit" name="register" class="btn" value="Register"> Register</button> -->
+                      
 
                     </div>
                 </div>
