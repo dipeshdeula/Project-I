@@ -239,49 +239,57 @@
                     Show
                     <select name="" id="">
                         <option value="
-                       <?php echo $total_students; ?>"></option>
+                       <?php echo $total_subjects; ?>"></option>
                     </select>
                     entries
                     <br><br>
                     <input type="search" placeholder="search" name="search">
                     <center>
-
-                        <table>
-                            <tr>
-                                <th>Subject Code</th>
-                                <th>Subject Name</th>
-                                <th>Operations</th>
-                            </tr>
-
-                            <?php
-
-                            include ("../connection.php");
+                    <div class="table-container">
+                        <?php
+                            include("../includes/connection.php");
                             $query = "SELECT * FROM tbl_subjects";
                             $data = mysqli_query($conn, $query);
                             $total = mysqli_num_rows($data);
-
-
-                            while ($result = mysqli_fetch_assoc($data)) {
-                                echo "<tr>
-                   <td>" . $result['subCode'] . "</td>
-                   <td>" . $result['subName'] . "</td>
-                   <td>
-                   <a  href='http://localhost/student_project/subject/upateSubject.php?id=$result[subCode]'>
-                    <input type='submit' value='update' class='update' name='updateSubject'>
-                   </a>
-                   <a  href='http://localhost/student_project/subject/deleteSubject.php?id=$result[subCode]'>
-                     <input type='submit' value='delete' class='delete' name='deleteSubject' onclick='return checkdelete();'>
-
-                                        
-                                        </a
+                            if($total > 0)
+                            {
+                        ?>
+                        <center>
+                            <table class="table">
+                                <tr>
+                                    <th>Subject Code</th>
+                                    <th>Subject Name</th>
+                                    <th>Operations</th>
+                                </tr>
+                                <?php
+                                    while($result = mysqli_fetch_assoc($data))
+                                    {
+                                        echo "<tr>
+                                        <td>".$result['subCode']."</td>
+                                        <td>".$result['subName']."</td>
+                                        <td>
+                                        <a href='http://localhost/student_project/subject/upateSubject.php?id=$result[subCode]'>
+                                        <input type='submit' value='update' class='update' name='updateSubject'>
+                                        </a>
+                                        <a href='http://localhost/student_project/subject/deleteSubject.php?id=$result[subCode]'>
+                                        <input type='submit' value='delete' class='delete' name='deleteSubject' onclick='return checkdelete();'>
+                                        </a>
                                         </td>
-                   
-
-                    </tr>";
+                                        </tr>";
+                                    }
+                                ?>
+                            </table>
+                        </center>
+                        <?php
                             }
-                            ?>
-                        </table>
-                    </center>
+                            else
+                            {
+                                echo "No records found.";
+                            }
+                        ?>
+                    </div>
+                      
+                    
                 </form>
             </div>
         </div>
