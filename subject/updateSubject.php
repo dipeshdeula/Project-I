@@ -1,3 +1,58 @@
+<?php
+include ("../connection.php");
+
+// Get the subCode from GET request
+$subCode = isset($_GET['id']) ? $_GET['id'] : null;
+
+// Check if the subCode is valid
+if ($subCode) {
+    // Fetch existing data based on subCode
+    $query = "SELECT * FROM tbl_subjects WHERE subCode = '$subCode'";
+    $data = mysqli_query($conn, $query);
+
+    if ($data && mysqli_num_rows($data)>0) { //Ensure data is retrieved
+        $result = mysqli_fetch_assoc($data); // Fetch a single record
+    } else {
+        // Display an error if the initial data fetch fails
+        echo "<script>alert('Error fetching data: " . mysqli_error($conn) . "');</script>";
+        $result = null; // Explicitly set $result to null
+    }
+}
+else {
+    echo "<script>alert('No valid subCode provided');</script>";
+    $result = null; // Explicitly set $result to null
+}
+if ($result) {
+    $subName = isset($result['subName']) ? htmlspecialchars($result['subName']) : ''; // Ensure default values
+    $subCode = isset($result['subCode']) ? htmlspecialchars($result['subCode']) : '';
+} else {
+    $subName = ''; // Default to empty string
+    $subCode = ''; // Default to empty string
+}
+
+
+        // If the POST request is made to update the subject
+        if (isset($_POST['update'])) {
+            $subName = $_POST['subName']; // Ensure the correct variable name
+            $updatedSubCode = $_POST['subCode']; // Use a new variable for the updated code
+
+            // Construct the SQL query to update the record
+            $query = "UPDATE tbl_subjects SET subName = '$subName', subCode = '$updatedSubCode' WHERE subCode = '$subCode'";
+
+            $data = mysqli_query($conn, $query); // Execute the query
+
+            // Check if the query execution was successful
+            if ($data) {
+                echo "<script>alert('Subjects Data Updated Successfully');</script>";
+            } else {
+                // Display an error message if the update fails
+                echo "<script>alert('Failed to update data: " . mysqli_error($conn) . "');</script>";
+            }
+        }
+    
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -251,7 +306,7 @@
                     <label>Subject Name</label>
                     <input type="text" name="subName" placeholder="Subject Name" 
                     value="
-                    <?php echo htmlspecialchars($result['subName']);
+                    <?php echo $subName;
                     ?>
                     "
                     />
@@ -262,7 +317,7 @@
                     <input type="text" name="subCode" placeholder="Subject Code" 
                     value = "
                     <?php
-                    echo htmlspecialchars($result['subCode']);
+                    echo $subCode;
                     ?>
                     "
                     />
@@ -270,7 +325,7 @@
             </div>
 
             <div class="input_field">
-                <input type="submit" value="UPDATE" class="btn" name="updateSubject" />
+                <input type="submit" value="update" class="btn" name="updateSubject" />
 
 
             </div>
@@ -285,44 +340,4 @@
 </body>
 
 </html>
-<?php
-include ("../connection.php");
-
-// Get the subCode from GET request
-$subCode = isset($_GET['subCode']) ? $_GET['subCode'] : null;
-
-// Check if the subCode is valid
-if ($subCode) {
-    // Fetch existing data based on subCode
-    $query = "SELECT * FROM tbl_subjects WHERE subCode = '$subCode'";
-    $data = mysqli_query($conn, $query);
-
-    if ($data) {
-        $result = mysqli_fetch_assoc($data); // Fetch a single record
-
-        // If the POST request is made to update the subject
-        if (isset($_POST['updateSubject'])) {
-            $subName = $_POST['subName']; // Ensure the correct variable name
-            $updatedSubCode = $_POST['subCode']; // Use a new variable for the updated code
-
-            // Construct the SQL query to update the record
-            $query = "UPDATE tbl_subjects SET subName = '$subName', subCode = '$updatedSubCode' WHERE subCode = '$subCode'";
-
-            $data = mysqli_query($conn, $query); // Execute the query
-
-            // Check if the query execution was successful
-            if ($data) {
-                echo "<script>alert('Subjects Data Updated Successfully');</script>";
-            } else {
-                // Display an error message if the update fails
-                echo "<script>alert('Failed to update data: " . mysqli_error($conn) . "');</script>";
-            }
-        }
-    } else {
-        // Display an error message if the initial data fetch fails
-        echo "<script>alert('Error fetching data: " . mysqli_error($conn) . "');</script>";
-    }
-} else {
-    echo "<script>alert('No valid subCode provided');</script>";
-}
-?>
+ 
