@@ -1,17 +1,24 @@
+
+<?php
+require_once("../connection.php");
+
+// Retrieve all subjects from the database
+$query = "SELECT * FROM tbl_subjects";
+$data = mysqli_query($conn, $query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Subjects</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5fNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        /* Global Styling */
-        body {
+         /* Global Styling */
+         body {
             font-family: poppins;
             margin: 0;
             padding: 0;
@@ -204,111 +211,52 @@
         }
     </style>
 </head>
-
 <body>
 
-    <header>
+<header>
+    <h3>Manage Subjects</h3>
+</header>
 
-        <h3>Manage Subjects</h3>
+<div class="nav">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+            <li class="breadcrumb-item active">Subjects</li>
+        </ol>
+    </nav>
+</div>
 
-    </header>
+<div class="container">
+    <h4>Subjects List</h4>
+    <?php if (mysqli_num_rows($data) > 0): ?>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($subject = mysqli_fetch_assoc($data)): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($subject['subCode']); ?></td>
+                <td><?php echo htmlspecialchars($subject['subName']); ?></td>
+                <td>
+                    <a href="updateSubject.php?id=<?php echo htmlspecialchars($subject['subCode']); ?>" class="btn btn-primary">Update</a>
+                    <a href="deleteSubject.php?id=<?php echo htmlspecialchars($subject['subCode']); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this subject?');">Delete</a>
+                </td>
+            </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+    <?php else: ?>
+    <p>No subjects found.</p>
+    <?php endif; ?>
+</div>
 
-    <div class="nav">
-
-        <nav aria-label="breadcrumb" text-decoration="none">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Subject Name</a></li>
-                <li class="breadcrumb-item"><a href="#">Subject Code</a></li>
-
-            </ol>
-        </nav>
-    </div>
-    <!-- 
-    adding dashboard here -->
-
-    <div class="main">
-        <div class="dashboard">
-            <?php include('../includes/leftbar.php') ?>
-
-        </div>
-        <div class="container">
-            <div class="form">
-                <form action="#">
-                    <p>View Subject Info </p>
-                    Show
-                    <select name="" id="">
-                        <option value="
-                       <?php echo $total_subjects; ?>"></option>
-                    </select>
-                    entries
-                    <br><br>
-                    <input type="search" placeholder="search" name="search">
-                    <center>
-                    <div class="table-container">
-                        <?php
-                            include("../includes/connection.php");
-                            $query = "SELECT * FROM tbl_subjects";
-                            $data = mysqli_query($conn, $query);
-                            $total = mysqli_num_rows($data);
-                            if($total > 0)
-                            {
-                        ?>
-                        <center>
-                            <table class="table">
-                                <tr>
-                                    <th>Subject Code</th>
-                                    <th>Subject Name</th>
-                                    <th>Operations</th>
-                                </tr>
-                                <?php
-                                    while($result = mysqli_fetch_assoc($data))
-                                    {
-                                        echo "<tr>
-                                        <td>".$result['subCode']."</td>
-                                        <td>".$result['subName']."</td>
-                                        <td>
-                                        <a href='http://localhost/student_project/subject/upateSubject.php?id=$result[subCode]'>
-                                        <input type='submit' value='update' class='update' name='updateSubject'>
-                                        </a>
-                                        <a href='http://localhost/student_project/subject/deleteSubject.php?id=$result[subCode]'>
-                                        <input type='submit' value='delete' class='delete' name='deleteSubject' onclick='return checkdelete();'>
-                                        </a>
-                                        </td>
-                                        </tr>";
-                                    }
-                                ?>
-                            </table>
-                        </center>
-                        <?php
-                            }
-                            else
-                            {
-                                echo "No records found.";
-                            }
-                        ?>
-                    </div>
-                      
-                    
-                </form>
-            </div>
-        </div>
-
-    </div>
-
-
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-
-    <script>
-        function checkdelete() {
-            return confirm("Are you sure want to delete?");
-        }
-    </script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </body>
-
 </html>
