@@ -1,28 +1,17 @@
 <?php
-include("../connection.php"); 
+require_once("../connection.php");
 
-// Check if the 'id' parameter is passed
-$stdId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$stdId = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ($stdId) {
-    $query = "DELETE FROM tbl_student WHERE stdId = $stdId"; 
+    $query = "DELETE FROM tbl_student WHERE stdId = '$stdId'";
     $result = mysqli_query($conn, $query);
 
     if ($result) {
-        echo "<script>
-            alert('Data deleted successfully');
-          
-        </script>";
+        echo "<script>alert('Student deleted successfully.'); window.location='manageStudent.php';</script>";
     } else {
-        echo "<script>
-            alert('Deletion failed: " . mysqli_error($conn) . "');
-           
-        </script>";
+        echo "<script>alert('Error deleting student: " . mysqli_error($conn) . "'); window.location='manageStudent.php';</script>";
     }
 } else {
-    echo "<script>
-        alert('Invalid or missing ID');
-        
-    </script>";
+    echo "<script>alert('No student ID provided'); window.location='manageStudent.php';</script>";
 }
-?>
