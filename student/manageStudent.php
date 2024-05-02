@@ -1,37 +1,34 @@
+
+<!-- new code snipets -->
+
+
 <?php
-include("../connection.php");
+require_once("../connection.php");
 
-// Initialize the variable with a default value
-$total_students = 0; // Default value in case of query failure
-
-// Try to fetch the total number of registered students
+// Fetch the total number of registered students
 $query = "SELECT COUNT(*) AS total_students FROM tbl_student";
 $result = mysqli_query($conn, $query);
 
-// Check if the query executed successfully
-if ($result) {
-    // Fetch the data
-    $row = mysqli_fetch_assoc($result);
-    if ($row) {
-        // Assign the total count
-        $total_students = $row['total_students'];
-    }
-}
+// Get the total number of students
+$total_students = $result ? mysqli_fetch_assoc($result)['total_students'] : 0;
+
+// Fetch all students from the database
+$query = "SELECT * FROM tbl_student";
+$data = mysqli_query($conn, $query);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Manage Students</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        /* Global Styling */
-        body {
+             /* Global Styling */
+             body {
             font-family: poppins;
             margin: 0;
             padding: 0;
@@ -282,99 +279,69 @@ if ($result) {
         }
     </style>
 </head>
-
 <body>
     <header>
         <h3>Manage Students</h3>
     </header>
 
     <div class="nav">
-        <nav aria-label="breadcrumb" text-decoration="none">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">&nbsp;&nbsp;&nbsp;<i class="fa fa-home"></i>&nbsp;&nbsp;Home</a>
-                </li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Students</a></li>
-                <li class="breadcrumb-item"><a href="#">Manage Students</a></li>
+                <li class="breadcrumb-item active">Manage Students</li>
             </ol>
         </nav>
     </div>
 
-    <!-- Here we add the main container to hold the sidebar and the main content -->
     <div class="main">
-        <!-- Sidebar for Dashboard -->
         <div class="dashboard">
-            <!-- Include leftbar or other sidebar content -->
-            <?php include ('../includes/leftbar.php'); ?>
+            <!-- Include leftbar or other dashboard content -->
+            <?php include('../includes/leftbar.php'); ?>
         </div>
 
-        <!-- Main content container -->
         <div class="container">
-            <div class="form">
-                <form action="#" method="POST">
-                    <p>View Student Info </p>
-                    Show
-                    <select name="" id="">
-                       <option value="
-                       <?php echo $total_students; ?>"></option> 
-                    </select>
-                    entries
-                    <br><br>
-                    <input type="search" placeholder="search" name="search">
-
-                    <table>
-                        <tr>
-                            <th>StdId</th>
-                            <th>Photo</th>
-                            <th>Student Name</th>
-                            <th>Email</th>
-                            <th>Password</th>
-                            <th>Class</th>
-                            <th>Gender</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Operations</th>
-                        </tr>
-
-                        <!-- Existing PHP code to fetch and display data from the database -->
-                        <?php
-                        include ("../connection.php");
-                        $query = "SELECT * FROM tbl_student";
-                        $data = mysqli_query($conn, $query);
-                        $total = mysqli_num_rows($data);
-                        if ($total > 0) {
-                            while ($result = mysqli_fetch_assoc($data)) {
-                                echo "<tr>
-                                    <td>{$result['stdId']}</td>
-                                    <td><img src=\"{$result['std_image']}\" height='100px' width='100px' /></td>
-                                    <td>{$result['stdname']}</td>
-                                    <td>{$result['email']}</td>
-                                    <td>{$result['password']}</td>
-                                    <td>{$result['classname']}</td>
-                                    <td>{$result['gender']}</td>
-                                    <td>{$result['phone']}</td>
-                                    <td>{$result['address']}</td>
-                                    <td>
-                                        <a id='update' href='update.php?id={$result['stdId']}'>
-                                            <input type='submit' value='update' class='update'>
-                                        </a>
-                                        <a id='delete' href='http://localhost/student_project/student/deleteStudent.php?id={$result['stdId']}'>
-                                            <input type='submit' value='delete' class='delete' onclick='return checkdelete();'>
-                                        </a>
-                                    </td>
-                                </tr>";
-                            }
-                        }
-                        ?>
-                    </table>
-                </form>
-            </div>
+            <h4>Registered Students</h4>
+            <?php if ($data && mysqli_num_rows($data) > 0): ?>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>StdId</th>
+                        <th>Photo</th>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Class</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($student = mysqli_fetch_assoc($data)): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($student['stdId']); ?></td>
+                        <td><img src="<?php echo htmlspecialchars($student['std_image']); ?>" height='100px' width='100px' /></td>
+                        <td><?php echo htmlspecialchars($student['stdname']); ?></td>
+                        <td><?php echo htmlspecialchars($student['email']); ?></td>
+                        <td><?php echo htmlspecialchars($student['classname']); ?></td>
+                        <td><?php echo htmlspecialchars($student['gender']); ?></td>
+                        <td><?php echo htmlspecialchars($student['phone']); ?></td>
+                        <td><?php echo htmlspecialchars($student['address']); ?></td>
+                        <td>
+                            <a href="updateStudent.php?id=<?php echo htmlspecialchars($student['stdId']); ?>" class="btn btn-primary">Update</a>
+                            <a href="deleteStudent.php?id=<?php echo htmlspecialchars($student['stdId']); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
+                        </td>
+                    </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+            <?php else: ?>
+            <p>No students found.</p>
+            <?php endif; ?>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
-
 </html>
