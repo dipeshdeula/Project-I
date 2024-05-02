@@ -1,17 +1,96 @@
 
+<?php
+require_once("../connection.php");
+
+$stdId = isset($_GET['id']) ? $_GET['id'] : null;
+
+if ($stdId) {
+    $query = "SELECT * FROM tbl_student WHERE stdId = '$stdId'";
+    $data = mysqli_query($conn, $query);
+
+    if ($data && mysqli_num_rows($data) > 0) {
+        $student = mysqli_fetch_assoc($data);
+    } else {
+        header("Location: manageStudent.php?error=Student not found");
+        exit();
+    }
+} else {
+    header("Location: manageStudent.php?error=No student ID provided");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $stdname = $_POST['stdname'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $classname = $_POST['classname'];
+    $gender = $_POST['gender'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+
+    // Default image path
+    $image_path = $student['std_image']; // Keep existing image by default
+
+    // Check if a new image was uploaded
+    if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['student_image'];
+        $file_name = $file['name'];
+        $file_tmp = $file['tmp_name'];
+        $file_type = $file['type'];
+
+        // Allow only certain file types (e.g., JPG, PNG)
+        $allowed_types = ['image/jpeg', 'image/png'];
+        if (in_array($file_type, $allowed_types)) {
+            // Set a secure destination path (make sure the directory is writable)
+            $upload_dir = '../uploads/students/'; // Update this path according to your structure
+            if (!file_exists($upload_dir)) {
+                mkdir($upload_dir, 0777, true); // Create directory if it doesn't exist
+            }
+
+            // Move the uploaded file to the destination directory
+            $destination = $upload_dir . $file_name;
+            move_uploaded_file($file_tmp, $destination);
+
+            // Update the image path
+            $image_path = $destination;
+        } else {
+            echo "<script>alert('Invalid file type. Only JPG and PNG are allowed.');</script>";
+        }
+    }
+
+    // Update query to include the image path
+    $query = "UPDATE tbl_student SET 
+              stdname = '$stdname', 
+              email = '$email', 
+              password = '$password', 
+              classname = '$classname', 
+              gender = '$gender', 
+              phone = '$phone', 
+              address = '$address', 
+              std_image = '$image_path' 
+              WHERE stdId = '$stdId'";
+
+    $result = mysqli_query($conn, $query);
+
+    if ($result) {
+        echo "<script>alert('Student updated successfully.'); window.location='manageStudent.php';</script>";
+    } else {
+        echo "<script>alert('Error updating student: " . mysqli_error($conn) . "');</script>";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Update Student</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
-          /* Global Styling */
+               /* Global Styling */
   body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -233,192 +312,68 @@ header {
         /* Reduce height for smaller screens */
     }
 }
-
     </style>
-      
 </head>
-
 <body>
-
     <header>
-
-        <h3>Update Students </h3>
-
+        <h3>Update Student</h3>
     </header>
-
-    <div class="nav">
-
-        <nav aria-label="breadcrumb" text-decoration="none">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Students</a></li>
-                <li class="breadcrumb-item"><a href="#">Update Students</a></li>
-
-            </ol>
-        </nav>
-    </div>
 
     <div class="container">
         <form action="#" method="POST" enctype="multipart/form-data">
-            <div class="title">Update Student Details</div>
+            <div class="form-group">
+                <label>Student Image</label>
+                <input type="file" name="student_image" class="form-control">
+            <div class="form-group">
+                <label>Student Name</label>
+                <input type="text" name="stdname" value="<?php echo htmlspecialchars($student['stdname']); ?>" class="form-control">
+            </div>
 
+            <div class="form-group">
+                <label>Student ID</label>
+                <input type="text" name="stdId" value="<?php echo htmlspecialchars($student['stdId']); ?>" class="form-control">
+            </div>
 
-            <div class="form">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="<?php echo htmlspecialchars($student['email']); ?>" class="form-control">
+            </div>
 
-                <div class="input_field">
-                    <label>Upload Image</label>
-                    <input type="file" name="uploadfile" style="width:100%;">
-                </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" value="<?php echo htmlspecialchars($student['password']); ?>" class="form-control">
+            </div>
 
-                <div class="input_field">
-                    <label>Student Name</label>
-                    <input type="text" class="input" name="stdname">
-                </div>
+            <div class="form-group">
+                <label>Class Name</label>
+                <input type="text" name="classname" value="<?php echo htmlspecialchars($student['classname']); ?>" class="form-control">
+            </div>
 
-                <div class="input_field">
-                    <label>Student Id</label>
-                    <input type="text" class="input" name="stdId">
-                </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="gender" class="form-control">
+                    <option value="Male" <?php echo $student['gender'] === 'Male' ? 'selected' : ''; ?>>Male</option>
+                    <option value="Female" <?php echo $student['gender'] === 'Female' ? 'selected' : ''; ?>>Female</option>
+                    <option value="Other" <?php echo $student['gender'] === 'Other' ? 'selected' : ''; ?>>Other</option>
+                </select>
+            </div>
 
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" value="<?php echo htmlspecialchars($student['phone']); ?>" class="form-control">
+            </div>
 
+            <div class="form-group">
+                <label>Address</label>
+                <textarea name="address" class="form-control"><?php echo htmlspecialchars($student['address']); ?></textarea>
+            </div>
 
-                <div class="input_field">
-                    <label>Email</label>
-                    <input type="text" class="input" name="email">
-                </div>
-
-                <div class="input_field">
-                    <label>Password</label>
-                    <input type="password" class="input" name="password">
-                </div>
-
-                <div class="input_field">
-                    <label>Class Name</label>
-                    <input type="text" class="input" name="classname">
-                </div>
-                <!-- <div class="input_field">
-                    <label for="className">Class</label>
-                    <div class="custom_select">
-                        <select name="className" id="className">
-                            <option value="Not Selected">Select</option>
-                            <option value="className">
-
-                            </option>
-                        </select>
-                    </div>
-
-                </div> -->
-
-                <div class="input_field">
-                    <label>Gender</label>
-                    <div class="custom_select">
-                        <select name="gender">
-                            <option value="Not Selected">Select</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other's">Other's</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="input_field">
-                    <label>Phone</label>
-                    <input type="text" class="input" name="phone">
-                </div>
-
-                <div class="input_field">
-                    <label>Address</label>
-                    <textarea class="textarea" name="address"></textarea>
-                </div>
-
-                <div class="input_field terms">
-                    <label class="check">
-                        <input type="checkbox">
-                        <p>Agree to terms and conditions</p>
-
-                    </label>
-
-                </div>
-
-                <div class="input_field">
-                    <input type="submit" value="UPDATE" class="btn" name="update" />
-                    <!-- <button type="submit" name="register" class="btn" value="Register"> Register</button> -->
-
-                </div>
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary">
             </div>
         </form>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
-
-<?php
-
-// Include connection
-include ('../connection.php');
-
-// Retrieve the 'id' parameter from the query string
-$stdId = isset($_GET['stdId']) ? $_GET['stdId'] : null;
-
-
-error_reporting(0);
-
-
-if ($stdId) {
-    // Fetch data from the database based on the provided 'id'
-    $query = "SELECT * FROM form WHERE id = '$stId'";
-    $data = mysqli_query($conn, $query);
-
-    if ($data) {
-       
-
-        if (isset($_POST['update'])) {
-            $stdname = $_POST['stdname'];
-            $stdId = $_POST['stdId'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $classname = $_POST['classname'];
-            $gender = $_POST['gender'];
-            $phone = $_POST['phone'];
-            $address = $_POST['address'];
-
-            // Construct the SQL query to update the record
-            $query = "UPDATE form SET stdname = '$stdname', stdId='$stdId',email='$email', password = '$password', 
-                       classname='$classname', gender = '$gender', phone = '$phone',
-                         address = '$address' 
-                        WHERE stdId = '$stdId'";
-
-            // Execute the query and check for success
-            $data = mysqli_query($conn, $query);
-
-            if ($data) {
-                // echo "<script>alert('Data updated successfully.')</script>";
-
-                ?>
-
-                <meta http-equiv="refresh" content="0; url='http://localhost/student_project/student/manageStudent.php'/>
-        
-                <?php
-            } else {
-                echo "Failed to update data: " . mysqli_error($conn);
-            }
-        }
-
-    } else {
-        echo "Error fetching data: " . mysqli_error($conn);
-        return; // Stop execution if there's an error fetching data
-    }
-}
- else {
-    echo "No ID provided.";
-    return; // Stop execution if no ID is given
-}
-?>
-
-
-
