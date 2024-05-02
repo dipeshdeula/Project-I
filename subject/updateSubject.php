@@ -1,74 +1,50 @@
 <?php
-include ("../connection.php");
+require_once("../connection.php");
 
-// Get the subCode from GET request
 $subCode = isset($_GET['id']) ? $_GET['id'] : null;
 
-// Check if the subCode is valid
 if ($subCode) {
-    // Fetch existing data based on subCode
     $query = "SELECT * FROM tbl_subjects WHERE subCode = '$subCode'";
     $data = mysqli_query($conn, $query);
 
-    if ($data && mysqli_num_rows($data)>0) { //Ensure data is retrieved
-        $result = mysqli_fetch_assoc($data); // Fetch a single record
+    if ($data && mysqli_num_rows($data) > 0) {
+        $result = mysqli_fetch_assoc($data);
+        $subName = $result['subName'];
     } else {
-        // Display an error if the initial data fetch fails
-        echo "<script>alert('Error fetching data: " . mysqli_error($conn) . "');</script>";
-        $result = null; // Explicitly set $result to null
+        // Redirect if the subject code doesn't exist
+        header("Location: manageSubject.php?error=Subject not found");
+        exit();
+    }
+} else {
+    header("Location: manageSubject.php?error=No subject code provided");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $newSubCode = htmlspecialchars($_POST['subCode']);
+    $subName = htmlspecialchars($_POST['subName']);
+    
+    $query = "UPDATE tbl_subjects SET subCode = '$newSubCode', subName = '$subName' WHERE subCode = '$subCode'";
+    if (mysqli_query($conn, $query)) {
+        echo "<script>alert('Subject updated successfully'); window.location='manageSubject.php';</script>";
+    } else {
+        echo "<script>alert('Error updating subject: " . mysqli_error($conn) . "');</script>";
     }
 }
-else {
-    echo "<script>alert('No valid subCode provided');</script>";
-    $result = null; // Explicitly set $result to null
-}
-if ($result) {
-    $subName = isset($result['subName']) ? htmlspecialchars($result['subName']) : ''; // Ensure default values
-    $subCode = isset($result['subCode']) ? htmlspecialchars($result['subCode']) : '';
-} else {
-    $subName = ''; // Default to empty string
-    $subCode = ''; // Default to empty string
-}
-
-
-        // If the POST request is made to update the subject
-        if (isset($_POST['update'])) {
-            $subName = $_POST['subName']; // Ensure the correct variable name
-            $updatedSubCode = $_POST['subCode']; // Use a new variable for the updated code
-
-            // Construct the SQL query to update the record
-            $query = "UPDATE tbl_subjects SET subName = '$subName', subCode = '$updatedSubCode' WHERE subCode = '$subCode'";
-
-            $data = mysqli_query($conn, $query); // Execute the query
-
-            // Check if the query execution was successful
-            if ($data) {
-                echo "<script>alert('Subjects Data Updated Successfully');</script>";
-            } else {
-                // Display an error message if the update fails
-                echo "<script>alert('Failed to update data: " . mysqli_error($conn) . "');</script>";
-            }
-        }
-    
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>subject creation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
+    <title>Update Subject</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5fNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        /* Global Styling */
-        body {
+        /* Your CSS styles here */
+
+          /* Global Styling */
+          body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -273,71 +249,28 @@ if ($result) {
         }
     </style>
 </head>
-
 <body>
 
+<header>
+    <h3>Update Subject</h3>
+</header>
 
-    <header>
+<div class="container">
+    <form action="updateSubject.php?id=<?php echo htmlspecialchars($subCode); ?>" method="POST">
+        <div class="mb-3">
+            <label for="subName">Subject Name</label>
+            <input type="text" name="subName" class="form-control" value="<?php echo htmlspecialchars($subName); ?>">
+        </div>
+        <div class="mb-3">
+            <label for="subCode">Subject Code</label>
+            <input type="text" name="subCode" class="form-control" value="<?php echo htmlspecialchars($subCode); ?>">
+        </div>
+        <input type="submit" value="Update" class="btn btn-primary">
+    </form>
+</div>
 
-        <h3>Update Subjects</h3>
-
-    </header>
-
-    <div class="nav">
-
-        <nav aria-label="breadcrumb" text-decoration="none">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Subject</a></li>
-                <li class="breadcrumb-item"><a href="#">Update Subject</a></li>
-
-            </ol>
-        </nav>
-    </div>
-
-    <div class="container">
-        <form action="#" method="POST" enctype="multipart/form-data">
-            <div class="title">Update Subject's</div>
-
-
-            <div class="form">
-
-                <div class="input_field">
-                    <label>Subject Name</label>
-                    <input type="text" name="subName" placeholder="Subject Name" 
-                    value="
-                    <?php echo $subName;
-                    ?>
-                    "
-                    />
-                </div>
-
-                <div class="input_field">
-                    <label>Subject Code</label>
-                    <input type="text" name="subCode" placeholder="Subject Code" 
-                    value = "
-                    <?php
-                    echo $subCode;
-                    ?>
-                    "
-                    />
-                </div>
-            </div>
-
-            <div class="input_field">
-                <input type="submit" value="update" class="btn" name="updateSubject" />
-
-
-            </div>
-        </form>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </body>
-
 </html>
- 
