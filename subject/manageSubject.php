@@ -24,7 +24,7 @@
         header {
             background-color: #0072ff;
             color: white;
-            padding: 20px;
+            padding: 10px;
             text-align: center;
         }
 
@@ -34,9 +34,23 @@
         }
 
         .nav a {
+            display: flex;
+            margin-left: 30px;
             color: white;
             text-decoration: none;
         }
+
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+            /* Underline on hover */
+        }
+
 
         .breadcrumb {
             padding: 10px;
@@ -49,22 +63,20 @@
             flex-direction: row;
         }
 
-        .dashboard {
-            
-            
-           
-            
+        .main .container {
+            height: 50%;
+            width: 50%
         }
 
         .container {
-            flex: 1;
-            max-width: 800px;
+            max-width: 960px;
             margin: 20px auto;
             padding: 20px;
             background: white;
             border-radius: 10px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
         }
+
 
         table {
             width: 100%;
