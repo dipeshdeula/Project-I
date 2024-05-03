@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,28 +32,26 @@
 
         /* Navigation Styling */
         .nav {
-           
             padding: 10px 20px;
-            /* Padding around navigation */
             background: #333;
-            /* Dark gray background */
-            overflow: hidden;
         }
 
         .nav a {
-            margin-left: 25px;
+            display: flex;
+            margin-left: 30px;
             color: white;
-            /* White text color */
             text-decoration: none;
-            /* No underline */
-            transition: all 0.3s ease;
         }
 
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
+        }
         .nav a:hover {
             text-decoration: underline;
             /* Underline on hover */
         }
-
         /* Breadcrumb Styling */
         .breadcrumb {
             padding: 10px;
@@ -65,45 +64,44 @@
             margin-right: 10px;
             /* Space between breadcrumb items */
         }
-        .main{
+
+        .main {
             display: flex;
             flex-direction: row;
-    
+
         }
-        
-        /* Container layout*/
-        .container{
-            display: block;
-            flex-direction: row;
+
+        .main .container {
+            height: 50%;
+            width: 50%
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
             padding: 20px;
-            margin: 20px ;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-         
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .table-container {
-            padding: 20px;
-            margin: 20px;
-        }
+        
+        
 
-        .table {
+        table {
             width: 100%;
-            table-layout: auto;
             border-collapse: collapse;
-            border: 1px solid #ddd;
         }
 
-        .table th,
-        .table td {
-            
+        table th,
+        table td {
+            border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            margin-right: 20px;
         }
 
-        .table th {
+        table th {
             background-color: #0072ff;
             color: white;
         }
@@ -129,8 +127,8 @@
             opacity: 0.8;
         }
 
-         /* Responsive Design with Media Queries */
-         @media (max-width: 768px) {
+        /* Responsive Design with Media Queries */
+        @media (max-width: 768px) {
             .container {
                 padding: 10px;
                 /* Reduced padding for smaller screens */
@@ -160,46 +158,49 @@
         <h3>Manage Classes</h3>
     </header>
 
+
     <div class="nav">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Class</a></li>
-                <li class="breadcrumb-item"><a href="#">Manage Classes</a></li>
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Class</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Class</a></li>
+
             </ol>
         </nav>
     </div>
 
     <div class="main">
         <div class="dashboard">
-            <?php include('../includes/leftbar.php'); ?>
+            <?php include ('../includes/leftbar.php'); ?>
         </div>
         <div class="container">
             <h4>View Class Details</h4>
             <div class="table-container">
                 <?php
-                include("../connection.php");
+                include ("../connection.php");
 
                 $query = "SELECT * FROM tbl_classes";
                 $data = mysqli_query($conn, $query);
 
                 if ($data && mysqli_num_rows($data) > 0):
                     $serial = 1; // Initialize the serial number
-                ?>
-                <center>
-                    <table class="table" id="myTable">
-                        <thead>
-                            <tr>
-                                <th>S.N</th> <!-- Serial number -->
-                                <th>Class Name</th>
-                                <th>Section</th>
-                                <th>Operation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            while ($result = mysqli_fetch_array($data)):
-                                echo "<tr>
+                    ?>
+                    <center>
+                        <table class="table-responsive" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>S.N</th> <!-- Serial number -->
+                                    <th>Class Name</th>
+                                    <th>Section</th>
+                                    <th>Operation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                while ($result = mysqli_fetch_array($data)):
+                                    echo "<tr>
                                     <td>{$serial}</td> <!-- Serial number -->
                                     <td>{$result['className']}</td>
                                     <td>{$result['classSection']}</td>
@@ -209,14 +210,14 @@
                                         <a class='delete' href='deleteClass.php?className={$result['className']}&classSection={$result['classSection']}' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</a>
                                     </td>
                                 </tr>";
-                                $serial++; // Increment serial number
-                            endwhile;
-                            ?>
-                        </tbody>
-                    </table>
-                </center>
+                                    $serial++; // Increment serial number
+                                endwhile;
+                                ?>
+                            </tbody>
+                        </table>
+                    </center>
                 <?php else: ?>
-                <p>No records found.</p>
+                    <p>No records found.</p>
                 <?php endif; ?>
             </div>
         </div>
@@ -233,4 +234,5 @@
         });
     </script>
 </body>
+
 </html>
