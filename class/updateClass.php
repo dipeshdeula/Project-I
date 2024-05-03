@@ -1,52 +1,44 @@
 <?php
-// session_start();
-// if(!isset($_SESSION['className']))
-// {
-//     header("Location:adminLogin.php");
-//     exit();
-// }
-// ?>
+include('../connection.php');
 
+// Retrieve 'className' and 'classSection' from the query string
+$className = isset($_GET['className']) ? $_GET['className'] : null;
+$classSection = isset($_GET['classSection']) ? $_GET['classSection'] : null;
 
-<?php
-include ('../connection.php');
-
-//retrieve the 'id' parameter from teh query string
-
-$cid = isset($_GET['id']) ? $_GET['id'] : null;
-
-if ($cid) {
-    //fetch data from the database on the provided id;
-
-    $query = "SELECT * from tbl_classes WHERE id='$cid'";
+// Check if the class name and section were provided
+if ($className && $classSection) {
+    // Fetch data from the database for the provided class name and section
+    $query = "SELECT * FROM tbl_classes WHERE className = '$className' AND classSection = '$classSection'";
     $data = mysqli_query($conn, $query);
 
-    if ($data) {
+    if ($data && mysqli_num_rows($data) > 0) {
         $result = mysqli_fetch_assoc($data);
     } else {
-        echo "error fetching data:" . mysqli_error($conn);
+        echo "Error fetching data: " . mysqli_error($conn);
         return;
     }
 } else {
-    echo "No Id provided";
+    echo "No class name or section provided.";
     return;
 }
 
 if (isset($_POST['update'])) {
-    $className = $_POST['className'];
-    $classSection = $_POST['classSection'];
+    $newClassName = $_POST['className'];
+    $newClassSection = $_POST['classSection'];
 
-    //construct the sql query to update the record
+    // Construct the SQL query to update the record
+    $updateQuery = "UPDATE tbl_classes SET 
+        className = '$newClassName', 
+        classSection = '$newClassSection' 
+        WHERE className = '$className' AND classSection = '$classSection'";
 
-    $query = "UPDATE tbl_classes set className='$className',
-     classSection = '$classSection' WHERE id = '$cid'";
-
-    //execute the query and check for sucess
-    $data = mysqli_query($conn, $query);
-    if ($data) {
-        echo "<script>alert('Data updated Successfully');</script>";
+    // Execute the query and check for success
+    if (mysqli_query($conn, $updateQuery)) {
+        header("Location: manageClass.php");
+      //  echo "<script>alert('Data updated successfully');</script>";
+        // Optionally, redirect or perform other actions upon successful update
     } else {
-        echo "<script>alert('failed to update data');</script>";
+        echo "<script>alert('Failed to update data');</script>";
     }
 }
 
@@ -54,19 +46,14 @@ if (isset($_POST['update'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Student Class</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Existing head content -->
+    <title>Update Student Class</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional head content -->
     <style>
-        /* Global Styling */
-        body {
+         /* Global Styling */
+         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -282,54 +269,39 @@ if (isset($_POST['update'])) {
         }
     </style>
 </head>
-
 <body>
     <header>
-
         <h3>Update Student Class</h3>
-
     </header>
 
-
-
     <div class="nav">
-
-        <nav aria-label="breadcrumb" text-decoration="none">
+        <!-- Navigation and breadcrumb -->
+        <nav aria-label="breadcrumb">
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">classes</a></li>
-                <li class="breadcrumb-item"><a href="#">update class</a></li>
-
+                <li class="breadcrumb-item"><a href="#">Classes</a></li>
+                <li class="breadcrumb-item"><a href="#">Update Class</a></li>
             </ul>
         </nav>
     </div>
 
-
-    <div class="main">
-        <div class="dashboard">
-            <?php include("../includes/leftbar.php"); ?>
-        <div class="container">
-        <h3>Update Student Class</h3>
+    <div class="container">
+        <h4>Update Student Class</h4>
         <hr>
-        <div class="form">
-            <form action="#" method="POST">
-                <label for="className">Class Name</label>
-                <input type="text" name="className" value="<?php echo htmlspecialchars($result['className']); ?>" />
+        <form action="#" method="POST">
+            <label for="className">Class Name</label>
+            <input type="text" name="className" value="<?php echo htmlspecialchars($result['className']); ?>" />
 
-                <p>Eg-BCAI,BIM IV, BBS III etc </p>
-                <label for="classSection">Section</label>
-                <input type="text" name="classSection" value="<?php
-                echo htmlspecialchars($result['classSection']) ?>" />
-
-                <p>Eg- A, B, C etc </p>
-                <input type="submit" name="update" value="update" />
-            </form>
-        </div>
-    </div>
+            <p>Examples: BCA I, BIM IV, BBS III, etc.</p>
             
-        </div>
+            <label for="classSection">Section</label>
+            <input type="text" name="classSection" value="<?php echo htmlspecialchars($result['classSection']); ?>" />
+
+            <p>Examples: A, B, C, etc.</p>
+
+            <input type="submit" name="update" value="Update" />
+        </form>
     </div>
     
 </body>
-
 </html>
