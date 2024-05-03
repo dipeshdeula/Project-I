@@ -47,22 +47,20 @@
         /* Navigation Styling */
         .nav {
             padding: 10px 20px;
-            /* Padding for navigation */
             background: #333;
-            /* Dark gray background */
         }
 
         .nav a {
-           
-            display: inline-flex;
-            list-style: none;
+            display: flex;
+            margin-left: 30px;
             color: white;
-            /* White text */
             text-decoration: none;
-            /* No underline */
-            transition: all 0.3s ease;
-            /* Smooth transitions */
-            
+        }
+
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
         }
 
         .nav a:hover {
@@ -95,6 +93,13 @@
         .dashboard{
             width:auto;
             margin-right: 10px;
+        }
+
+        .main .container{
+            width: 50%;
+            height: 50%;
+            align-items: center;
+            justify-content: center;
         }
         /* Container Layout */
         .container {
@@ -252,20 +257,19 @@
 
 <header>
 
-<h3>Register Student's Classes</h3>
+<h4>Register Student's Classes</h4>
 
 </header>
    
+<div class="nav">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Class</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Create Class</a></li>
 
-    <div class="nav">
-
-        <nav aria-label="breadcrumb" text-decoration="none">
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-home"></i>&nbsp; Home</a></li>
-                <li class="breadcrumb-item"><a href="#">classes</a></li>
-                <li class="breadcrumb-item"><a href="#">create class</a></li>
-
-            </ul>
+            </ol>
         </nav>
     </div>
 
