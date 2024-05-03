@@ -1,9 +1,5 @@
-
-<!-- new code snipets -->
-
-
 <?php
-require_once("../connection.php");
+require_once ("../connection.php");
 
 // Fetch the total number of registered students
 $query = "SELECT COUNT(*) AS total_students FROM tbl_student";
@@ -19,16 +15,20 @@ $data = mysqli_query($conn, $query);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Students</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+
     <style>
-             /* Global Styling */
-             body {
+        /* Global Styling */
+        body {
             font-family: poppins;
             margin: 0;
             padding: 0;
@@ -52,23 +52,24 @@ $data = mysqli_query($conn, $query);
         /* Navigation Styling */
         .nav {
             padding: 10px 20px;
-            /* Padding around navigation */
-            background: #0072ff;
-            /* Dark gray background */
-            overflow: hidden;
-            font-size: 26px;
+            background: #333;
         }
 
         .nav a {
+            display: flex;
+            margin-left: 30px;
             color: white;
-            /* White text color */
             text-decoration: none;
-            /* No underline */
-            transition: all 0.3s ease;
+        }
+
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
         }
 
         .nav a:hover {
-            text-decoration: none;
+            text-decoration: underline;
             /* Underline on hover */
         }
 
@@ -90,84 +91,71 @@ $data = mysqli_query($conn, $query);
 
             /* Space between breadcrumb items */
         }
-/* Main container class for dashboard and content */
-.main {
-    display: flex; /* Flex layout to position sidebar and content */
-    align-items: flex-start; /* Align content at the top */
-    justify-content: flex-start; /* Ensure sidebar and content are side-by-side */
-}
 
-/* Sidebar (dashboard) */
-.dashboard {
-    
-    width: 70%; /* Sidebar width */
-   
-}
-
-/* Main content container */
-.container {
-    margin:40px auto;
-    flex: 0 1 auto; /* Allow the main content to expand */
-    padding: 12px; /* Padding around content */
-    background: white; /* White background */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
-
-
-    transform: translate(-10%, 2%);
-
-
-}
-
-/* Responsive Design with Media Queries */
-@media (max-width: 768px) {
-    .main {
-        flex-direction: column; /* Vertical layout for smaller screens */
-    }
-
-    .container {
-        padding: 10px; /* Reduced padding for smaller screens */
-    }
-
-    .dashboard {
-        width: 100%; /* Full width for sidebar in smaller screens */
-    }
-}
-
-
-        /* Form Styling */
-        .form {
-            margin-bottom: 20px;
-            /* Space below form */
+        /* Main container class for dashboard and content */
+        .main {
+            display: flex;
+            /* Flex layout to position sidebar and content */
+            align-items: flex-start;
+            /* Align content at the top */
+            justify-content: flex-start;
+            /* Ensure sidebar and content are side-by-side */
         }
 
-        .form input[type="search"] {
-            padding: 8px 12px;
-            /* Padding for search input */
-            border: 1px solid #ccc;
-            /* Border color */
-            border-radius: 5px;
-            /* Rounded corners */
-            width: 75%;
-            /* Full width */
-            box-sizing: border-box;
-            /* Include padding in width */
-        }
-
-        .form select {
-            padding: 8px 12px;
-            /* Padding for select */
-            border: 1px solid #ccc;
-            /* Border color */
-            border-radius: 5px;
-            /* Rounded corners */
-        }
-
-        /* Table Design */
-        table {
+        .main .container{
             align-items: center;
             justify-content: center;
-            width: 70%;
+            height: 80%;
+            width: 80%;
+        }
+
+       
+
+        /* Main content container */
+        .container {
+            margin: 40px;
+            flex: 0 1 auto;
+            /* Allow the main content to expand */
+            padding: 12px;
+            /* Padding around content */
+            background: white;
+            /* White background */
+            border-radius: 10px;
+            /* Rounded corners */
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            /* Shadow effect */
+
+
+        }
+       
+
+
+
+        /* Responsive Design with Media Queries */
+        @media (max-width: 768px) {
+            .main {
+                flex-direction: column;
+                /* Vertical layout for smaller screens */
+            }
+
+            .container {
+                padding: 10px;
+                /* Reduced padding for smaller screens */
+            }
+
+            .dashboard {
+                width: 100%;
+                /* Full width for sidebar in smaller screens */
+            }
+        }
+
+
+      
+        /* Table Design */
+       .container table {
+            align-items: center;
+            justify-content: center;
+            width: 80%;
             /* Full width */
             border-collapse: collapse;
             /* Collapse borders */
@@ -182,6 +170,11 @@ $data = mysqli_query($conn, $query);
 
 
         }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
 
 
         table th,
@@ -212,6 +205,7 @@ $data = mysqli_query($conn, $query);
             font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-bottom: 5px;
 
         }
 
@@ -279,6 +273,7 @@ $data = mysqli_query($conn, $query);
         }
     </style>
 </head>
+
 <body>
     <header>
         <h3>Manage Students</h3>
@@ -287,9 +282,11 @@ $data = mysqli_query($conn, $query);
     <div class="nav">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Students</a></li>
-                <li class="breadcrumb-item active">Manage Students</li>
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-users"></i> Students</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Students</a></li>
+
             </ol>
         </nav>
     </div>
@@ -297,51 +294,68 @@ $data = mysqli_query($conn, $query);
     <div class="main">
         <div class="dashboard">
             <!-- Include leftbar or other dashboard content -->
-            <?php include('../includes/leftbar.php'); ?>
+            <?php include ('../includes/leftbar.php'); ?>
         </div>
 
         <div class="container">
             <h4>Registered Students</h4>
             <?php if ($data && mysqli_num_rows($data) > 0): ?>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>StdId</th>
-                        <th>Photo</th>
-                        <th>Student Name</th>
-                        <th>Email</th>
-                        <th>Class</th>
-                        <th>Gender</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Operations</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($student = mysqli_fetch_assoc($data)): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($student['stdId']); ?></td>
-                        <td><img src="<?php echo htmlspecialchars($student['std_image']); ?>" height='100px' width='100px' /></td>
-                        <td><?php echo htmlspecialchars($student['stdname']); ?></td>
-                        <td><?php echo htmlspecialchars($student['email']); ?></td>
-                        <td><?php echo htmlspecialchars($student['classname']); ?></td>
-                        <td><?php echo htmlspecialchars($student['gender']); ?></td>
-                        <td><?php echo htmlspecialchars($student['phone']); ?></td>
-                        <td><?php echo htmlspecialchars($student['address']); ?></td>
-                        <td>
-                            <a href="updateStudent.php?id=<?php echo htmlspecialchars($student['stdId']); ?>" class="btn btn-primary">Update</a>
-                            <a href="deleteStudent.php?id=<?php echo htmlspecialchars($student['stdId']); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                <table class="table-responsive" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>StdId</th>
+                            <th>Photo</th>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Class</th>
+                            <th>Gender</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Operations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($student = mysqli_fetch_assoc($data)): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($student['stdId']); ?></td>
+                                <td><img src="<?php echo htmlspecialchars($student['std_image']); ?>" height='100px'
+                                        width='100px' /></td>
+                                <td><?php echo htmlspecialchars($student['stdname']); ?></td>
+                                <td><?php echo htmlspecialchars($student['email']); ?></td>
+                                <td><?php echo htmlspecialchars($student['classname']); ?></td>
+                                <td><?php echo htmlspecialchars($student['gender']); ?></td>
+                                <td><?php echo htmlspecialchars($student['phone']); ?></td>
+                                <td><?php echo htmlspecialchars($student['address']); ?></td>
+                                <td>
+                                    <a href="updateStudent.php?id=<?php echo htmlspecialchars($student['stdId']); ?>"
+                                        class="btn btn-primary">Update</a>
+                                    <a href="deleteStudent.php?id=<?php echo htmlspecialchars($student['stdId']); ?>"
+                                        class="btn btn-danger"
+                                        onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
             <?php else: ?>
-            <p>No students found.</p>
+                <p>No students found.</p>
             <?php endif; ?>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
 </body>
+
 </html>
