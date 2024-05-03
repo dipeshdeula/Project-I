@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Manage Classes</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <style>
         /* Global Styling */
         body {
@@ -66,6 +65,12 @@
             margin-right: 10px;
             /* Space between breadcrumb items */
         }
+        .main{
+            display: flex;
+            flex-direction: row;
+    
+        }
+        
         /* Container layout*/
         .container{
             display: block;
@@ -75,6 +80,7 @@
             background: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+         
         }
 
         .table-container {
@@ -150,95 +156,81 @@
 </head>
 
 <body>
-
-
     <header>
-
         <h3>Manage Classes</h3>
-
     </header>
 
     <div class="nav">
-
-        <nav aria-label="breadcrumb" text-decoration="none">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Class</a></li>
                 <li class="breadcrumb-item"><a href="#">Manage Classes</a></li>
-
             </ol>
         </nav>
     </div>
 
     <div class="main">
         <div class="dashboard">
-            <?php
-            include ('../includes/leftbar.php');
-            ?>
+            <?php include('../includes/leftbar.php'); ?>
+        </div>
+        <div class="container">
+            <h4>View Class Details</h4>
+            <div class="table-container">
+                <?php
+                include("../connection.php");
 
-            <div class="container">
-                <form action="#" method="POST">
-                <p>View Student Info </p>
-                    Show
-                    <select name="" id="">
-                       <option value="
-                       <?php echo $total_students; ?>"></option> 
-                    </select>
-                    entries
-                    <br><br>
-                    <input type="search" placeholder="search" name="search">
+                $query = "SELECT * FROM tbl_classes";
+                $data = mysqli_query($conn, $query);
 
-                <div class="table-container">
-                    <?php
-                    include ("../connection.php");
-
-                    $query = "SELECT * FROM tbl_classes";
-                    $data = mysqli_query($conn, $query);
-                    $total = mysqli_num_rows($data);
-
-                    if ($total > 0) {
-                        ?>
-                       <center> <table class="table">
+                if ($data && mysqli_num_rows($data) > 0):
+                    $serial = 1; // Initialize the serial number
+                ?>
+                <center>
+                    <table class="table" id="myTable">
+                        <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>S.N</th> <!-- Serial number -->
                                 <th>Class Name</th>
                                 <th>Section</th>
                                 <th>Operation</th>
                             </tr>
+                        </thead>
+                        <tbody>
                             <?php
-                            while ($result = mysqli_fetch_array($data)) {
+                            while ($result = mysqli_fetch_array($data)):
                                 echo "<tr>
-                      <td>{$result['id']}</td>
-                      <td>{$result['className']}</td>
-                      <td>{$result['classSection']}</td>
-                      <td>
-                          <a class='update' href='http://localhost/student_project/class/updateClass.php?id={$result['id']}'>Update</a>
-                          <a class='delete' href='http://localhost/student_project/class/deleteClass.php?id={$result['id']}' onclick='return checkdelete();'>Delete</a>
-                      </td>
-                      </tr>";
-                            }
+                                    <td>{$serial}</td> <!-- Serial number -->
+                                    <td>{$result['className']}</td>
+                                    <td>{$result['classSection']}</td>
+                                    <td>
+                                        <!-- Using className and classSection to identify records for update/delete -->
+                                        <a class='update' href='updateClass.php?className={$result['className']}&classSection={$result['classSection']}'>Update</a>
+                                        <a class='delete' href='deleteClass.php?className={$result['className']}&classSection={$result['classSection']}' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</a>
+                                    </td>
+                                </tr>";
+                                $serial++; // Increment serial number
+                            endwhile;
                             ?>
-                        </table></center>
-                        <?php
-                    } else {
-                        echo "No records found.";
-                    }
-                    ?>
-                </div>
-                    
-                </form>
-               
+                        </tbody>
+                    </table>
+                </center>
+                <?php else: ?>
+                <p>No records found.</p>
+                <?php endif; ?>
             </div>
         </div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
-
-        <script>
-            function checkdelete() {
-                return confirm('Are you sure you want to delete this record?');
-            }
-        </script>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable(); // Initialize DataTables
+        });
+    </script>
 </body>
 </html>
