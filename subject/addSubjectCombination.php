@@ -1,18 +1,53 @@
+<?php
+require_once ("../connection.php");
+
+// Fetch all classes from the database
+$query_classes = "SELECT * FROM tbl_classes";
+$classes = mysqli_query($conn, $query_classes);
+
+// Fetch all subjects from the database
+$query_subjects = "SELECT * FROM tbl_subjects";
+$subjects = mysqli_query($conn, $query_subjects);
+
+// Handle form submission to add subject combinations
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Add'])) {
+    $classname = $_POST['classname'];
+    // Collect all subjects selected, ensuring non-empty
+    $subjects_selected = array_filter([
+        $_POST['subject1'],
+        $_POST['subject2'],
+        $_POST['subject3'],
+        $_POST['subject4'],
+        $_POST['subject5']
+    ]);
+
+    // Insert each subject combination into the database
+    foreach ($subjects_selected as $subName) {
+        $query_insert = "INSERT INTO tbl_sub_combination (classname, subName) 
+                         VALUES ('$classname', '$subName')";
+        $data = mysqli_query($conn, $query_insert);
+
+        if (!$data) {
+            echo "<script>alert('Error adding subject combination: " . mysqli_error($conn) . "');</script>";
+            break; // Exit on error
+        }
+    }
+
+    if ($data) {
+        echo "<script>alert('Subject combination added successfully!'); window.location = 'addSubjectCombination.php';</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>subject creation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
+    <title>Add Subject Combination</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
-        /* Global Styling */
         body {
             font-family: 'poppins';
             margin: 0;
@@ -27,7 +62,7 @@
             /* Dark blue */
             color: white;
             /* White text */
-            padding: 15px 20px;
+            padding: 10px;
             /* Adequate padding */
             text-align: center;
             /* Center align text */
@@ -38,22 +73,22 @@
 
         /* Navigation Styling */
         .nav {
-            margin: 0;
             padding: 10px 20px;
-            /* Padding for navigation */
             background: #333;
-            /* Dark gray background */
         }
 
         .nav a {
+            display: flex;
+            margin-left: 30px;
             color: white;
-            /* White text */
             text-decoration: none;
-            /* No underline */
-            transition: all 0.3s ease;
-            /* Smooth transitions */
         }
 
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
+        }
         .nav a:hover {
             text-decoration: underline;
             /* Underline on hover */
@@ -73,12 +108,23 @@
             margin-right: 10px;
             /* Space between items */
         }
+        .main{
+            display: flex;
+            flex:row
+            alignt-items: center;
+            justify-content: center;
+        }
+
+        .main .container{
+            width:35%;
+        }
+      
 
         /* Container Layout */
         .container {
-            max-width: 600px;
+          
             /* Moderate width */
-            margin: 40px auto;
+            margin:50px 40px ;
             /* Center the container */
             padding: 20px;
             /* Padding around the container */
@@ -88,6 +134,12 @@
             /* Rounded corners */
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
             /* Shadow effect */
+            display: flex;
+            /* Use flexbox */
+            /*decrease width of container; */
+           flex-direction: column;
+           
+
         }
 
         .title {
@@ -96,11 +148,12 @@
 
         /* Form Styling */
         .form {
+           
             display: flex;
             /* Use flexbox */
             flex-direction: column;
             /* Vertical alignment */
-            align-items: stretch;
+           
             /* Align to container width */
         }
 
@@ -221,154 +274,137 @@
 </head>
 
 <body>
-
-
     <header>
-
         <h3>Add Subject Combination</h3>
-
     </header>
 
     <div class="nav">
-
-        <nav aria-label="breadcrumb" text-decoration="none">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a>
+                </li>
                 <li class="breadcrumb-item"><a href="#">Subjects</a></li>
                 <li class="breadcrumb-item"><a href="#">Add Subject Combination</a></li>
-
+                <li class="breadcrumb-item active">Add Subject Combination</li>
             </ol>
         </nav>
     </div>
+    <div class="main">
+        <div class="dashboard">
+            <?php include ('../includes/leftbar.php'); ?>
+        </div>
 
-    <div class="container">
-        <form action="#" method="POST" enctype="multipart/form-data">
-            <div class="title">Add Subject Combination</div>
+        <div class="container">
+            <form action="addSubjectCombination.php" method="POST">
+                <div class="form">
+                    <!-- Class Selection -->
+                    <div class="custom_select">
+                        <label>Select Class</label>
+                        <select name="classname" required>
+                            <option value="">Select Class</option>
+                            <?php while ($class = mysqli_fetch_assoc($classes)): ?>
+                                <option value="<?php echo htmlspecialchars($class['className']); ?>">
+                                    <?php echo htmlspecialchars($class['className']); ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
 
+                    <!-- Unique Subject Selection Fields -->
+                    <?php
+                    // For each subject select, reset the pointer to avoid repetition
+                    mysqli_data_seek($subjects, 0); // Reset pointer
+                    ?>
 
-            <div class="form">
+                    <div class="custom_select">
+                        <label>Subject 1</label>
+                        <select name="subject1" required>
+                            <option value="">Select Subject</option>
+                            <?php while ($subject = mysqli_fetch_assoc($subjects)): ?>
+                                <option value="<?php echo htmlspecialchars($subject['subName']); ?>">
+                                    <?php echo htmlspecialchars($subject['subName']); ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
 
-                <div class="custom_select">
-                    <label>class</label>
-                    <select name="classname" id="selectClass">Select Class
-                        <option value="$classname"
-                        <?php if($result1['classname'] == '$classname')
-                        {
-                            echo "selected";
-                        }?>
-                        ></option>
-                    </select>
+                    <?php
+                    // Reset the pointer for the next subject
+                    mysqli_data_seek($subjects, 0);
+                    ?>
+
+                    <div class="custom_select">
+                        <label>Subject 2</label>
+                        <select name="subject2">
+                            <option value="">Select Subject</option>
+                            <?php while ($subject = mysqli_fetch_assoc($subjects)): ?>
+                                <option value="<?php echo htmlspecialchars($subject['subName']); ?>">
+                                    <?php echo htmlspecialchars($subject['subName']); ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
+
+                    <?php
+                    // Reset pointer for subsequent subjects
+                    mysqli_data_seek($subjects, 0);
+                    ?>
+
+                    <div class="custom_select">
+                        <label>Subject 3</label>
+                        <select name="subject3">
+                            <option value="">Select Subject</option>
+                            <?php while ($subject = mysqli_fetch_assoc($subjects)): ?>
+                                <option value="<?php echo htmlspecialchars($subject['subName']); ?>">
+                                    <?php echo htmlspecialchars($subject['subName']); ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
+
+                    <?php
+                    mysqli_data_seek($subjects, 0); // Reset pointer
+                    ?>
+
+                    <div class="custom_select">
+                        <label>Subject 4</label>
+                        <select name="subject4">
+                            <option value="">Select Subject</option>
+                            <?php while ($subject = mysqli_fetch_assoc($subjects)): ?>
+                                <option value="<?php echo htmlspecialchars($subject['subName']); ?>">
+                                    <?php echo htmlspecialchars($subject['subName']); ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
+
+                    <?php
+                    mysqli_data_seek($subjects, 0); // Reset pointer for Subject 5
+                    ?>
+
+                    <div class="custom_select">
+                        <label>Subject 5</label>
+                        <select name="subject5">
+                            <option value="">Select Subject</option>
+                            <?php while ($subject = mysqli_fetch_assoc($subjects)): ?>
+                                <option value="<?php echo htmlspecialchars($subject['subName']); ?>">
+                                    <?php echo htmlspecialchars($subject['subName']); ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="input_field">
+                        <input type="submit" value="Add Subject Combination" class="btn" name="Add" />
+                    </div>
                 </div>
+            </form>
+        </div>
 
-                <div class="title-child">for ex:- taking each class has 5 subjects</div>
-
-
-                <div class="custom_select">
-                    <label>Subject 1</label>
-                    <select name="selectSubject" id="selectSubject">Select Subject</select>
-                </div>
-
-                <div class="custom_select">
-                    <label>Subject 2</label>
-                    <select name="subName" id="selectSubject">Select Subject
-                        <option value="$subName"
-                        <?php
-                        if($result2['subName'] =='$subName')
-                    {
-                        echo "selected";
-                    }
-                        ?>
-                        ><?php echo $subName?></option>
-                    </select>
-                </div>
-                <div class="custom_select">
-                    <label>Subject 3</label>
-                    <select name="selectSubject" id="selectSubject">Select Subject</select>
-                </div>
-                <div class="custom_select">
-                    <label>Subject 4</label>
-                    <select name="selectSubject" id="selectSubject">Select Subject</select>
-                </div>
-                <div class="custom_select">
-                    <label>Subject 5</label>
-                    <select name="selectSubject" id="selectSubject">Select Subject</select>
-                </div>
-
-
-
-
-
-                <div class="input_field">
-                    <input type="submit" value="Add" class="btn" name="Add" />
-
-
-                </div>
-        </form>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
-
-<?php
-include ("../connection.php");
-
-
-$cid = isset($_GET['id']) ? $_GET['id'] : null;
-$subCode = isset($_GET['subCode']) ? $_GET['subCode'] : null;
-
-if($cid && $subCode)
-{
-
-//fetching className data from tbl_classes
-$query1 = "SELECT className FROM tbl_classes";
-
-//executing className data
-$data1 = mysqli_query($conn, $query1);
-
-
-//fetching subName data from tbl_subjects
-$query2 = "SELECT subName from tbl_subjects";
-
-$data2 = mysqli_query($conn,$query2);
-
-if($data1 && $data2)
-{
-    $result1 = mysqli_fetch_assoc($data1);
-    $result2 = mysqli_fetch_assoc($data2);
-    if (isset($_POST['Add'])) {
-        $classname = $_POST['classname'];
-        $subName = $_POST['$subName'];
-
-        $query1 = $query2= "INSERT INTO tbl_sub_combination (classname,subName) VALUES ('$className','$subName')";
-
-        $data = mysqli_query($conn, $query1);
-
-        if($data)
-        {
-            echo "<script>alert('subject's assigned to the class');</script>";
-        }
-        else{
-            echo "<script>alert('unable to assigned subject');</script>";
-        }
-
-    }
-  echo "ERROR fetching data:". mysqli_error($conn);
-  return;
-    
-
-}
-}
-else{
-    echo "NO Id provided.";
-    return;
-
-}
-
-
-?>
