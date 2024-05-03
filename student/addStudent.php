@@ -1,3 +1,48 @@
+<?php
+include ("../connection.php");
+error_reporting(0);
+
+if (isset($_POST['register'])) {
+    // Handling image uploads
+    $filename = $_FILES["uploadfile"]["name"];
+    $tempname = $_FILES["uploadfile"]["tmp_name"];
+    $folder = "images/" . $filename;
+    move_uploaded_file($tempname, $folder);
+
+    // Retrieve form data
+    $stdname = $_POST['stdname'];
+    $stdId = $_POST['stdId'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $classname = $_POST['className'];
+    $gender = $_POST['gender'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+
+    // Server-side validation
+    if (
+        empty($stdname) || empty($stdId) || empty($email) || empty($password) ||
+        $classname == 'Not Selected' || empty($gender) || empty($phone) || empty($address)
+    ) {
+        echo "<script>alert('All form fields must be filled!');</script>";
+    } else {
+        // Insert student data into the database
+        $query = "INSERT INTO tbl_student (std_image, stdname, stdId, email, password, classname, gender, phone, address) 
+                  VALUES ('$folder', '$stdname', '$stdId', '$email', '$password', '$classname', '$gender', '$phone', '$address')";
+        $data = mysqli_query($conn, $query);
+
+        if ($data) {
+            echo "<script>alert('Student information successfully inserted into the database');</script>";
+        } else {
+            echo "<script>alert('Failed to insert student information into the database');</script>";
+        }
+    }
+}
+
+// Fetch class names from tbl_classes to populate the dropdown
+$query = "SELECT className FROM tbl_classes";
+$data = mysqli_query($conn, $query);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +57,7 @@
     <style>
         /* Global Styling */
         body {
-            font-family: poppins, sans-serif;
+            font-family: Poppins, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -24,29 +69,29 @@
             background-color: #0072ff;
             /* Dark blue */
             color: white;
-            padding: 15px 20px;
-            /* Increased padding for a fuller look */
+            padding: 10px;
             text-align: center;
             font-size: 24px;
             /* Larger text for better visibility */
-            overflow: hidden;
         }
 
         /* Navigation Styling */
         .nav {
             padding: 10px 20px;
-            /* Padding around navigation */
             background: #333;
-            /* Dark gray background */
-            overflow: hidden;
         }
 
         .nav a {
+            display: flex;
+            margin-left: 30px;
             color: white;
-            /* White text color */
             text-decoration: none;
-            /* No underline */
-            transition: all 0.3s ease;
+        }
+
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
         }
 
         .nav a:hover {
@@ -57,7 +102,6 @@
         /* Breadcrumb Styling */
         .breadcrumb {
             padding: 10px;
-            /* Padding inside breadcrumb */
             background: none;
             /* No background */
         }
@@ -67,46 +111,37 @@
             /* Space between breadcrumb items */
         }
 
-        /* Main container for dashboard and content */
+        /* Main container */
         .main {
             display: flex;
-            /* Flexbox layout */
             flex-direction: row;
-            /* Elements should be side-by-side */
+            /* Side-by-side elements */
           
-
         }
 
-        /* Dashboard Sidebar */
-        .dashboard {
-            margin: 0;
-            display: flex;
-            flex: column;
-            width: auto;
+
+        .main .container {
+            height: 30%;
+            width: 50%
             
         }
+
 
         /* Main content container */
         .container {
-            flex: 1;
-            /* Takes the rest of the space */
+            align-items: center;
+            justify-content: center;
+            max-width: 960px;
+            margin: 40px;
             padding: 20px;
-            /* Padding around the content */
             background: white;
-            /* Background color */
             border-radius: 10px;
-            /* Rounded corners */
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-            /* Shadow for depth */
-            
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
         }
-
-
 
         /* Form Styling */
         .form {
             margin-bottom: 20px;
-            /* Space below form */
         }
 
         .input_field {
@@ -116,7 +151,7 @@
 
         .input_field label {
             font-weight: bold;
-            /* Bold labels for emphasis */
+            /* Bold labels */
         }
 
         .input {
@@ -128,21 +163,13 @@
             /* Border color */
             border-radius: 5px;
             /* Rounded corners */
-            box-sizing: border-box;
-            /* Include padding in width */
         }
 
         .textarea {
             width: 100%;
-            /* Full width */
             padding: 8px 12px;
-            /* Padding for text area */
             border: 1px solid #ccc;
-            /* Border color */
             border-radius: 5px;
-            /* Rounded corners */
-            box-sizing: border-box;
-            /* Include padding in width */
             height: 80px;
             /* Default height for text area */
         }
@@ -151,116 +178,49 @@
             width: 100%;
             /* Full width */
             padding: 8px 12px;
-            /* Padding for select fields */
             border: 1px solid #ccc;
-            /* Border color */
             border-radius: 5px;
-            /* Rounded corners */
-            box-sizing: border-box;
-            /* Include padding in width */
         }
 
-        .terms p {
-
-            display: flex;
-            /* Use flexbox for alignment */
-            align-items: center;
-            /* Center checkbox and text */
-            margin: -23px 22px;
-        }
-
-        .checkmark {
-            width: 20px;
-            /* Checkbox size */
-            height: 20px;
-            border: 2px solid #0072ff;
-            /* Border color */
-            border-radius: 5px;
-            /* Rounded corners */
-        }
-
-        .checkmark input {
-            opacity: 0;
-            /* Hide default checkbox */
-        }
-
-        .checkmark:after {
-            content: '';
-            position: absolute;
-            left: 6px;
-            top: 2px;
-            width: 10px;
-            height: 10px;
-            background: #0072ff;
-            /* Background color for checked */
-            display: none;
-            /* Initially hidden */
-        }
-
-        .check input:checked.checkmark:after {
-            display: block;
-            /* Show when checked */
-        }
-
-        .btn {
-           
+        /* Button Styling */
+        .input_field   .btn {
+            width:100%;
             background: #0072ff;
             /* Blue background */
             color: white;
-            /* White text color */
             padding: 10px 20px;
-            /* Padding for button */
+            /* Padding */
             border: none;
             /* No border */
             border-radius: 5px;
-            /* Rounded corners */
             text-transform: uppercase;
-            /* Capitalize text */
-            transition: all 0.3s ease;
         }
 
-        .btn:hover {
+        .input_field  .btn:hover {
             background: #005bb5;
             /* Darker blue on hover */
         }
 
-        /* Responsive Design with Media Queries */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            main {
+            .main {
                 flex-direction: column;
-                /* Stacks elements vertically */
+                /* Stacks vertically */
             }
 
             .dashboard {
                 width: 100%;
-                /* Sidebar takes full width on smaller screens */
+                /* Full width */
             }
 
             .container {
                 width: 100%;
-                /* Container also takes full width */
-            }
-
-            .breadcrumb {
-                font-size: 14px;
-                /* Smaller font size */
-            }
-
-            .input_field {
-                margin-bottom: 10px;
-                /* Reduce space for smaller screens */
-            }
-
-            .input {
-                padding: 6px 10px;
-                /* Adjust padding for smaller screens */
+                /* Full width */
             }
 
             .textarea {
                 height: 60px;
-                width: auto;
-                resize: none;
-                /* Reduce height for smaller screens */
+                /* Reduced height */
             }
         }
     </style>
@@ -269,18 +229,16 @@
 <body>
 
     <header>
-
-        <h3>Add Students </h3>
-
+        <h3>Add Students</h3>
     </header>
 
     <div class="nav">
-
-        <nav aria-label="breadcrumb" text-decoration="none">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Students</a></li>
-                <li class="breadcrumb-item"><a href="#">Add Students</a></li>
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Subjects</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Subjects</a></li>
 
             </ol>
         </nav>
@@ -293,11 +251,7 @@
 
         <div class="container">
             <form action="#" method="POST" enctype="multipart/form-data">
-                <div class="title">Insert Student Details</div>
-
-
                 <div class="form">
-
                     <div class="input_field">
                         <label>Upload Image</label>
                         <input type="file" name="uploadfile" style="width:100%;">
@@ -313,8 +267,6 @@
                         <input type="text" class="input" name="stdId">
                     </div>
 
-
-
                     <div class="input_field">
                         <label>Email</label>
                         <input type="text" class="input" name="email">
@@ -326,21 +278,18 @@
                     </div>
 
                     <div class="input_field">
-                        <label>Class Name</label>
-                        <input type="text" class="input" name="classname">
+                        <label for="className">Class Name</label>
+                        <div class="custom_select">
+                            <select name="className" id="className">
+                                <option value="Not Selected">Select</option>
+                                <?php
+                                while ($row = mysqli_fetch_assoc($data)) {
+                                    echo "<option value=\"{$row['className']}\">{$row['className']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
-                    <!-- <div class="input_field">
-                    <label for="className">Class</label>
-                    <div class="custom_select">
-                        <select name="className" id="className">
-                            <option value="Not Selected">Select</option>
-                            <option value="className">
-
-                            </option>
-                        </select>
-                    </div>
-
-                </div> -->
 
                     <div class="input_field">
                         <label>Gender</label>
@@ -349,7 +298,7 @@
                                 <option value="Not Selected">Select</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
-                                <option value="other's">Other's</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                     </div>
@@ -368,92 +317,19 @@
                         <label class="check">
                             <input type="checkbox">
                             <p>Agree to terms and conditions</p>
-
                         </label>
-
                     </div>
 
                     <div class="input_field">
                         <input type="submit" value="Register" class="btn" name="register" />
-                      
-
                     </div>
                 </div>
             </form>
         </div>
-
     </div>
 
-
-
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
-
-<?php
-
-include ("../connection.php");
-error_reporting(0);
-if (isset($_POST['register'])) {
-    //for uploading images
-
-    $filename = $_FILES["uploadfile"]["name"];
-    $tempname = $_FILES["uploadfile"]["tmp_name"];
-    $folder = "images/" . $filename;
-    move_uploaded_file($tempname, $folder);
-
-    $stdname = $_POST['stdname'];
-    $stdId = $_POST['stdId'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $classname = $_POST['classname'];
-    $gender = $_POST['gender'];
-    $phone = $_POST['phone'];
-    $address = $_POST['address'];
-
-
-    //connect database
-
-
-
-
-    //server side validation
-
-    if (
-        $stdname == null && $stdId == null && $email == null
-        && $password == null && $classname == null && $gender == null
-        && $phone == null && $address == null
-    ) {
-
-        echo "<script>alert('all form required to filled!!');</script>";
-    } else {
-        //data insert into the database
-
-        $query = "INSERT INTO tbl_student (std_image,stdname,stdId,
-       email,password,classname,gender, phone,address)
-        VALUES 
-        ('$folder', '$stdname', '$stdId', '$email', '$password','$classname' ,'$gender',
-       '$phone','$address')";
-
-        // echo $query;
-        $data = mysqli_query($conn, $query);
-
-        $result = mysqli_num_rows($data);
-
-        if ($result > 0) {
-            echo "<script>alert('Student Info inserted into the Database');</script>";
-        } else {
-            echo "<script>alert('failed to insert data into the Database');</script>";
-        }
-    }
-
-
-}
-
-
-
-?>
