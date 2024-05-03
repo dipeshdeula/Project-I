@@ -1,9 +1,10 @@
 <?php
 include("../connection.php");
 
-$cid = $_GET['id'];
+$className = $_GET['className'];
+$classSection = $_GET['classSection'];
 
-$query = "DELETE from tbl_classes where id = '$cid'";
+$query = "DELETE from tbl_classes where className = '$className' AND classSection = '$classSection'";
 
 $data = mysqli_query($conn,$query);
 
