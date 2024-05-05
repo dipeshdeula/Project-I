@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,67 +20,89 @@
 
         /* Dashboard layout with Flexbox */
         .dashboard {
-            display: flex; /* Flex layout for columns */
-            flex-direction: row; /* Horizontal layout */
+            display: flex;
+            /* Flex layout for columns */
+            flex-direction: row;
+            /* Horizontal layout */
             justify-content: space-between;
         }
 
         .sidebar {
-            width: 100%; /* Fixed width for sidebar */
-            background: #0072ff; /* Dark blue background */
-            color: white; /* White text */
-            padding: 20px; /* Padding around sidebar */
-            height: 100vh; /* Full height */
-            overflow-y: auto; /* Scrollable if content overflows */
+            width: 100%;
+            /* Fixed width for sidebar */
+            background: #0072ff;
+            /* Dark blue background */
+            color: white;
+            /* White text */
+            padding: 20px;
+            /* Padding around sidebar */
+            height: 100vh;
+            /* Full height */
+            overflow-y: auto;
+            /* Scrollable if content overflows */
         }
 
         .sidebar ul {
-            list-style-type: none; /* No bullet points */
+            list-style-type: none;
+            /* No bullet points */
             padding: 0;
             margin: 0;
         }
 
         .sidebar li {
-            margin-bottom: 10px; /* Space between items */
+            margin-bottom: 10px;
+            /* Space between items */
         }
 
         .sidebar a {
             color: white;
             text-decoration: none;
-            display: flex; /* Flex for icon alignment */
-            align-items: center; /* Center icon and text */
+            display: flex;
+            /* Flex for icon alignment */
+            align-items: center;
+            /* Center icon and text */
             transition: all 0.3s ease;
-            padding: 10px; /* Padding for links */
+            padding: 10px;
+            /* Padding for links */
             border-radius: 5px;
         }
 
         .sidebar a:hover {
-            background: #005bb5; /* Change background on hover */
+            background: #005bb5;
+            /* Change background on hover */
         }
 
         .sidebar i {
-            margin-right: 10px; /* Space between icon and text */
+            margin-right: 10px;
+            /* Space between icon and text */
         }
 
         .child-nav {
-            display: none; /* Initially hidden */
-            font-size: 16px; /* Smaller font for child items */
-            padding-left: 20px; /* Indentation for child items */
+            display: none;
+            /* Initially hidden */
+            font-size: 16px;
+            /* Smaller font for child items */
+            padding-left: 20px;
+            /* Indentation for child items */
         }
 
         .has-children.open .child-nav {
-            display: block; /* Show child items when parent is open */
+            display: block;
+            /* Show child items when parent is open */
         }
 
         /* Responsive design with media queries */
         @media (max-width: 768px) {
             .dashboard {
-                flex-direction: column; /* Stack sidebar and content vertically */
+                flex-direction: column;
+                /* Stack sidebar and content vertically */
             }
 
             .sidebar {
-                width: 100%; /* Full width on smaller screens */
-                border-bottom: 1px solid #ccc; /* Border between sidebar and content */
+                width: 100%;
+                /* Full width on smaller screens */
+                border-bottom: 1px solid #ccc;
+                /* Border between sidebar and content */
             }
 
             .sidebar a {
@@ -87,11 +110,13 @@
                 padding: 10px;
                 border-radius: 5px;
                 margin: 5px 2px;
-                width: 100%; /* Full width for smaller screens */
+                width: 100%;
+                /* Full width for smaller screens */
             }
 
             .child-nav {
-                padding-left: 10px; /* Reduce padding for smaller screens */
+                padding-left: 10px;
+                /* Reduce padding for smaller screens */
             }
         }
     </style>
@@ -118,14 +143,15 @@
                 <li class="has-children" onclick="toggleChildNav(this)">
                     <a href="#"><i class='bi bi-journal-text'></i><span>Subjects</span></a>
                     <ul class="child-nav">
+                        <li><a href="http://localhost/student_project/subject/createSubject.php"><i
+                                    class="fa fa-bars"></i> Create Subject</a></li>
                         <li><a href="http://localhost/student_project/subject/manageSubject.php"><i
                                     class="fa fa-server"></i> Manage Subjects</a></li>
                         <li><a href="http://localhost/student_project/subject/addSubjectCombination.php"><i
                                     class="fa fa-newspaper-o"></i> Add Subject Combination</a></li>
-                        <li><a href="http://localhost/student_project/subject/manageSubject.php"><i
+                        <li><a href="http://localhost/student_project/subject/manageSubjectCombination.php"><i
                                     class="fa fa-newspaper-o"></i> Manage Subject Combination</a></li>
-                        <li><a href="http://localhost/student_project/subject/createSubject.php"><i
-                                    class="fa fa-bars"></i> Create Subject</a></li>
+
                     </ul>
                 </li>
 
@@ -142,15 +168,16 @@
                 <li class="has-children" onclick="toggleChildNav(this)">
                     <a href="#"><i class='bi bi-bar-chart'></i><span>Results</span></a>
                     <ul class="child-nav">
-                        <li><a href="http://localhost/student_project/result/addResult.php"><i
-                                    class="fa fa-bars"></i> Add Result</a></li>
-                        <li><a href="http://localhost/student_project/manageStudent.php"><i
-                                    class="fa fa-server"></i> Manage Result</a></li>
+                        <li><a href="http://localhost/student_project/result/addResult.php"><i class="fa fa-bars"></i>
+                                Add Result</a></li>
+                        <li><a href="http://localhost/student_project/manageStudent.php"><i class="fa fa-server"></i>
+                                Manage Result</a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="http://localhost/adminSection/adminChangePassword.php"><i class="fa fa-key"></i> Admin Change
+                    <a href="http://localhost/adminSection/adminChangePassword.php"><i class="fa fa-key"></i> Admin
+                        Change
                         Password</a>
                 </li>
             </ul>
@@ -168,4 +195,5 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
