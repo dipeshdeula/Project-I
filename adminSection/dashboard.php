@@ -314,14 +314,15 @@ if ($result && $result1 && $result2) {
                 <li class="has-children" onclick="toggleChildNav(this)">
                     <a href="#"><i class='bi bi-journal-text'></i><span>Subjects</span></a>
                     <ul class="child-nav">
+                    <li><a href="http://localhost/student_project/subject/createSubject.php"><i
+                                    class="fa fa-bars"></i> Create Subject</a></li>
                         <li><a href="http://localhost/student_project/subject/manageSubject.php"><i
                                     class="fa fa-server"></i> Manage Subject</a></li>
                         <li><a href="http://localhost/student_project/subject/addSubjectCombination.php"><i
                                     class="fa fa-newspaper-o"></i> Add Subject Combination</a></li>
-                        <li><a href="http://localhost/student_project/subject/manageSubject.php"><i
+                        <li><a href="http://localhost/student_project/subject/manageSubjectCombination.php"><i
                                     class="fa fa-newspaper-o"></i> Manage Subject Combination</a></li>
-                        <li><a href="http://localhost/student_project/subject/createSubject.php"><i
-                                    class="fa fa-bars"></i> Create Subject</a></li>
+                        
                     </ul>
                 </li>
 
