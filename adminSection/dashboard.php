@@ -347,9 +347,17 @@ if ($result && $result1 && $result2) {
                                 Manage Result</a></li>
                     </ul>
                 </li>
+                 <!-- Admin change password -->
+                <li class="has-children" onclick="toggleChildNav(this)">
+                    <a href="#"><i class='bi bi-key'></i><span>Admin</span></a>
+                    <ul class="child-nav">
+                        <li><a href="http://localhost/student_project/adminSection/adminChangePass.php"><i class="fa fa-key"></i> Admin Change
+                                Password</a></li>
+                    </ul>
+            </li>
 
-                <!-- Admin change password -->
-                <li><a href="#" onclick="loadContent('admin/changePassword.php')"><i class="fa fa-key"></i> Admin Change
+               
+                <li><a href="http://localhost/student_project/adminSection/adminChangePass.php"><i class="fa fa-key"></i> Admin Change
                         Password</a></li>
             </ul>
         </div>
