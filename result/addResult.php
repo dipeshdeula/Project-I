@@ -1,60 +1,50 @@
 <?php
-require_once('../connection.php'); // Database connection
+require_once ('../connection.php'); // Database connection
 
 // Fetch all unique classes
 $query = "SELECT DISTINCT className FROM tbl_classes";
 $classes_result = mysqli_query($conn, $query);
 
+// Check for errors in fetching classes
 if (!$classes_result) {
     die("Error fetching classes: " . mysqli_error($conn));
 }
 
-// To store subject combinations based on the selected class
-$subject_combinations = [];
-$count = 1;
-
-$selected_class = isset($_POST['className']) ? trim($_POST['className']) : '';
-
-// Fetch subjects for the selected class
-if ($selected_class) {
-    $query_subjects = "SELECT tbl_subjects.subCode, tbl_subjects.subName 
-                       FROM tbl_sub_combination 
-                       INNER JOIN tbl_subjects 
-                       ON tbl_sub_combination.subName = tbl_subjects.subName 
-                       WHERE tbl_sub_combination.className = ?";
-    $stmt = mysqli_prepare($conn, $query_subjects);
-    mysqli_stmt_bind_param($stmt, "s", $selected_class);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    while ($row = mysqli_fetch_assoc($result)) {
-        $subject_combinations[] = $row;
+// Function to add a new result
+// Function to add a new result
+function AddResult($conn, $studentId, $className, $subject_combinations, $theoryMarks, $practicalMarks)
+{
+    // Check if all required data is present
+    if (!isset($studentId) || !isset($className) || !isset($subject_combinations) || !isset($theoryMarks) || !isset($practicalMarks)) {
+        die("Error: Missing required data for adding result.");
     }
-}
 
-// If the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['AddResult'])) {
-    $studentId = trim($_POST['studentId']);
-    $theoryMarks = $_POST['theoryMarks'];
-    $practicalMarks = $_POST['practicalMarks'];
-
-    // Calculate total marks and percentage
+    // Calculate total marks, percentage, and remarks for each subject
     $totalMarks = 0;
     $maxTheoryMarks = 75; // Maximum possible marks for theory
     $maxPracticalMarks = 25; // Maximum possible marks for practical
+
+    // Check if subject_combinations is an array
+    if (!is_array($subject_combinations)) {
+        die("Error: Subject combinations should be an array.");
+    }
+
     $subject_count = count($subject_combinations);
 
     foreach ($subject_combinations as $index => $subject) {
-        $theory = (float)$theoryMarks[$index];
-        $practical = (float)$practicalMarks[$index];
+        // Check if theoryMarks and practicalMarks have values at this index
+        if (!isset($theoryMarks[$index]) || !isset($practicalMarks[$index])) {
+            die("Error: Missing marks for subject at index $index.");
+        }
+
+        $theory = (float) $theoryMarks[$index];
+        $practical = (float) $practicalMarks[$index];
         $subject_combinations[$index]['totalMarks'] = $theory + $practical;
         $totalMarks += $theory + $practical;
     }
 
     $totalPossibleMarks = $subject_count * ($maxTheoryMarks + $maxPracticalMarks);
     $percentage = ($totalMarks / $totalPossibleMarks) * 100;
-
-    // Determine remarks (pass/fail)
     $remarks = ($percentage >= 25 && $totalMarks >= 100) ? 'Pass' : 'Fail';
 
     // Insert the results into the database
@@ -62,26 +52,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['AddResult'])) {
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $insert_query);
 
-    if ($stmt === false) {
-        die("Error preparing insert statement: " . mysqli_error($conn));
-    }
-
+    // Bind parameters and execute the statement for each subject
     foreach ($subject_combinations as $index => $subject) {
         $subjectCode = $subject['subCode'];
         $subjectName = $subject['subName'];
-        $theory = (float)$theoryMarks[$index];
-        $practical = (float)$practicalMarks[$index];
+        $theory = (float) $theoryMarks[$index];
+        $practical = (float) $practicalMarks[$index];
         $combinedMarks = $theory + $practical;
 
-        mysqli_stmt_bind_param($stmt, "sssssssds", 
-            $studentId, 
-            $selected_class, 
-            $subjectCode, 
-            $subjectName, 
-            $theory, 
-            $practical, 
-            $combinedMarks, 
-            $percentage, 
+        mysqli_stmt_bind_param(
+            $stmt,
+            "sssssssss",
+            $studentId,
+            $className,
+            $subjectCode,
+            $subjectName,
+            $theory,
+            $practical,
+            $combinedMarks,
+            $percentage,
             $remarks
         );
 
@@ -90,7 +79,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['AddResult'])) {
         }
     }
 
-    echo "<script>alert('Result added successfully'); window.location.href = 'addResult.php';</script>"; // Feedback upon successful insert
+    echo "<script>alert('Result added successfully');</script>";
+}
+
+
+// Function to edit an existing result
+function EditResult($conn, $studentId, $theoryMarks, $practicalMarks)
+{
+    // Implement your logic to update the result in the database
+    $update_query = "UPDATE tbl_result 
+                     SET theoryMarks = ?, practicalMarks = ?
+                     WHERE stdId = ?";
+    $stmt = mysqli_prepare($conn, $update_query);
+
+    // Bind parameters and execute the statement
+    mysqli_stmt_bind_param($stmt, "sss", $theoryMarks, $practicalMarks, $studentId);
+    if (!mysqli_stmt_execute($stmt)) {
+        die("Error updating result: " . mysqli_stmt_error($stmt));
+    }
+    echo "<script>alert('Result updated successfully'); window.location.href = 'manageResults.php';</script>";
+}
+
+// Function to display results
+function DisplayResult($conn)
+{
+    // Your code for displaying results goes here
+}
+
+// Function to delete a result
+function DeleteResult($conn, $studentId)
+{
+    // Implement your logic to delete the result from the database
+    $delete_query = "DELETE FROM tbl_result WHERE stdId = ?";
+    $stmt = mysqli_prepare($conn, $delete_query);
+    if (!mysqli_stmt_bind_param($stmt, "i", $studentId)) {
+        die("Error binding parameters: " . mysqli_stmt_error($stmt));
+    }
+    if (!mysqli_stmt_execute($stmt)) {
+        die("Error deleting result: " . mysqli_stmt_error($stmt));
+    }
+    echo "<script>alert('Result deleted successfully'); window.location.href = 'result/manageResults.php';</script>";
+}
+
+// Process form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $operation = isset($_POST['operation']) ? $_POST['operation'] : '';
+
+    switch ($operation) {
+        case 'AddResult':
+            // Add result logic
+            AddResult($conn, $_POST['stdId'], $_POST['className'], $_POST['subject_combinations'], $_POST['theoryMarks'], $_POST['practicalMarks']);
+            break;
+        case 'EditResult':
+            // Edit result logic
+            EditResult($conn, $_POST['stdId'], $_POST['theoryMarks'], $_POST['practicalMarks']);
+            break;
+        case 'DisplayResult':
+            // Display result logic
+            DisplayResult($conn);
+            break;
+        case 'DeleteResult':
+            // Delete result logic
+            DeleteResult($conn, $_POST['stdId']);
+            break;
+        default:
+            // Handle invalid operation
+            break;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -290,7 +345,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['AddResult'])) {
     </header>
 
     <div class="container">
-        <form method="POST" action="addResult.php"> <!-- Correct form setup -->
+        <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="resultForm"> <!-- Correct form setup -->
             <div class="form-group">
                 <label for="className">Select Class</label>
                 <select name="className" id="className" onchange="fetchStudents(); fetchSubjects();">
@@ -316,18 +371,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['AddResult'])) {
             <div class="form-group" id="subjectTable"> <!-- Placeholder for subjects table -->
                 <!-- This will be populated by AJAX -->
             </div>
+<!-- 
 
 
+           
 
-            <div>
-                <p id="totalRow">Total Marks:</p>
-                <p id="percentageRow">Percentage:</p>
-                <p id="remarksRow">Remarks:</p>
+             <!-- Other form elements -->
+
+            <div class="form-group">
+                <label for="totalMarks">Total Marks:</label>
+                <input type="text" name="totalMarks" id="totalRow" readonly>
             </div>
+
+            <div class="form-group">
+                <label for="percentage">Percentage:</label>
+                <input type="text" name="percentage" id="percentageRow" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="remarks">Remarks:</label>
+                <input type="text" name="remarks" id="remarksRow" readonly>
+            </div>
+
+
+
+
             <button type="button" onclick="calculateResults()" class="btn btn-primary">Calculate</button>
             <!-- Button to calculate results -->
-            <input type="submit" value="Add Student Result" name="AddResult" class="btn btn-primary" />
-            <!-- Submit button -->
+            <input type="submit" value="AddResult" name="operation" class="btn btn-primary" />
+            <!-- Add button -->
+
+            <input type="submit" value="EditResult" name="operation" class="btn btn-primary" />
+            <!-- Edit button -->
+
+            <input type="submit" value="DisplayResult" name="operation" class="btn btn-primary" />
+            <!-- Display button -->
+
+            <input type="submit" value="DeleteResult" name="operation" class="btn btn-primary" />
+            <!-- Delete button -->
+
+
         </form>
     </div>
 
@@ -380,7 +463,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['AddResult'])) {
             const remarks = hasFailed || percentage < 25 ? 'Fail' : 'Pass';
 
             // Update the calculated fields
-            document.getElementById('totalRow').innerText = `Total Marks: ${totalMarks}`;
+            document.getElementById('totalRow').innerText = ` ${totalMarks}`;
             document.getElementById('percentageRow').innerText = `Percentage: ${percentage.toFixed(2)}%`;
             document.getElementById('remarksRow').innerText = `Remarks: ${remarks}`;
         }
