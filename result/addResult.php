@@ -1,20 +1,39 @@
 <?php
-require_once ('../connection.php'); // Database connection
+require_once('../connection.php'); // Database connection
 
 // Fetch all unique classes
 $query = "SELECT DISTINCT className FROM tbl_classes";
 $classes_result = mysqli_query($conn, $query);
 
-// Check for errors in fetching classes
 if (!$classes_result) {
     die("Error fetching classes: " . mysqli_error($conn));
 }
 
+// To store subject combinations based on the selected class
+$subject_combinations = [];
+$count = 1;
 
+$selected_class = isset($_POST['className']) ? trim($_POST['className']) : '';
 
-// Function to display results
-// Process form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Fetch subjects for the selected class
+if ($selected_class) {
+    $query_subjects = "SELECT tbl_subjects.subCode, tbl_subjects.subName 
+                       FROM tbl_sub_combination 
+                       INNER JOIN tbl_subjects 
+                       ON tbl_sub_combination.subName = tbl_subjects.subName 
+                       WHERE tbl_sub_combination.className = ?";
+    $stmt = mysqli_prepare($conn, $query_subjects);
+    mysqli_stmt_bind_param($stmt, "s", $selected_class);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $subject_combinations[] = $row;
+    }
+}
+
+// If the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['AddResult'])) {
     $stdId = isset($_POST['stdId']) ? $_POST['stdId'] : '';
     $stdname = isset($_POST['stdname']) ? $_POST['stdname'] : '';
     $className = isset($_POST['className']) ? $_POST['className'] : '';
@@ -25,98 +44,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $totalMarks = isset($_POST['totalMarks']) ? $_POST['totalMarks'] : '';
     $percentage = isset($_POST['percentage']) ? $_POST['percentage'] : '';
     $remarks = isset($_POST['remarks']) ? $_POST['remarks'] : '';
-    $pstdId = isset($_POST['pstdId']) ? $_POST['pstdId'] : ''; // Previous student ID
 
+    $totalMarks = 0;
+    $maxTheoryMarks = 75; // Maximum possible marks for theory
+    $maxPracticalMarks = 25; // Maximum possible marks for practical
+    $subject_count = count($subject_combinations);
 
-    $operation = isset($_POST['operation']) ? $_POST['operation'] : '';
-
-    switch ($operation) {
-        case 'Add':
-            //query to insert data into the table
-            $query = "INSERT INTO tbl_result (stdId, stdname, className, subCode, subName, theoryMarks, practicalMarks, totalMarks, percentage, remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "ssssssssss", $stdId, $stdname, $className, $subCode, $subName, $theoryMarks, $practicalMarks, $totalMarks, $percentage, $remarks);
-            mysqli_stmt_execute($stmt);
-            echo "<script>alert('Data inserted successfully!')</script>";
-
-            break;
-        case 'Edit':
-            //query to update data in the table
-            $query = "UPDATE tbl_result SET stdId = ?, stdname = ?, className = ?, subCode = ?, subName = ?, theoryMarks = ?, practicalMarks = ?, totalMarks = ?, percentage = ?, remarks = ? WHERE stdId = ?";
-            $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "sssssssssss", $stdId, $stdname, $className, $subCode, $subName, $theoryMarks, $practicalMarks, $totalMarks, $percentage, $remarks, $pstdId);
-            mysqli_stmt_execute($stmt);
-            echo "<script>alert('Data updated successfully!')</script>";
-            break;
-        case 'Find':
-            //query to find data in the table
-            $query = "SELECT * FROM tbl_result WHERE stdId = ?";
-            $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "s", $pstdId); // Bind parameter to the statement
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            $row = mysqli_fetch_assoc($result);
-            if ($row != null) {
-                $pstdId = $stdId = $row['stdId'];
-                $stdname = $row['stdname'];
-                $className = $row['className'];
-                $subCode = $row['subCode'];
-                $subName = $row['subName'];
-                $theoryMarks = $row['theoryMarks'];
-                $practicalMarks = $row['practicalMarks'];
-                $totalMarks = $row['totalMarks'];
-                $percentage = $row['percentage'];
-                $remarks = $row['remarks'];
-            }
-            echo "<script>alert('Data found successfully!')</script>";
-            break;
-
-        case 'Delete':
-            //query to delete data from the table
-            $query = "DELETE FROM tbl_result WHERE stdId = $stdId";
-            $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_execute($stmt);
-            break;
-        case 'Display':
-            //query to display data from the table
-            $query = "SELECT * FROM tbl_result";
-            $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            echo "<table border='1'>";
-            echo "<tr>";
-            echo "<th>Student ID</th>";
-            echo "<th>Student Name</th>";
-            echo "<th>Class Name</th>";
-            echo "<th>Subject Code</th>";
-            echo "<th>Subject Name</th>";
-            echo "<th>Theory Marks</th>";
-            echo "<th>Practical Marks</th>";
-            echo "<th>Total Marks</th>";
-            echo "<th>Percentage</th>";
-            echo "<th>Remarks</th>";
-            echo "</tr>";
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo "<tr>";
-                echo "<td>" . $row['stdId'] . "</td>";
-                echo "<td>" . $row['stdname'] . "</td>";
-                echo "<td>" . $row['className'] . "</td>";
-                echo "<td>" . $row['subCode'] . "</td>";
-                echo "<td>" . $row['subName'] . "</td>";
-                echo "<td>" . $row['theoryMarks'] . "</td>";
-                echo "<td>" . $row['practicalMarks'] . "</td>";
-                echo "<td>" . $row['totalMarks'] . "</td>";
-                echo "<td>" . $row['percentage'] . "</td>";
-                echo "<td>" . $row['remarks'] . "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-
-            break;
-        default:
-            // Handle invalid operation
-            break;
+    foreach ($subject_combinations as $index => $subject) {
+        $theory = (float)$theoryMarks[$index];
+        $practical = (float)$practicalMarks[$index];
+        $subject_combinations[$index]['totalMarks'] = $theory + $practical;
+        $totalMarks += $theory + $practical;
     }
+
+    $totalPossibleMarks = $subject_count * ($maxTheoryMarks + $maxPracticalMarks);
+    $percentage = ($totalMarks / $totalPossibleMarks) * 100;
+
+    // Determine remarks (pass/fail)
+    $remarks = ($percentage >= 25 && $totalMarks >= 100) ? 'Pass' : 'Fail';
+
+    // Insert the results into the database
+    $insert_query = "INSERT INTO tbl_result(stdId,stdname, className, subCode, subName, theoryMarks, practicalMarks, totalMarks, percentage, remarks) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+    $stmt = mysqli_prepare($conn, $insert_query);
+
+    if ($stmt === false) {
+        die("Error preparing insert statement: " . mysqli_error($conn));
+    }
+
+    foreach ($subject_combinations as $index => $subject) {
+        $subCode = $subject['subCode'];
+        $subName = $subject['subName'];
+        $theory = (float)$theoryMarks[$index];
+        $practical = (float)$practicalMarks[$index];
+        $totalMarks = $theory + $practical;
+
+        mysqli_stmt_bind_param($stmt, "ssssssssss", 
+            $stdId, 
+            $stdname,
+            $selected_class, 
+            $subCode, 
+            $subName, 
+            $theory, 
+            $practical, 
+            $totalMarks, 
+            $percentage, 
+            $remarks
+        );
+
+        if (!mysqli_stmt_execute($stmt)) {
+            die("Error inserting result: " . mysqli_stmt_error($stmt));
+        }
+    }
+
+    echo "<script>alert('Result added successfully'); window.location.href = 'addResult.php';</script>"; // Feedback upon successful insert
 }
 ?>
 <!DOCTYPE html>
@@ -316,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <div class="container">
-        <form method="POST" id="resultForm" action="#"> <!-- Correct form setup -->
+        <form method="POST" action="addResult.php"> <!-- Correct form setup -->
             <div class="form-group">
                 <label for="className">Select Class</label>
                 <select name="className" id="className" onchange="fetchStudents(); fetchSubjects();">
@@ -342,38 +323,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group" id="subjectTable"> <!-- Placeholder for subjects table -->
                 <!-- This will be populated by AJAX -->
             </div>
-            <!-- Other form elements -->
 
-            <div class="form-group">
-                <label for="totalMarks">Total Marks:</label>
-                <input type="text" name="totalMarks" id="totalRow" readonly>
+
+
+            <div>
+                <p id="totalRow">Total Marks:</p>
+                <p id="percentageRow">Percentage:</p>
+                <p id="remarksRow">Remarks:</p>
             </div>
-
-            <div class="form-group">
-                <label for="percentage">Percentage:</label>
-                <input type="text" name="percentage" id="percentageRow" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="remarks">Remarks:</label>
-                <input type="text" name="remarks" id="remarksRow" readonly>
-            </div>
-            <table>
-                <tr>
-                <td colspan="4">
-                    <input type="submit" name="operation" onclick="performOperation('Add')" value="Add" id="addBtn" class="btn btn-primary">
-                    <input type="submit" name="operation" onclick="performOperation('Find')" value="Find" id="findBtn" class="btn btn-primary">
-                    <input type="submit" name="operation" onclick="performOperation('Edit')" value="Edit" id="editBtn" class="btn btn-primary">
-                    <input type="submit" name="operation" onclick="performOperation('Delete')" value="Delete" id="deleteBtn" class="btn btn-primary">
-                    <input type="submit" name="operation" onclick="performOperation('Display')" value="Display" id="displayBtn" class="btn btn-primary">
-                    <input type="submit" name="operation" onclick="calculateResult()" value="Calculate"
-                        class="btn btn-primary">
-                </td>
-
-            </tr>
-
-            </table>
-
+            <button type="button" onclick="calculateResults()" class="btn btn-primary">Calculate</button>
+            <!-- Button to calculate results -->
+            <input type="submit" value="Add " name="AddResult" class="btn btn-primary" />
+            <!-- Add button -->
             
         </form>
     </div>
@@ -384,55 +345,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script>
 
-        document.addEventListener('DOMContentLoaded', function () {
-            // Add event listener for form submission
-            document.getElementById('resultForm').addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent default form submission
-                calculateResult(); // Calculate result
-
-                // AJAX code to submit form data without refreshing the page
-                const formData = new FormData(this);
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', '<?php echo $_SERVER['PHP_SELF']; ?>', true);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        // Handle success response
-                        console.log(xhr.responseText);
-                    } else {
-                        // Handle error response
-                        console.error('Error:', xhr.statusText);
-                    }
-                };
-                xhr.onerror = function () {
-                    // Handle network errors
-                    console.error('Network Error');
-                };
-                xhr.send(formData); // Send form data
-            });
-        });
-        // Function to perform operation based on button clicked
-        function performOperation($operation) {
-            // AJAX code to perform operation without refreshing the page
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '<?php echo $_SERVER['PHP_SELF']; ?>', true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // Handle success response
-                    console.log(xhr.responseText);
-                } else {
-                    // Handle error response
-                    console.error('Error:', xhr.statusText);
-                }
-            };
-            xhr.onerror = function () {
-                // Handle network errors
-                console.error('Network Error');
-            };
-            xhr.send('operation=' + operation); // Send operation to the server
-        }
-
-        function calculateResult() {
+        function calculateResults() {
             console.log("Calculate button clicked"); // Debugging statement
 
             const theoryMarks = document.querySelectorAll('.theoryMarks');
@@ -475,33 +388,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const remarks = hasFailed || percentage < 25 ? 'Fail' : 'Pass';
 
             // Update the calculated fields
-            document.getElementById('totalRow').value = totalMarks;
-            document.getElementById('percentageRow').value = percentage.toFixed(2) + "%";
-            document.getElementById('remarksRow').value = remarks;
-
-            // Inside calculateResult() function
-            const formData = new FormData(document.getElementById('resultForm'));
-            formData.append('operation', 'Calculate');
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '<?php echo $_SERVER['PHP_SELF']; ?>', true);
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // Handle success response
-                    console.log(xhr.responseText);
-                } else {
-                    // Handle error response
-                    console.error('Error:', xhr.statusText);
-                }
-            };
-            xhr.onerror = function () {
-                // Handle network errors
-                console.error('Network Error');
-            };
-            xhr.send(formData); // Send form data
-
+            document.getElementById('totalRow').innerText = `Total Marks: ${totalMarks}`;
+            document.getElementById('percentageRow').innerText = `Percentage: ${percentage.toFixed(2)}%`;
+            document.getElementById('remarksRow').innerText = `Remarks: ${remarks}`;
         }
-
 
 
 
