@@ -175,6 +175,8 @@
                         <th>S.N.</th>
                         <th>Subject Code</th>
                         <th>Subject Name</th>
+                        <th>Total Theory Marks</th>
+                        <th>Toal practical Marks</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -193,6 +195,8 @@
                                 <td><?php echo $count++; ?></td>
                                 <td><?php echo htmlspecialchars($subject['subCode']); ?></td>
                                 <td><?php echo htmlspecialchars($subject['subName']); ?></td>
+                                <td><?php echo htmlspecialchars($subject['thFM']);?></td>
+                                <td><?php echo htmlspecialchars($subject['prFM']);?></td>
                                 <td>
                                     <a href="updateSubject.php?id=<?php echo htmlspecialchars($subject['subCode']); ?>"
                                         class="btn-update">Update</a>

@@ -78,7 +78,7 @@
 
         }
 
-        .main .container{
+        .main .container {
             height: 50%;
             width: 50%
         }
@@ -107,7 +107,7 @@
             /* Shadow effect */
             margin-top: 40px;
             /* Space above the container */
-            padding:20px;
+            padding: 20px;
 
         }
 
@@ -155,6 +155,36 @@
             outline: none;
             /* No default outline */
         }
+        .input_field_number label {
+    font-weight: bold;
+    /* Bold text for labels */
+    color: #555;
+    /* Dark gray color */
+}
+
+.input_field_number input[type="number"] {
+    width: 100%;
+    margin-top: 10px;
+    /* Full width */
+    padding: 10px 15px;
+    /* Padding for input fields */
+    border: 1px solid #ccc;
+    /* Light gray border */
+    border-radius: 5px;
+    /* Rounded corners */
+    font-size: 16px;
+    /* Adequate font size */
+    transition: all 0.3s ease;
+    /* Smooth transitions */
+}
+
+.input_field_number input[type="number"]:focus {
+    border-color: #0072ff;
+    /* Blue border on focus */
+    outline: none;
+    /* No default outline */
+}
+
 
         /* Register Button Styling */
         input[type="submit"] {
@@ -273,19 +303,32 @@
         </div>
         <div class="container">
             <form action="#" method="POST" enctype="multipart/form-data">
-               <h4>Register Subjects</h4>
+                <h4>Register Subjects</h4>
 
                 <div class="form">
+
+                    <div class="input_field">
+                        <label>Subject Code</label>
+                        <input type="text" name="subCode" placeholder="Subject Code" />
+                    </div>
 
                     <div class="input_field">
                         <label>Subject Name</label>
                         <input type="text" name="subName" placeholder="Subject Name" />
                     </div>
 
-                    <div class="input_field">
-                        <label>Subject Code</label>
-                        <input type="text" name="subCode" placeholder="Subject Code" />
+                    <div class="input_field_number">
+                        <label for="thfm">Total Theroy Marks</label>
+                        <input type="number" name="thFM" max="100" placeholder="Total Theroy Marks" />
                     </div>
+                    <div class="input_field_number">
+                        <label for="thfm">Total Practical Marks</label>
+                        <input type="number" max = "25"  name="prFM" placeholder="Total practical Marks" />
+                    </div>
+
+
+
+
                 </div>
 
                 <div class="input_field">
@@ -311,16 +354,19 @@
 <?php
 include ("../connection.php");
 if (isset($_POST['register'])) {
-    $subName = $_POST['subName'];
     $subCode = $_POST['subCode'];
+    $subName = $_POST['subName'];
+    $thFM = $_POST['thFM'];
+    $prFM = $_POST['prFM'];
+    
 
 
-    if ($subName == null && $subCode == null) {
+    if ($subName == null && $subCode == null && $thFM == null && $prFM == null) {
         echo "<script>alert('All field are required to filled');</script>";
 
     } else {
-        $query = "INSERT INTO tbl_subjects (subCode,subName)
-            VALUES ('$subCode','$subName')";
+        $query = "INSERT INTO tbl_subjects (subCode,subName,thFM,prFM)
+            VALUES ('$subCode','$subName','$thFM','$prFM')";
 
         $data = mysqli_query($conn, $query);
         if ($data) {

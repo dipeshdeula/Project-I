@@ -1,5 +1,5 @@
 <?php
-require_once("../connection.php");
+require_once ("../connection.php");
 
 $subCode = isset($_GET['id']) ? $_GET['id'] : null;
 
@@ -10,6 +10,8 @@ if ($subCode) {
     if ($data && mysqli_num_rows($data) > 0) {
         $result = mysqli_fetch_assoc($data);
         $subName = $result['subName'];
+        $thFM = $result['thFM'];
+        $prFM = $result['prFM'];
     } else {
         // Redirect if the subject code doesn't exist
         header("Location: manageSubject.php?error=Subject not found");
@@ -23,8 +25,10 @@ if ($subCode) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newSubCode = htmlspecialchars($_POST['subCode']);
     $subName = htmlspecialchars($_POST['subName']);
-    
-    $query = "UPDATE tbl_subjects SET subCode = '$newSubCode', subName = '$subName' WHERE subCode = '$subCode'";
+    $thFM = htmlspecialchars($_POST['thFM']);
+    $prFM = htmlspecialchars($_POST['prFM']);
+
+    $query = "UPDATE tbl_subjects SET subCode = '$newSubCode', subName = '$subName', thFM='$thFM',prFM='$prFM' WHERE subCode = '$subCode'";
     if (mysqli_query($conn, $query)) {
         echo "<script>alert('Subject updated successfully'); window.location='manageSubject.php';</script>";
     } else {
@@ -35,16 +39,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Subject</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5fNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5fNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         /* Your CSS styles here */
 
-          /* Global Styling */
-          body {
+        /* Global Styling */
+        body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -161,6 +167,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             /* No default outline */
         }
 
+        .input_field_number label {
+    font-weight: bold;
+    /* Bold text for labels */
+    color: #555;
+    /* Dark gray color */
+}
+
+.input_field_number input[type="number"] {
+    width: 100%;
+    /* Full width */
+    padding: 10px 15px;
+    /* Padding for input fields */
+    border: 1px solid #ccc;
+    /* Light gray border */
+    border-radius: 5px;
+    /* Rounded corners */
+    font-size: 16px;
+    /* Adequate font size */
+    transition: all 0.3s ease;
+    /* Smooth transitions */
+}
+
+.input_field_number input[type="number"]:focus {
+    border-color: #0072ff;
+    /* Blue border on focus */
+    outline: none;
+    /* No default outline */
+}
+
+
         /* Register Button Styling */
         input[type="submit"] {
             background: #0072ff;
@@ -249,28 +285,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </style>
 </head>
+
 <body>
 
-<header>
-    <h3>Update Subject</h3>
-</header>
+    <header>
+        <h3>Update Subject</h3>
+    </header>
 
-<div class="container">
-    <form action="updateSubject.php?id=<?php echo htmlspecialchars($subCode); ?>" method="POST">
-        <div class="mb-3">
-            <label for="subName">Subject Name</label>
-            <input type="text" name="subName" class="form-control" value="<?php echo htmlspecialchars($subName); ?>">
-        </div>
-        <div class="mb-3">
-            <label for="subCode">Subject Code</label>
-            <input type="text" name="subCode" class="form-control" value="<?php echo htmlspecialchars($subCode); ?>">
-        </div>
-        <input type="submit" value="Update" class="btn btn-primary">
-    </form>
-</div>
+    <div class="container">
+        <form action="updateSubject.php?id=<?php echo htmlspecialchars($subCode); ?>" method="POST">
+            <div class="input_field">
+                <label for="subName">Subject Name</label>
+                <input type="text" name="subName" class="form-control"
+                    value="<?php echo htmlspecialchars($subName); ?>">
+            </div>
+            <div class="input_field">
+                <label for="subCode">Subject Code</label>
+                <input type="text" name="subCode" class="form-control"
+                    value="<?php echo htmlspecialchars($subCode); ?>">
+            </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            <div class="input_field_number">
+                <label for="thfm">Total Theroy Marks</label>
+                <input type="number" name="thFM" max="100" placeholder="Total Theroy Marks"
+                value="<?php echo htmlspecialchars($thFM); ?>" />
+            </div>
+            <div class="input_field_number">
+                <label for="prfm">Total Practical Marks</label>
+                <input type="number" max="25" name="prFM" placeholder="Total practical Marks"
+                value = "<?php echo htmlspecialchars($prFM); ?> " />
+            </div>
+            <input type="submit" value="Update" class="btn btn-primary">
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 
 </body>
+
 </html>
