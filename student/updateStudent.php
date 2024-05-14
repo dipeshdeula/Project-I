@@ -18,19 +18,19 @@ if ($stdId) {
     exit();
 }
 
-// Fetch class names to populate the dropdown
-$class_query = "SELECT className FROM tbl_classes";
-$class_data = mysqli_query($conn, $class_query);
-$classes = [];
-while ($row = mysqli_fetch_assoc($class_data)) {
-    $classes[] = $row['className'];
-}
+// // Fetch class names to populate the dropdown
+// $class_query = "SELECT className FROM tbl_classes";
+// $class_data = mysqli_query($conn, $class_query);
+// $classes = [];
+// while ($row = mysqli_fetch_assoc($class_data)) {
+//     $classes[] = $row['className'];
+// }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stdname = $_POST['stdname'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $classname = $_POST['classname'];
+    // $classname = $_POST['classname'];
     $gender = $_POST['gender'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               SET stdname = '$stdname', 
                   email = '$email', 
                   password = '$password', 
-                  classname = '$classname', 
+                --   classname = '$classname', 
                   gender = '$gender', 
                   phone = '$phone', 
                   address = '$address', 
@@ -392,18 +392,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         class="form-control">
                 </div>
 
-                <div class="form-group">
-                    <label>Class Name</label>
-                    <select name="classname" class="form-control">
-                        <option value="Not Selected">Select</option>
-                        <?php
-                        foreach ($classes as $className) {
-                            $selected = ($student['classname'] === $className) ? 'selected' : '';
-                            echo "<option value=\"$className\" $selected>$className</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+               
 
                 <div class="form-group">
                     <label>Gender</label>
