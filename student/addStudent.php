@@ -3,21 +3,23 @@ include ("../connection.php");
 error_reporting(0);
 
 if (isset($_POST['register'])) {
+   
+
+    // Retrieve form data
+    $stdId = $_POST['stdId'];
+    $stdname = $_POST['stdname'];
+    $gender = $_POST['gender'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
     // Handling image uploads
     $filename = $_FILES["uploadfile"]["name"];
     $tempname = $_FILES["uploadfile"]["tmp_name"];
-    $folder = "images/" . $filename;
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+    $newFilename = $stdId . '.' . $extension;
+    $folder = "images/" . $newFilename;
     move_uploaded_file($tempname, $folder);
-
-    // Retrieve form data
-    $stdname = $_POST['stdname'];
-    $stdId = $_POST['stdId'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $classname = $_POST['className'];
-    $gender = $_POST['gender'];
-    $phone = $_POST['phone'];
-    $address = $_POST['address'];
 
     // Server-side validation
     if (
@@ -27,8 +29,8 @@ if (isset($_POST['register'])) {
         echo "<script>alert('All form fields must be filled!');</script>";
     } else {
         // Insert student data into the database
-        $query = "INSERT INTO tbl_student (std_image, stdname, stdId, email, password, classname, gender, phone, address) 
-                  VALUES ('$folder', '$stdname', '$stdId', '$email', '$password', '$classname', '$gender', '$phone', '$address')";
+        $query = "INSERT INTO tbl_student(stdId,stdname,gender,email,password,phone,address,std_image)
+        VALUES ('$stdId','$stdname','$gender','$email','$password','$phone','$address','$folder')";
         $data = mysqli_query($conn, $query);
 
         if ($data) {
@@ -39,9 +41,6 @@ if (isset($_POST['register'])) {
     }
 }
 
-// Fetch class names from tbl_classes to populate the dropdown
-$query = "SELECT className FROM tbl_classes";
-$data = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -277,19 +276,7 @@ $data = mysqli_query($conn, $query);
                         <input type="password" class="input" name="password">
                     </div>
 
-                    <div class="input_field">
-                        <label for="className">Class Name</label>
-                        <div class="custom_select">
-                            <select name="className" id="className">
-                                <option value="Not Selected">Select</option>
-                                <?php
-                                while ($row = mysqli_fetch_assoc($data)) {
-                                    echo "<option value=\"{$row['className']}\">{$row['className']}</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
+                  
 
                     <div class="input_field">
                         <label>Gender</label>
