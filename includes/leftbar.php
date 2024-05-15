@@ -131,12 +131,12 @@
             <ul>
                 <!-- Dashboard navigation with collapsible items -->
                 <li class="has-children" onclick="toggleChildNav(this)">
-                    <a href="#"><i class='bi bi-book'></i><span>Student Classes</span></a>
+                    <a href="#"><i class='bi bi-book'></i><span>Student Course</span></a>
                     <ul class="child-nav">
-                        <li><a href="http://localhost/student_project/class/createClass.php"><i class="fa fa-bars"></i>
-                                Create Class</a></li>
-                        <li><a href="http://localhost/student_project/class/manageClass.php"><i
-                                    class="fa fa-server"></i> Manage Classes</a></li>
+                        <li><a href="http://localhost/student_project/course/createCourse.php"><i class="fa fa-bars"></i>
+                                Create Course</a></li>
+                        <li><a href="http://localhost/student_project/course/manageCourse.php"><i
+                                    class="fa fa-server"></i> Manage Course</a></li>
                     </ul>
                 </li>
 
@@ -152,6 +152,16 @@
                         <li><a href="http://localhost/student_project/subject/manageSubjectCombination.php"><i
                                     class="fa fa-newspaper-o"></i> Manage Subject Combination</a></li>
 
+                    </ul>
+                </li>
+
+                <li class="has-children" onclick="toggleChildNav(this)">
+                    <a href="#"><i class='bi bi-book'></i><span>Course Subject</span></a>
+                    <ul class="child-nav">
+                        <li><a href="http://localhost/student_project/courseSubject/createCourseSub.php"><i class="fa fa-bars"></i>
+                                Create Course Subject</a></li>
+                        <li><a href="http://localhost/student_project/courseSubject/manageCourseSub.php"><i
+                                    class="fa fa-server"></i> Manage Course Subject</a></li>
                     </ul>
                 </li>
 
