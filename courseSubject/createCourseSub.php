@@ -1,50 +1,63 @@
 <?php
-//get the courseId details from tbl_course and
-//get the subCode details from tbl_subjects
 require("../connection.php");
-$courseId = $_GET['courseId'];
-$subjectCode = $_GET['subCode'];
-$query = "SELECT courseId FROM tbl_course WHERE courseId = '$courseId'";
-$query1 = "SELECT subCode FROM tbl_subjects WHERE subCode = '$subjectCode'";
-$data = mysqli_query($conn, $query);
-$data1 = mysqli_query($conn, $query1);
-if ($data && mysqli_num_rows($data) && $data1 && mysqli_num_rows($data1)> 0) {
-    $result = mysqli_fetch_assoc($data);
-    $result1 = mysqli_fetch_assoc($data1);
-    $courseId = $result['courseId'];
-    $subCode = $result1['subCode'];
-} else {
-    // Redirect if the courseId doesn't exist
-    header("Location: manageCourse.php?error=Course and subject not found");
+
+// Fetch courseId and subjectCode data from tbl_course and tbl_subjects
+$query_course = "SELECT courseId FROM tbl_course";
+$query_subject = "SELECT subCode FROM tbl_subjects";
+
+$result_course = mysqli_query($conn, $query_course);
+$result_subject = mysqli_query($conn, $query_subject);
+
+
+
+if (!$result_course || !$result_subject) {
+    // Redirect if there's an error in fetching data
+    echo "Error fetching course or subject data";
     exit();
 }
 
-if(isset($_POST['submit'])) {
-    $semester = $_post['semester']; // Change $_post to $_POST
-}
-$query = "INSERT INTO tbl_course_subjects (courseId, subCode, semester) VALUES ('$courseId', '$subCode', '$semester')";
-if(mysqli_query($conn, $query)) {
-    echo "<script>alert('Course subject created successfully'); window.location='manageCourse.php';</script>";
-} else {
-    echo "<script>alert('Error creating course subject: " . mysqli_error($conn) . "');</script>";
-}
+// Check if form is submitted
+if (isset($_POST['submit'])) {
+    var_dump($_POST);
+    $courseId = $_POST['courseId'];
+    $subCode = $_POST['subCode'];
+    $semester = $_POST['semester'];
 
+    // Check if the selected courseId exists in tbl_course
+    $courseIdExistsQuery = "SELECT courseId FROM tbl_course WHERE courseId = '$courseId'";
+    $courseIdExistsResult = mysqli_query($conn, $courseIdExistsQuery);
+    var_dump($courseIdExistsResult, mysqli_num_rows($courseIdExistsResult));
+
+
+    // Check if the selected subCode exists in tbl_subjects
+    $subCodeExistsQuery = "SELECT subCode FROM tbl_subjects WHERE subCode = '$subCode'";
+    $subCodeExistsResult = mysqli_query($conn, $subCodeExistsQuery);
+    var_dump($subCodeExistsResult, mysqli_num_rows($subCodeExistsResult));
+
+    if (!$subCodeExistsResult || mysqli_num_rows($subCodeExistsResult) === 0) {
+        // Redirect if the selected subCode doesn't exist
+        echo "Erorr=Selected subject code does not exist";
+        exit();
+    }
+
+    // Insert data into tbl_course_subjects
+    $query_insert = "INSERT INTO tbl_course_subject(courseId, subCode, semester) 
+    VALUES ('$courseId', '$subCode', '$semester')";
+    if (mysqli_query($conn, $query_insert)) {
+        echo "<script>alert('Course subject created successfully'); window.location='manageCourseSub.php';</script>";
+    } else {
+        echo "<script>alert('Error creating course subject: " . mysqli_error($conn) . "');</script>";
+    }
+}
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Student Courses</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Create Course Subject</title>
     <style>
         /* Global Styling */
         body {
@@ -281,12 +294,8 @@ if(mysqli_query($conn, $query)) {
 </head>
 
 <body>
-
-
     <header>
-
         <h4>Create Course Subject</h4>
-
     </header>
 
     <div class="nav">
@@ -312,52 +321,42 @@ if(mysqli_query($conn, $query)) {
             <hr>
             <div class="form">
                 <form action="#" method="POST">
-                <label for="courseId">Course Id</label>
-<select name="courseId" id="courseId">
-    <?php
-    $query = "SELECT courseId FROM tbl_course";
-    $result = mysqli_query($conn, $query);
-    if(mysqli_num_rows($result) > 0) {
-        while($row = mysqli_fetch_assoc($result)) {
-            echo "<option value='" . $row['courseId'] . "'>" . $row['courseId'] . "</option>";
-        }
-    }
-    ?>
-</select>
+                    <label for="courseId">Course Id</label>
+                    <select name="courseId" id="courseId">
 
-<label for="subName">Subject Code</label>
-<select name="subName" id="subName">
-    <?php
-    $query = "SELECT subCode FROM tbl_subjects";
-    $result = mysqli_query($conn, $query);
-    if(mysqli_num_rows($result) > 0) {
-        while($row = mysqli_fetch_assoc($result)) {
-            echo "<option value='" . $row['subCode'] . "'>" . $row['subCode'] . "</option>";
-        }
-    }
-    ?>
-</select>
+                        <?php
+                        while ($row_course = mysqli_fetch_assoc($result_course)) {
+                            echo "<option value='" . $row_course['courseId'] . "'>" . $row_course['courseId'] . "</option>";
+                        }
+                        ?>
+                    </select><br>
 
+                    <label for="subCode">Subject Code</label>
+                    <select name="subCode" id="subCode">
+                        <?php
+                        while ($row_subject = mysqli_fetch_assoc($result_subject)) {
+                            echo "<option value='" . $row_subject['subCode'] . "'>" . $row_subject['subCode'] . "</option>";
+                        }
+                        ?>
+                    </select><br><br>
 
                     <label for="semester">Semester</label>
-                   <select name="semester" id=""semester>
-                    <option value="Not Selected">Select</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                   </select>
+                    <select name="semester" id="semester">
+                        <option value="Not Selected">Select</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
                     <input type="submit" name="submit" />
                 </form>
             </div>
         </div>
-
     </div>
-
 </body>
 
 </html>
