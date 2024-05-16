@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Examination</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -53,9 +58,11 @@
         .main {
             display: flex;
             flex-direction: row;
+            
         }
 
         .main .container {
+            margin-top: 40px;
             height: 50%;
             width: 50%
         }
@@ -82,6 +89,10 @@
             text-align: center;
         }
 
+        #mytable{
+            background-color: yellow;
+        }
+
         table th {
             background-color: #0072ff;
             color: white;
@@ -91,6 +102,7 @@
 
         /* Update and delete button styling */
         .btn-update {
+            margin-right: 10px;
             padding: 10px;
             background: #0072ff;
             color: white;
@@ -117,8 +129,6 @@
         .btn-delete:hover {
             background: #c0392b;
         }
-
-
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -180,8 +190,8 @@
                             echo "<td>" . $row['examId'] . "</td>";
                             echo "<td>" . $row['examName'] . "</td>";
                             echo "<td>";
-                            echo "<a class='update' href='updateExam.php?examId={$row['examId']}'>Update</a>";
-                            echo "<a class='delete' href='deleteExam.php?examId={$row['examId']}' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</a>";
+                            echo "<a class='btn-update' href='updateExam.php?examId={$row['examId']}'>Update</a>";
+                            echo "<a class='btn-delete' href='deleteExam.php?examId={$row['examId']}' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</a>";
                             echo "</td>";
                             echo "</tr>";
 
