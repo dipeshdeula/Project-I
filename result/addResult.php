@@ -1,401 +1,348 @@
 <?php
-require_once('../connection.php'); // Database connection
+require ("../connection.php");
 
-// Fetch all unique classes
-$query = "SELECT DISTINCT className FROM tbl_classes";
-$classes_result = mysqli_query($conn, $query);
+// Fetch data for stdId dropdown
+$query_stdId = "SELECT stdId FROM tbl_student";
+$result_stdId = mysqli_query($conn, $query_stdId);
 
-if (!$classes_result) {
-    die("Error fetching classes: " . mysqli_error($conn));
-}
+// Fetch data for examId dropdown
+$query_examId = "SELECT examId FROM tbl_exam";
+$result_examId = mysqli_query($conn, $query_examId);
 
-// To store subject combinations based on the selected class
-$subject_combinations = [];
-$count = 1;
+// Fetch data for subCode dropdown
+$query_subCode = "SELECT subCode FROM tbl_course_subject";
+$result_subCode = mysqli_query($conn, $query_subCode);
 
-$selected_class = isset($_POST['className']) ? trim($_POST['className']) : '';
+// Initialize variables for maxTheoryMarks and maxPracticalMarks
+$maxTheoryMarks = $maxPracticalMarks = 0;
 
-// Fetch subjects for the selected class
-if ($selected_class) {
-    $query_subjects = "SELECT tbl_subjects.subCode, tbl_subjects.subName 
-                       FROM tbl_sub_combination 
-                       INNER JOIN tbl_subjects 
-                       ON tbl_sub_combination.subName = tbl_subjects.subName 
-                       WHERE tbl_sub_combination.className = ?";
-    $stmt = mysqli_prepare($conn, $query_subjects);
-    mysqli_stmt_bind_param($stmt, "s", $selected_class);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $stdId = mysqli_real_escape_string($conn, $_POST['stdId']);
+    $examId = mysqli_real_escape_string($conn, $_POST['examId']);
+    $subCode = mysqli_real_escape_string($conn, $_POST['subCode']);
+    $date = mysqli_real_escape_string($conn, $_POST['date']);
+    $theoryMarks = mysqli_real_escape_string($conn, $_POST['theoryMarks']);
+    $practicalMarks = mysqli_real_escape_string($conn, $_POST['practicalMarks']);
 
-    while ($row = mysqli_fetch_assoc($result)) {
-        $subject_combinations[] = $row;
-    }
-}
-
-// If the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['AddResult'])) {
-    $stdId = isset($_POST['stdId']) ? $_POST['stdId'] : '';
-    $stdname = isset($_POST['stdname']) ? $_POST['stdname'] : '';
-    $className = isset($_POST['className']) ? $_POST['className'] : '';
-    $subCode = isset($_POST['subCode']) ? $_POST['subCode'] : '';
-    $subName = isset($_POST['subName']) ? $_POST['subName'] : '';
-    $theoryMarks = isset($_POST['theoryMarks']) ? $_POST['theoryMarks'] : '';
-    $practicalMarks = isset($_POST['practicalMarks']) ? $_POST['practicalMarks'] : '';
-    $totalMarks = isset($_POST['totalMarks']) ? $_POST['totalMarks'] : '';
-    $percentage = isset($_POST['percentage']) ? $_POST['percentage'] : '';
-    $remarks = isset($_POST['remarks']) ? $_POST['remarks'] : '';
-
-    $totalMarks = 0;
-    $maxTheoryMarks = 75; // Maximum possible marks for theory
-    $maxPracticalMarks = 25; // Maximum possible marks for practical
-    $subject_count = count($subject_combinations);
-
-    foreach ($subject_combinations as $index => $subject) {
-        $theory = (float)$theoryMarks[$index];
-        $practical = (float)$practicalMarks[$index];
-        $subject_combinations[$index]['totalMarks'] = $theory + $practical;
-        $totalMarks += $theory + $practical;
+    // Fetch max marks for theory and practical from tbl_subjects
+    $query_max_marks = "SELECT thFM, prFM FROM tbl_subjects WHERE subCode = '$subCode'";
+    $result_max_marks = mysqli_query($conn, $query_max_marks);
+    if ($result_max_marks && mysqli_num_rows($result_max_marks) > 0) {
+        $row_max_marks = mysqli_fetch_assoc($result_max_marks);
+        $maxTheoryMarks = $row_max_marks['thFM'];
+        $maxPracticalMarks = $row_max_marks['prFM'];
+    } else {
+        echo "Error fetching max marks: " . mysqli_error($conn);
+        exit;
     }
 
-    $totalPossibleMarks = $subject_count * ($maxTheoryMarks + $maxPracticalMarks);
-    $percentage = ($totalMarks / $totalPossibleMarks) * 100;
+    // Calculate total marks obtained
+    $totalMarks = $theoryMarks + $practicalMarks;
 
-    // Determine remarks (pass/fail)
-    $remarks = ($percentage >= 25 && $totalMarks >= 100) ? 'Pass' : 'Fail';
+    // Determine pass/fail status
+    $status = ($theoryMarks < 25 || $practicalMarks < 12) ? 'Fail' : 'Pass';
 
-    // Insert the results into the database
-    $insert_query = "INSERT INTO tbl_result(stdId,stdname, className, subCode, subName, theoryMarks, practicalMarks, totalMarks, percentage, remarks) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-    $stmt = mysqli_prepare($conn, $insert_query);
+    // Determine remarks
+    $remarks = ($status == 'Fail') ? 'Fail' : 'Pass';
 
-    if ($stmt === false) {
-        die("Error preparing insert statement: " . mysqli_error($conn));
-    }
+    // Check if an entry already exists for the given stdId, examId, and subCode combination
+    $query_check_existing = "SELECT * FROM tbl_result WHERE stdId = '$stdId' AND examId = '$examId' AND subCode = '$subCode'";
+    $result_check_existing = mysqli_query($conn, $query_check_existing);
 
-    foreach ($subject_combinations as $index => $subject) {
-        $subCode = $subject['subCode'];
-        $subName = $subject['subName'];
-        $theory = (float)$theoryMarks[$index];
-        $practical = (float)$practicalMarks[$index];
-        $totalMarks = $theory + $practical;
-
-        mysqli_stmt_bind_param($stmt, "ssssssssss", 
-            $stdId, 
-            $stdname,
-            $selected_class, 
-            $subCode, 
-            $subName, 
-            $theory, 
-            $practical, 
-            $totalMarks, 
-            $percentage, 
-            $remarks
-        );
-
-        if (!mysqli_stmt_execute($stmt)) {
-            die("Error inserting result: " . mysqli_stmt_error($stmt));
+    if (mysqli_num_rows($result_check_existing) > 0) {
+        // Entry already exists, so update the existing entry instead of inserting a new one
+        $query_update_result = "UPDATE tbl_result SET date = '$date', theoryMarks = '$theoryMarks', practicalMarks = '$practicalMarks', remarks = '$remarks' WHERE stdId = '$stdId' AND examId = '$examId' AND subCode = '$subCode'";
+        if (mysqli_query($conn, $query_update_result)) {
+            echo "Result updated successfully.";
+        } else {
+            echo "Error updating result: " . mysqli_error($conn);
+        }
+    } else {
+        // Entry does not exist, so insert a new entry
+        $query_insert_result = "INSERT INTO tbl_result (stdId, examId, subCode, date, theoryMarks, practicalMarks, remarks)
+                            VALUES ('$stdId', '$examId', '$subCode', '$date', '$theoryMarks', '$practicalMarks', '$remarks')";
+        if (mysqli_query($conn, $query_insert_result)) {
+            // echo "Result added successfully.";
+            header("Location: manageResult.php");
+        } else {
+            echo "Error adding result: " . mysqli_error($conn);
         }
     }
 
-    echo "<script>alert('Result added successfully'); window.location.href = 'addResult.php';</script>"; // Feedback upon successful insert
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Add Student Result</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <!-- Bootstrap CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Result</title>
     <style>
+        /* Global Styling */
         body {
-            font-family: 'Poppins', sans-serif;
-            /* Consistent font across the app */
+            font-family: Poppins, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
-            /* Light gray background for a clean look */
+            /* Light gray background */
         }
 
+        /* Header Styling */
         header {
-            background-color: #007bff;
-            /* Bootstrap's primary blue */
+            background-color: #0072ff;
+            /* Dark blue */
             color: white;
-            padding: 15px;
-            /* Adequate padding for a clean header */
+            padding: 10px;
             text-align: center;
-            /* Centered text for the header */
+            font-size: 24px;
+            /* Larger text for better visibility */
         }
+
+        /* Navigation Styling */
+        .nav {
+            padding: 10px 20px;
+            background: #333;
+        }
+
+        .nav a {
+            display: flex;
+            margin-left: 30px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+            /* Underline on hover */
+        }
+
+        /* Breadcrumb Styling */
+        .breadcrumb {
+            padding: 10px;
+            background: none;
+            /* No background */
+        }
+
+        .breadcrumb-item {
+            margin-right: 10px;
+            /* Space between breadcrumb items */
+        }
+
+        /* Main container */
+        .main {
+            display: flex;
+            flex-direction: row;
+            /* Side-by-side elements */
+
+        }
+
+
+        .main .container {
+            height: 30%;
+            width: 30%
+        }
+
 
         .container {
-            max-width: 960px;
-            /* Constrain maximum width to a reasonable size */
-            margin: 20px auto;
-            /* Center the container and add spacing */
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: center;
+            max-width: 600px;
+            margin: 40px auto;
             padding: 20px;
-            /* Adequate internal padding */
-            background: white;
-            /* White background for content */
+            background: #fff;
             border-radius: 10px;
-            /* Smooth, rounded corners */
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-            /* Light shadow for depth */
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .form-group {
+        .select_field,
+        .input_field,
+        .date_field {
+            width: 100%;
             margin-bottom: 20px;
-            /* Space between form elements */
         }
 
-        select,
-        input[type="text"],
-        input[type="number"] {
-            width: 100%;
-            /* Full width for responsive design */
+
+        .select_field label,
+        .input_field label,
+        .date_field label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .select_field select,
+        .input_field input[type="number"],
+        .input_field input[type="date"] {
+            width: calc(100% - 10px);
             padding: 10px;
-            /* Adequate padding for form elements */
-            border: 1px solid #ced4da;
-            /* Border styling */
+            border: 1px solid #ccc;
             border-radius: 5px;
-            /* Rounded corners for a clean look */
-            transition: all 0.3s;
-            /* Smooth transition for hover effects */
         }
 
-        select:focus,
-        input:focus {
-            border-color: #007bff;
-            /* Change border color on focus */
+        #date {
+            width: calc(100% - 10px);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+            padding: 10px;
         }
 
-        .btn-primary {
-            background-color: #007bff;
-            /* Primary blue */
-            color: white;
-            /* White text on buttons */
+        .button_field button {
+            width: 100%;
+            background-color: #0072ff;
+            color: #fff;
+            padding: 10px 0;
             border: none;
-            padding: 10px 20px;
-            /* Adequate padding for buttons */
             border-radius: 5px;
-            /* Rounded corners for buttons */
-            transition: background-color 0.3s;
-            /* Smooth hover effect */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-            /* Darker blue on hover */
+        .button_field button:hover {
+            background-color: #005bb5;
         }
 
-        .table {
-            width: 100%;
-            /* Full-width table */
-            border-collapse: collapse;
-            /* Collapse table borders */
-        }
-
-        .table th,
-        .table td {
-            padding: 10px;
-            /* Padding for table cells */
-            text-align: left;
-            /* Align text to the left */
-            border: 1px solid #ced4da;
-            /* Border for table cells */
-        }
-
-        .table th {
-            background-color: #007bff;
-            /* Blue background for table headers */
-            color: white;
-            /* White text for table headers */
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            /* Horizontal scroll for small screens */
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-                /* Reduce padding for smaller screens */
-            }
-
-            select,
-            input {
-                padding: 8px;
-                /* Smaller padding for smaller screens */
-            }
-
-            header {
-                font-size: 18px;
-                /* Smaller font for header on small screens */
-            }
-
-            .btn-primary {
-                padding: 8px 15px;
-                /* Smaller padding for buttons on small screens */
-            }
+        .readonly {
+            background-color: #f2f2f2;
+            cursor: not-allowed;
         }
     </style>
-
-
-    <script>
-        // Fetch students based on class name
-        function fetchStudents() {
-            const className = document.getElementById("className").value;
-
-            if (className === '') {
-                document.getElementById("studentNameDropdown").innerHTML = ''; // Clear if no class selected
-                document.getElementById("studentIdDropdown").innerHTML = ''; // Clear if no class selected
-                return;
-            }
-
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", `fetchStudents.php?className=${className}`, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.error) {
-                        console.error(response.error);
-                    } else {
-                        document.getElementById("studentNameDropdown").innerHTML = response.nameDropdown;
-                        document.getElementById("studentIdDropdown").innerHTML = response.idDropdown;
-                    }
-                }
-            };
-            xhr.send(); // Send the request
-        }
-
-
-        // Fetch subjects based on class name
-        function fetchSubjects() {
-            const className = document.getElementById("className").value;
-
-            if (className === '') {
-                document.getElementById("subjectTable").innerHTML = ''; // Clear if no class is selected
-                return;
-            }
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `fetchSubjects.php?className=${className}`, true); // AJAX request to fetch subjects
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    document.getElementById('subjectTable').innerHTML = xhr.responseText; // Populate subject table
-                }
-            };
-            xhr.send(); // Send the request
-        }
-    </script>
 </head>
 
 <body>
     <header>
-        <h3>Add Student Result</h3>
+        <h3>Add Results</h3>
     </header>
 
-    <div class="container">
-        <form method="POST" action="addResult.php"> <!-- Correct form setup -->
-            <div class="form-group">
-                <label for="className">Select Class</label>
-                <select name="className" id="className" onchange="fetchStudents(); fetchSubjects();">
-                    <!-- Trigger fetching of students and subjects -->
-                    <option value="">Select Class</option> <!-- Default option -->
-                    <?php
-                    while ($class = mysqli_fetch_assoc($classes_result)) {
-                        $className = htmlspecialchars($class['className']);
-                        echo "<option value=\"$className\">$className</option>"; // Display class names
-                    }
-                    ?>
-                </select>
+    <div class="nav">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Results</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Results</a></li>
+
+            </ol>
+        </nav>
+    </div>
+    <div class="main">
+        <div class="dashboard">
+            <?php include ('../includes/leftbar.php'); ?>
+        </div>
+        <div class="container">
+            <div class="form">
+                <form action="#" method="POST" id="resultForm">
+
+                    <div class="select_field">
+                        <label for="stdId">Student ID</label>
+                        <select name="stdId" id="stdId">
+                            <?php
+                            while ($row_stdId = mysqli_fetch_assoc($result_stdId)) {
+                                echo "<option value='" . $row_stdId['stdId'] . "'>" . $row_stdId['stdId'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="select_field">
+                        <label for="examId">Exam Id</label>
+                        <select name="examId" id="examId">
+                            <?php
+                            while ($row_examId = mysqli_fetch_assoc($result_examId)) {
+                                echo "<option value='" . $row_examId['examId'] . "'>" . $row_examId['examId'] . "</option>";
+                            }
+                            ?>
+                        </select>
+
+                    </div>
+                    <div class="select_field">
+                        <label for="subCode">Subject Code</label>
+                        <select name="subCode" id="subCode">
+                            <?php
+                            while ($row_subCode = mysqli_fetch_assoc($result_subCode)) {
+                                echo "<option value='" . $row_subCode['subCode'] . "'>" . $row_subCode['subCode'] . "</option>";
+                            }
+                            ?>
+                        </select>
+
+                    </div>
+
+                    <div class="date_field">
+                        <label for="date">Date</label>
+                        <input type="date" name="date" id="date">
+
+                    </div>
+
+                    <div class="input_field">
+                        <label for="thMarks">Theory Marks (Max: <?php echo 75 ?>)</label>
+                        <input type="number" name="theoryMarks" id="thMarks" value="">
+                    </div>
+
+                    <div class="input_field">
+                        <label for="prMarks">Practical Marks (Max: <?php echo 25 ?>)</label>
+                        <input type="number" name="practicalMarks" id="prMarks" value="">
+
+                    </div>
+                    <div class="button_field">
+
+                        <button type="submit">Submit</button>
+
+                    </div>
+                </form>
+
+
             </div>
 
-            <div class="form-group" id="studentNameDropdown"> <!-- Placeholder for student names -->
-                <!-- This will be populated by AJAX based on the selected class -->
-            </div>
-
-            <div class="form-group" id="studentIdDropdown"> <!-- Placeholder for student names -->
-                <!-- This will be populated by AJAX based on the selected class -->
-            </div>
-
-            <div class="form-group" id="subjectTable"> <!-- Placeholder for subjects table -->
-                <!-- This will be populated by AJAX -->
-            </div>
-
-
-
-            <div>
-                <p id="totalRow">Total Marks:</p>
-                <p id="percentageRow">Percentage:</p>
-                <p id="remarksRow">Remarks:</p>
-            </div>
-            <button type="button" onclick="calculateResults()" class="btn btn-primary">Calculate</button>
-            <!-- Button to calculate results -->
-            <input type="submit" value="Add " name="AddResult" class="btn btn-primary" />
-            <!-- Add button -->
-            
-        </form>
+        </div>
     </div>
 
-    <!-- Include Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Bootstrap JS -->
-
-    <script>
-
-        function calculateResults() {
-            console.log("Calculate button clicked"); // Debugging statement
-
-            const theoryMarks = document.querySelectorAll('.theoryMarks');
-            const practicalMarks = document.querySelectorAll('.practicalMarks');
-
-            if (theoryMarks.length === 0) {
-                console.error("No theory marks found");
-                return;
-            }
-
-            let totalMarks = 0;
-            const maxTheoryMarks = 75;
-            const maxPracticalMarks = 25;
-            let hasFailed = false; // Flag to check if any subject failed
-
-            // Calculate total marks with safeguard
-            theoryMarks.forEach((input, index) => {
-                const theory = parseFloat(input.value) || 0;
-                const practical = parseFloat(practicalMarks[index]?.value || 0); // Default to 0 if no practical
-
-                if (theory < 25 || (practical > 0 && practical < 12)) { // Check if the subject fails
-                    hasFailed = true;
-                }
-
-                const combined = theory + practical;
-
-                if (combined > 100) { // Safeguard against total marks exceeding 100
-                    console.error(`Marks for subject ${index + 1} exceed 100. Theory: ${theory}, Practical: ${practical}`);
-                    return; // Avoid processing if it exceeds 100
-                }
-
-                totalMarks += combined;
-            });
-
-            // Calculate percentage
-            const subjectCount = theoryMarks.length;
-            const totalPossibleMarks = subjectCount * 100; // Since each subject should be a max of 100
-            const percentage = (totalMarks / totalPossibleMarks) * 100;
-
-            const remarks = hasFailed || percentage < 25 ? 'Fail' : 'Pass';
-
-            // Update the calculated fields
-            document.getElementById('totalRow').innerText = `Total Marks: ${totalMarks}`;
-            document.getElementById('percentageRow').innerText = `Percentage: ${percentage.toFixed(2)}%`;
-            document.getElementById('remarksRow').innerText = `Remarks: ${remarks}`;
-        }
-
-
-
-    </script>
 </body>
+<script>
+    document.getElementById('resultForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent form submission
+
+        // Collect form data
+        var formData = new FormData(this);
+
+        // Convert formData to JSON
+        var jsonData = {};
+        formData.forEach(function (value, key) {
+            jsonData[key] = value;
+        });
+
+        // Check if the data is duplicate via AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'check_duplicate.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.duplicate) {
+                        alert('Data already exists! Please enter unique data.');
+                    } else {
+                        // If not duplicate, submit the form
+                        document.getElementById('resultForm').submit();
+                    }
+                } else {
+                    console.error('Error checking for duplicate data');
+                }
+            }
+        };
+        xhr.send(JSON.stringify(jsonData));
+    });
+</script>
 
 </html>
