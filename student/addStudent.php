@@ -3,8 +3,6 @@ include ("../connection.php");
 error_reporting(0);
 
 if (isset($_POST['register'])) {
-   
-
     // Retrieve form data
     $stdId = $_POST['stdId'];
     $stdname = $_POST['stdname'];
@@ -13,6 +11,7 @@ if (isset($_POST['register'])) {
     $password = $_POST['password'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
+
     // Handling image uploads
     $filename = $_FILES["uploadfile"]["name"];
     $tempname = $_FILES["uploadfile"]["tmp_name"];
@@ -22,15 +21,51 @@ if (isset($_POST['register'])) {
     move_uploaded_file($tempname, $folder);
 
     // Server-side validation
+    $errors = array();
+
     if (
         empty($stdname) || empty($stdId) || empty($email) || empty($password) ||
-        $classname == 'Not Selected' || empty($gender) || empty($phone) || empty($address)
+        empty($gender) || empty($phone) || empty($address)
     ) {
-        echo "<script>alert('All form fields must be filled!');</script>";
-    } else {
-        // Insert student data into the database
-        $query = "INSERT INTO tbl_student(stdId,stdname,gender,email,password,phone,address,std_image)
-        VALUES ('$stdId','$stdname','$gender','$email','$password','$phone','$address','$folder')";
+        $errors[] = "All form fields must be filled!";
+    } 
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Invalid email format";
+    }
+
+    if(strlen($phone) != 10) {
+        $errors[] = "Phone number must be 10 digits";
+    }
+    
+    if(strlen($password) < 6) {
+        $errors[] = "Password must be at least 6 characters";
+    }
+
+    if (!preg_match("/^[a-zA-Z ]*$/", $stdname)) {
+        $errors[] = "Only letters and white space allowed in student name";
+    }
+
+    if (!in_array($gender, array('male', 'female', 'other'))) {
+        $errors[] = "Invalid gender selection";
+    }
+
+    if (!preg_match("/^[0-9]*$/", $phone)) {
+        $errors[] = "Only numbers allowed in phone number";
+    }
+
+    if (!preg_match("/^[a-zA-Z0-9 ]*$/", $address)) {
+        $errors[] = "Only letters, numbers and white space allowed in address";
+    }
+
+    if (!isset($_POST['terms'])) {
+        $errors[] = "Please agree to terms and conditions";
+    }
+
+    // If there are no errors, insert data into the database
+    if (empty($errors)) {
+        $query = "INSERT INTO tbl_student (stdId, stdname, gender, email, password, phone, address, std_image)
+                  VALUES ('$stdId', '$stdname', '$gender', '$email', '$password', '$phone', '$address', '$folder')";
         $data = mysqli_query($conn, $query);
 
         if ($data) {
@@ -38,8 +73,16 @@ if (isset($_POST['register'])) {
         } else {
             echo "<script>alert('Failed to insert student information into the database');</script>";
         }
+    } else {
+        // Display errors if there are any
+        foreach ($errors as $error) {
+            echo "<script>alert('$error');</script>";
+        }
     }
 }
+
+?>
+
 
 ?>
 <!DOCTYPE html>
@@ -181,6 +224,17 @@ if (isset($_POST['register'])) {
             border-radius: 5px;
         }
 
+        .terms p {
+            position: absolute;
+            bottom:-45px;
+            margin-left: 20px;
+            margin-bottom: 30px;
+           
+            
+           
+            /* Center checkbox and text */
+        }
+
         /* Button Styling */
         .input_field   .btn {
             width:100%;
@@ -302,7 +356,7 @@ if (isset($_POST['register'])) {
 
                     <div class="input_field terms">
                         <label class="check">
-                            <input type="checkbox">
+                            <input type="checkbox" name="terms">
                             <p>Agree to terms and conditions</p>
                         </label>
                     </div>
