@@ -1,5 +1,5 @@
 <?php
-include('../connection.php');
+include ('../connection.php');
 
 // Retrieve 'courseId' from the query string
 $courseId = isset($_GET['courseId']) ? $_GET['courseId'] : null;
@@ -33,11 +33,11 @@ if (isset($_POST['update'])) {
         courseName = '$newCourseName' ,
         shortName = '$newShortName'
         WHERE courseId = '$courseId'";
-       
+
     // Execute the query and check for success
     if (mysqli_query($conn, $updateQuery)) {
         header("Location: manageCourse.php");
-      //  echo "<script>alert('Data updated successfully');</script>";
+        //  echo "<script>alert('Data updated successfully');</script>";
         // Optionally, redirect or perform other actions upon successful update
     } else {
         echo "<script>alert('Failed to update data');</script>";
@@ -48,15 +48,15 @@ if (isset($_POST['update'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Existing head content -->
     <title>Update Student Class</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional head content -->
     <style>
-         /* Global Styling */
-         body {
-            font-family: 'Arial', sans-serif;
+        body {
+            font-family: 'poppins';
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -75,28 +75,26 @@ if (isset($_POST['update'])) {
             /* Center align text */
             font-size: 24px;
             /* Larger font size */
-           
+
         }
 
         /* Navigation Styling */
         .nav {
             padding: 10px 20px;
-            /* Padding for navigation */
             background: #333;
-            /* Dark gray background */
         }
 
         .nav a {
-            margin-left: 23px;
-            display: inline-flex;
-            list-style: none;
+            display: flex;
+            margin-left: 30px;
             color: white;
-            /* White text */
             text-decoration: none;
-            /* No underline */
-            transition: all 0.3s ease;
-            /* Smooth transitions */
-            margin: 2px;
+        }
+
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
         }
 
         .nav a:hover {
@@ -122,9 +120,27 @@ if (isset($_POST['update'])) {
             /* Space between breadcrumb items */
         }
 
+        .main {
+            display: flex;
+            flex-direction: row;
+
+        }
+
+        .dashboard {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .main .container {
+            width: 50%;
+            height: 50%;
+            align-items: center;
+            justify-content: center;
+        }
+
         /* Container Layout */
         .container {
-            max-width: 600px;
+            width: 50 max-width: 600px;
             /* Moderate width */
             margin: 5% auto;
             /* Center the container */
@@ -136,8 +152,7 @@ if (isset($_POST['update'])) {
             /* Rounded corners */
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
             /* Shadow effect */
-            text-align: center;
-            /* Center align text */
+
 
         }
 
@@ -197,6 +212,7 @@ if (isset($_POST['update'])) {
 
         /* Submit Button Styling */
         input[type="submit"] {
+
             background: #0072ff;
             /* dark blue background */
             color: white;
@@ -215,11 +231,14 @@ if (isset($_POST['update'])) {
             /* Smooth transitions */
             width: 100%;
             /* Full width */
+            margin-top: 20px;
+
         }
 
         input[type="submit"]:hover {
-            background: #388E3C;
-            /* Darker green on hover */
+
+            background: #005bb5;
+            /* Slightly darker blue on hover */
         }
 
         input[type="submit"]:active {
@@ -271,6 +290,7 @@ if (isset($_POST['update'])) {
         }
     </style>
 </head>
+
 <body>
     <header>
         <h3>Update Student Course</h3>
@@ -286,25 +306,31 @@ if (isset($_POST['update'])) {
             </ul>
         </nav>
     </div>
+    <div class="main">
+        <div class="dashboard">
+            <?php include ('../includes/leftbar.php'); ?>
+        </div>
+        <div class="container">
+            <h4>Update Student Course</h4>
+            <hr>
+            <form action="#" method="POST">
+                <label for="courseId">Course Id</label>
+                <input type="text" name="courseId" value="<?php echo htmlspecialchars($result['courseId']) ?>">
 
-    <div class="container">
-        <h4>Update Student Course</h4>
-        <hr>
-        <form action="#" method="POST">
-            <label for="courseId">Course Id</label>
-            <input type="text" name="courseId" value="<?php echo htmlspecialchars($result['courseId']) ?>">
+                <label for="courseName">Course Name</label>
+                <input type="text" name="courseName" value="<?php echo htmlspecialchars($result['courseName']); ?>" />
 
-            <label for="courseName">Course Name</label>
-            <input type="text" name="courseName" value="<?php echo htmlspecialchars($result['courseName']); ?>" />
+                <label for="shortName">Short Name</label>
+                <input type="text" name="shortName" value="<?php echo htmlspecialchars($result['shortName']); ?>" />
+                <p>Examples: BCA , BIM , BBS , etc.</p>
 
-            <label for="shortName">Short Name</label>
-            <input type="text" name="shortName" value="<?php echo htmlspecialchars($result['shortName']); ?>" />
-            <p>Examples: BCA , BIM , BBS , etc.</p>
-            
 
-            <input type="submit" name="update" value="Update" />
-        </form>
+                <input type="submit" name="update" value="Update" />
+            </form>
+        </div>
     </div>
-    
+
+
 </body>
+
 </html>
