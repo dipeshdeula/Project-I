@@ -22,7 +22,7 @@
     <style>
         /* Global Styling */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'poppins';
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -197,11 +197,14 @@
             /* Smooth transitions */
             width: 100%;
             /* Full width */
+            margin-top: 20px;
+           
         }
 
         input[type="submit"]:hover {
-            background: #388E3C;
-            /* Darker green on hover */
+           
+            background: #005bb5;
+            /* Slightly darker blue on hover */
         }
 
         input[type="submit"]:active {
@@ -259,7 +262,7 @@
 
     <header>
 
-        <h4>Available Courses</h4>
+        <h4>Create Courses</h4>
 
     </header>
 
