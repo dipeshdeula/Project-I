@@ -1,5 +1,5 @@
 <?php
-require("../connection.php");
+require ("../connection.php");
 
 // Retrieve courseId and subCode from URL parameters
 $courseId = isset($_GET['courseId']) ? $_GET['courseId'] : null;
@@ -51,9 +51,8 @@ if (isset($_POST['update'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Course Subject</title>
     <style>
-        /* Global Styling */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'poppins';
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -173,6 +172,16 @@ if (isset($_POST['update'])) {
             /* Space below labels */
         }
 
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+        }
+
         input[type="text"] {
             width: 100%;
             /* Full width */
@@ -195,17 +204,6 @@ if (isset($_POST['update'])) {
             /* No default outline */
         }
 
-        /* Paragraph Styling */
-        p {
-            color: #777;
-            /* Light gray text */
-            font-size: 14px;
-            /* Slightly smaller font size */
-            text-align: start;
-            /* Align left */
-            margin-bottom: 15px;
-            /* Space below paragraph */
-        }
 
         /* Submit Button Styling */
         input[type="submit"] {
@@ -228,11 +226,13 @@ if (isset($_POST['update'])) {
             /* Smooth transitions */
             width: 100%;
             /* Full width */
+
+            margin-top: 20px;
         }
 
         input[type="submit"]:hover {
-            background: #388E3C;
-            /* Darker green on hover */
+            background: #005bb5;
+            /* Darker blue on hover */
         }
 
         input[type="submit"]:active {
@@ -305,7 +305,7 @@ if (isset($_POST['update'])) {
     <div class="main">
         <div class="dashboard">
             <?php
-            include('../includes/leftbar.php');
+            include ('../includes/leftbar.php');
             ?>
         </div>
         <div class="container">
@@ -340,14 +340,22 @@ if (isset($_POST['update'])) {
                     <label for="semester">Semester</label>
                     <select name="semester" id="semester">
                         <option value="Not Selected">Select</option>
-                        <option value="1" <?php if ($result['semester'] == '1') echo 'selected'; ?>>1</option>
-                        <option value="2" <?php if ($result['semester'] == '2') echo 'selected'; ?>>2</option>
-                        <option value="3" <?php if ($result['semester'] == '3') echo 'selected'; ?>>3</option>
-                        <option value="4" <?php if ($result['semester'] == '4') echo 'selected'; ?>>4</option>
-                        <option value="5" <?php if ($result['semester'] == '5') echo 'selected'; ?>>5</option>
-                        <option value="6" <?php if ($result['semester'] == '6') echo 'selected'; ?>>6</option>
-                        <option value="7" <?php if ($result['semester'] == '7') echo 'selected'; ?>>7</option>
-                        <option value="8" <?php if ($result['semester'] == '8') echo 'selected'; ?>>8</option>
+                        <option value="1" <?php if ($result['semester'] == '1')
+                            echo 'selected'; ?>>1</option>
+                        <option value="2" <?php if ($result['semester'] == '2')
+                            echo 'selected'; ?>>2</option>
+                        <option value="3" <?php if ($result['semester'] == '3')
+                            echo 'selected'; ?>>3</option>
+                        <option value="4" <?php if ($result['semester'] == '4')
+                            echo 'selected'; ?>>4</option>
+                        <option value="5" <?php if ($result['semester'] == '5')
+                            echo 'selected'; ?>>5</option>
+                        <option value="6" <?php if ($result['semester'] == '6')
+                            echo 'selected'; ?>>6</option>
+                        <option value="7" <?php if ($result['semester'] == '7')
+                            echo 'selected'; ?>>7</option>
+                        <option value="8" <?php if ($result['semester'] == '8')
+                            echo 'selected'; ?>>8</option>
                     </select>
                     <input type="submit" name="update" value="Update" />
                 </form>
