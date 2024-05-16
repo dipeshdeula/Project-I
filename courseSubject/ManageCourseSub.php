@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Course Subject</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -98,6 +103,8 @@
             border-radius: 5px;
             text-decoration: none;
             transition: all 0.3s ease;
+            margin-right: 10px;
+            
         }
 
         .btn-update:hover {
@@ -112,6 +119,7 @@
             border-radius: 5px;
             text-decoration: none;
             transition: all 0.3s ease;
+          
         }
 
         .btn-delete:hover {
@@ -182,8 +190,8 @@
                             echo "<td>" . $row['subCode'] . "</td>";
                             echo "<td>" . $row['semester'] . "</td>";
                             echo "<td>";
-                            echo "<a class='update' href='updateCourseSub.php?courseId={$row['courseId']}&subCode={$row['subCode']}'>Update</a>";
-                            echo "<a class='delete' href='deleteCourseSub.php?courseId={$row['courseId']}&subCode={$row['subCode']}' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</a>";
+                            echo "<a class='btn-update' href='updateCourseSub.php?courseId={$row['courseId']}&subCode={$row['subCode']}'>Update</a>";
+                            echo "<a class='btn-delete' href='deleteCourseSub.php?courseId={$row['courseId']}&subCode={$row['subCode']}' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</a>";
                             echo "</td>";
                             echo "</tr>";
 
