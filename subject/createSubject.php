@@ -14,7 +14,7 @@
     <style>
         /* Global Styling */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'poppins';
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -147,6 +147,7 @@
             /* Adequate font size */
             transition: all 0.3s ease;
             /* Smooth transitions */
+            margin-top: 10px;
         }
 
         input[type="text"]:focus {
@@ -160,6 +161,7 @@
     /* Bold text for labels */
     color: #555;
     /* Dark gray color */
+    margin-top: 10px;
 }
 
 .input_field_number input[type="number"] {
@@ -204,10 +206,11 @@
             /* Pointer cursor on hover */
             transition: all 0.3s ease;
             /* Smooth transition on hover and active */
-            text-transform: uppercase;
+          
             /* Uppercase text */
             width: 100%;
             /* Full width */
+            margin-top: 20px;
         }
 
         input[type="submit"]:hover {
@@ -280,7 +283,7 @@
 
     <header>
 
-        <h3>Register Subjects</h3>
+        <h3>Create Subjects</h3>
 
     </header>
     <div class="nav">
@@ -303,7 +306,7 @@
         </div>
         <div class="container">
             <form action="#" method="POST" enctype="multipart/form-data">
-                <h4>Register Subjects</h4>
+                <h4>Create Subjects</h4>
 
                 <div class="form">
 
@@ -325,16 +328,10 @@
                         <label for="thfm">Total Practical Marks</label>
                         <input type="number" max = "25"  name="prFM" placeholder="Total practical Marks" />
                     </div>
-
-
-
-
                 </div>
 
                 <div class="input_field">
-                    <input type="submit" value="Register" class="btn" name="register" />
-
-
+                    <input type="submit" value="Create" class="btn" name="create" />
                 </div>
             </form>
         </div>
@@ -353,7 +350,7 @@
 
 <?php
 include ("../connection.php");
-if (isset($_POST['register'])) {
+if (isset($_POST['create'])) {
     $subCode = $_POST['subCode'];
     $subName = $_POST['subName'];
     $thFM = $_POST['thFM'];
