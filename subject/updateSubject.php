@@ -44,14 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Subject</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5fNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        /* Your CSS styles here */
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
+    <style>
         /* Global Styling */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'poppins';
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -74,18 +76,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         /* Navigation Styling */
         .nav {
             padding: 10px 20px;
-            /* Padding for navigation */
             background: #333;
-            /* Dark gray background */
         }
 
         .nav a {
+            display: flex;
+            margin-left: 30px;
             color: white;
-            /* White text */
             text-decoration: none;
-            /* No underline */
-            transition: all 0.3s ease;
-            /* Smooth transitions */
+        }
+
+        .nav a i {
+            margin-right: 5px;
+            margin-top: 5px;
+            font-size: 15px;
         }
 
         .nav a:hover {
@@ -106,20 +110,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             /* Space between items */
         }
 
+        .main {
+            display: flex;
+            flex-direction: row;
+
+
+        }
+
+        .main .container {
+            height: 50%;
+            width: 40%
+        }
+
+        .dashboard {
+            width: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
         /* Container Layout */
         .container {
-            max-width: 600px;
-            /* Moderate width */
-            margin: 40px auto;
-            /* Center the container */
-            padding: 20px;
-            /* Padding around the container */
+            flex-direction: row;
+            display: flex;
+            /* Use flexbox */
+            flex-direction: column;
+            /* Vertical alignment */
+            height: 50vh;
+            /* Full height */
+            width: 10vh;
             background: white;
             /* White background */
             border-radius: 10px;
             /* Rounded corners */
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
             /* Shadow effect */
+            margin-top: 40px;
+            /* Space above the container */
+            padding: 20px;
+
         }
 
         /* Form Styling */
@@ -158,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             /* Adequate font size */
             transition: all 0.3s ease;
             /* Smooth transitions */
+            margin-top: 10px;
         }
 
         input[type="text"]:focus {
@@ -168,33 +197,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .input_field_number label {
-    font-weight: bold;
-    /* Bold text for labels */
-    color: #555;
-    /* Dark gray color */
-}
+            font-weight: bold;
+            /* Bold text for labels */
+            color: #555;
+            /* Dark gray color */
+            margin-top: 10px;
+        }
 
-.input_field_number input[type="number"] {
-    width: 100%;
-    /* Full width */
-    padding: 10px 15px;
-    /* Padding for input fields */
-    border: 1px solid #ccc;
-    /* Light gray border */
-    border-radius: 5px;
-    /* Rounded corners */
-    font-size: 16px;
-    /* Adequate font size */
-    transition: all 0.3s ease;
-    /* Smooth transitions */
-}
+        .input_field_number input[type="number"] {
+            width: 100%;
+            margin-top: 10px;
+            /* Full width */
+            padding: 10px 15px;
+            /* Padding for input fields */
+            border: 1px solid #ccc;
+            /* Light gray border */
+            border-radius: 5px;
+            /* Rounded corners */
+            font-size: 16px;
+            /* Adequate font size */
+            transition: all 0.3s ease;
+            /* Smooth transitions */
+        }
 
-.input_field_number input[type="number"]:focus {
-    border-color: #0072ff;
-    /* Blue border on focus */
-    outline: none;
-    /* No default outline */
-}
+        .input_field_number input[type="number"]:focus {
+            border-color: #0072ff;
+            /* Blue border on focus */
+            outline: none;
+            /* No default outline */
+        }
 
 
         /* Register Button Styling */
@@ -215,10 +246,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             /* Pointer cursor on hover */
             transition: all 0.3s ease;
             /* Smooth transition on hover and active */
-            text-transform: uppercase;
+
             /* Uppercase text */
             width: 100%;
             /* Full width */
+            margin-top: 20px;
         }
 
         input[type="submit"]:hover {
@@ -284,6 +316,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     </style>
+
+
 </head>
 
 <body>
@@ -292,7 +326,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h3>Update Subject</h3>
     </header>
 
-    <div class="container">
+    <div class="nav">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Subjects</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Update Subjects</a></li>
+
+            </ol>
+        </nav>
+    </div>
+
+    <div class="main">
+        <div class="dashboard">
+            <?php include('../includes/leftbar.php'); ?>
+        </div>
+        <div class="container">
         <form action="updateSubject.php?id=<?php echo htmlspecialchars($subCode); ?>" method="POST">
             <div class="input_field">
                 <label for="subName">Subject Name</label>
@@ -308,16 +358,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="input_field_number">
                 <label for="thfm">Total Theroy Marks</label>
                 <input type="number" name="thFM" max="100" placeholder="Total Theroy Marks"
-                value="<?php echo htmlspecialchars($thFM); ?>" />
+                    value="<?php echo htmlspecialchars($thFM); ?>" />
             </div>
             <div class="input_field_number">
                 <label for="prfm">Total Practical Marks</label>
                 <input type="number" max="25" name="prFM" placeholder="Total practical Marks"
-                value = "<?php echo htmlspecialchars($prFM); ?> " />
+                    value="<?php echo htmlspecialchars($prFM); ?> " />
             </div>
             <input type="submit" value="Update" class="btn btn-primary">
         </form>
     </div>
+    </div>
+    
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
