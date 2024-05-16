@@ -1,5 +1,5 @@
 <?php
-require("../connection.php");
+require ("../connection.php");
 
 // Fetch courseId and subjectCode data from tbl_course and tbl_subjects
 $query_course = "SELECT courseId FROM tbl_course";
@@ -61,7 +61,7 @@ if (isset($_POST['submit'])) {
     <style>
         /* Global Styling */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'poppins';
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -181,6 +181,16 @@ if (isset($_POST['submit'])) {
             /* Space below labels */
         }
 
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+        }
+
         input[type="text"] {
             width: 100%;
             /* Full width */
@@ -203,20 +213,9 @@ if (isset($_POST['submit'])) {
             /* No default outline */
         }
 
-        /* Paragraph Styling */
-        p {
-            color: #777;
-            /* Light gray text */
-            font-size: 14px;
-            /* Slightly smaller font size */
-            text-align: start;
-            /* Align left */
-            margin-bottom: 15px;
-            /* Space below paragraph */
-        }
-
+    
         /* Submit Button Styling */
-        input[type="submit"] {
+        input[type="submit"]  {
 
             background: #0072ff;
             /* dark blue background */
@@ -236,11 +235,13 @@ if (isset($_POST['submit'])) {
             /* Smooth transitions */
             width: 100%;
             /* Full width */
+
+            margin-top: 20px;
         }
 
         input[type="submit"]:hover {
-            background: #388E3C;
-            /* Darker green on hover */
+            background: #005bb5;
+            /* Darker blue on hover */
         }
 
         input[type="submit"]:active {
@@ -321,38 +322,52 @@ if (isset($_POST['submit'])) {
             <hr>
             <div class="form">
                 <form action="#" method="POST">
-                    <label for="courseId">Course Id</label>
-                    <select name="courseId" id="courseId">
+                    <div class="select_field">
+                        <label for="courseId">Course Id</label>
+                        <select name="courseId" id="courseId">
 
-                        <?php
-                        while ($row_course = mysqli_fetch_assoc($result_course)) {
-                            echo "<option value='" . $row_course['courseId'] . "'>" . $row_course['courseId'] . "</option>";
-                        }
-                        ?>
-                    </select><br>
+                            <?php
+                            while ($row_course = mysqli_fetch_assoc($result_course)) {
+                                echo "<option value='" . $row_course['courseId'] . "'>" . $row_course['courseId'] . "</option>";
+                            }
+                            ?>
+                        </select>
 
-                    <label for="subCode">Subject Code</label>
-                    <select name="subCode" id="subCode">
-                        <?php
-                        while ($row_subject = mysqli_fetch_assoc($result_subject)) {
-                            echo "<option value='" . $row_subject['subCode'] . "'>" . $row_subject['subCode'] . "</option>";
-                        }
-                        ?>
-                    </select><br><br>
+                    </div>
 
-                    <label for="semester">Semester</label>
-                    <select name="semester" id="semester">
-                        <option value="Not Selected">Select</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                    </select>
-                    <input type="submit" name="submit" />
+                    <div class="select_field">
+                        <label for="subCode">Subject Code</label>
+                        <select name="subCode" id="subCode">
+                            <?php
+                            while ($row_subject = mysqli_fetch_assoc($result_subject)) {
+                                echo "<option value='" . $row_subject['subCode'] . "'>" . $row_subject['subCode'] . "</option>";
+                            }
+                            ?>
+                        </select>
+
+                    </div>
+
+                    <div class="select_field">
+                        <label for="semester">Semester</label>
+                        <select name="semester" id="semester">
+                            <option value="Not Selected">Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+
+                    </div>
+
+                   
+                        <input type="submit" name="submit" />
+
+                
+
                 </form>
             </div>
         </div>
