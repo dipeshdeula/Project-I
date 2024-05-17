@@ -106,7 +106,7 @@ $data = mysqli_query($conn, $query);
             align-items: center;
             justify-content: center;
             height: 80%;
-            width: 80%;
+            width: 100%;
         }
 
        
@@ -155,7 +155,7 @@ $data = mysqli_query($conn, $query);
        .container table {
             align-items: center;
             justify-content: center;
-            width: 80%;
+            width: 90%;
             /* Full width */
             border-collapse: collapse;
             /* Collapse borders */
