@@ -147,11 +147,6 @@
                                     class="fa fa-bars"></i> Create Subject</a></li>
                         <li><a href="http://localhost/student_project/subject/manageSubject.php"><i
                                     class="fa fa-server"></i> Manage Subjects</a></li>
-                        <li><a href="http://localhost/student_project/subject/addSubjectCombination.php"><i
-                                    class="fa fa-newspaper-o"></i> Add Subject Combination</a></li>
-                        <li><a href="http://localhost/student_project/subject/manageSubjectCombination.php"><i
-                                    class="fa fa-newspaper-o"></i> Manage Subject Combination</a></li>
-
                     </ul>
                 </li>
 
@@ -176,11 +171,21 @@
                 </li>
 
                 <li class="has-children" onclick="toggleChildNav(this)">
+                    <a href="#"><i class='bi bi-person'></i><span>Exam</span></a>
+                    <ul class="child-nav">
+                        <li><a href="http://localhost/student_project/exam/createExam.php"><i class="fa fa-bars"></i>
+                                create Exam</a></li>
+                        <li><a href="http://localhost/student_project/exam/manageExam.php"><i
+                                    class="fa fa-server"></i> Manage exam</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-children" onclick="toggleChildNav(this)">
                     <a href="#"><i class='bi bi-bar-chart'></i><span>Results</span></a>
                     <ul class="child-nav">
                         <li><a href="http://localhost/student_project/result/addResult.php"><i class="fa fa-bars"></i>
                                 Add Result</a></li>
-                        <li><a href="http://localhost/student_project/manageStudent.php"><i class="fa fa-server"></i>
+                        <li><a href="http://localhost/student_project/result/manageResult.php"><i class="fa fa-server"></i>
                                 Manage Result</a></li>
                     </ul>
                 </li>
