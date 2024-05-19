@@ -1,9 +1,27 @@
 <?php
 require ("../connection.php");
+error_reporting(0);
 
 // Fetch result data
 $query_results = "SELECT * FROM tbl_result";
 $result_results = mysqli_query($conn, $query_results);
+
+// Handle form submission to update result status
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['status'])) {
+        foreach ($_POST['status'] as $stdId => $examData) {
+            foreach ($examData as $examId => $subCodes) {
+                foreach ($subCodes as $subCode => $value) {
+                    $update_query = "UPDATE tbl_result SET status = 'Published' WHERE stdId = '$stdId' AND examId = '$examId' AND subCode = '$subCode'";
+                    mysqli_query($conn, $update_query);
+                }
+            }
+        }
+        // Refresh the page to show updated results
+        header("Location: manageResult.php");
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -53,9 +71,7 @@ $result_results = mysqli_query($conn, $query_results);
 
         .nav a:hover {
             text-decoration: underline;
-            /* Underline on hover */
         }
-
 
         .breadcrumb {
             padding: 10px;
@@ -82,7 +98,6 @@ $result_results = mysqli_query($conn, $query_results);
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
         }
 
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -100,9 +115,6 @@ $result_results = mysqli_query($conn, $query_results);
             color: white;
         }
 
-
-
-        /* Update and delete button styling */
         .btn-update {
             padding: 10px;
             background: #0072ff;
@@ -131,7 +143,6 @@ $result_results = mysqli_query($conn, $query_results);
             background: #c0392b;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -141,8 +152,6 @@ $result_results = mysqli_query($conn, $query_results);
             table td {
                 padding: 8px;
             }
-
-
         }
     </style>
 </head>
@@ -154,11 +163,9 @@ $result_results = mysqli_query($conn, $query_results);
     <div class="nav">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a>
-                </li>
+                <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Results</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Results</a></li>
-
             </ol>
         </nav>
     </div>
@@ -166,48 +173,53 @@ $result_results = mysqli_query($conn, $query_results);
     <div class="main">
         <div class="dashboard">
             <?php require ('../includes/leftbar.php'); ?>
-
         </div>
         <div class="container">
             <h4>View Result Details</h4>
- 
-            <table id="myTable">
-                <thead>
-                    <tr>
-                        <th>Student ID</th>
-                        <th>Exam ID</th>
-                        <th>Subject Code</th>
-                        <th>Date</th>
-                        <th>Theory Marks</th>
-                        <th>Practical Marks</th>
-                        <!-- <th>Total Marks</th> -->
-                        <th>Remarks</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    while ($row = mysqli_fetch_assoc($result_results)) {
-                        // $totalMarks = $row['theoryMarks'] + $row['practicalMarks'];
-                        $remarks = ($row['theoryMarks'] < 25 || $row['practicalMarks'] < 12) ? 'Fail' : 'Pass';
-                        echo "<tr>";
-                        echo "<td>{$row['stdId']}</td>";
-                        echo "<td>{$row['examId']}</td>";
-                        echo "<td>{$row['subCode']}</td>";
-                        echo "<td>{$row['date']}</td>";
-                        echo "<td>{$row['theoryMarks']}</td>";
-                        echo "<td>{$row['practicalMarks']}</td>";
-                        // echo "<td>{$totalMarks}</td>";
-                        echo "<td>{$remarks}</td>";
-                        echo "<td><a href='updateResult.php?stdId={$row['stdId']}&examId={$row['examId']}&subCode={$row['subCode']}'
-                        class='btn-update' >Update</a> 
-                     <a href='deleteResult.php?stdId={$row['stdId']}&examId={$row['examId']}&subCode={$row['subCode']}'
-                    class='btn-delete'>Delete</a></td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+            <form method="POST" action="publishResult.php">
+                <table id="myTable">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Exam ID</th>
+                            <th>Subject Code</th>
+                            <th>Date</th>
+                            <th>Theory Marks</th>
+                            <th>Practical Marks</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        while ($row = mysqli_fetch_assoc($result_results)) {
+                            $remarks = ($row['theoryMarks'] < 25 || $row['practicalMarks'] < 12) ? 'Fail' : 'Pass';
+                            $statusChecked = ($row['status'] === 'Published') ? 'checked' : '';
+                            echo "<tr>";
+                            echo "<td>{$row['stdId']}</td>";
+                            echo "<td>{$row['examId']}</td>";
+                            echo "<td>{$row['subCode']}</td>";
+                            echo "<td>{$row['date']}</td>";
+                            echo "<td>{$row['theoryMarks']}</td>";
+                            echo "<td>{$row['practicalMarks']}</td>";
+                            echo "<td><input type='checkbox' name='status[{$row['stdId']}][{$row['examId']}][{$row['subCode']}]' value='Published' $statusChecked></td>";
+                            echo "<td>{$remarks}</td>";
+                            echo "<td><a href='updateResult.php?stdId={$row['stdId']}&examId={$row['examId']}&subCode={$row['subCode']}' class='btn-update'>Update</a> 
+                                  <a href='deleteResult.php?stdId={$row['stdId']}&examId={$row['examId']}&subCode={$row['subCode']}' class='btn-delete'>Delete</a></td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+                <!-- send stdId via url on click submit button-->
+                <input type="hidden" name="stdId" value="<?php echo $stdId; ?>">
+                <input type="hidden" name="examId" value="<?php echo $examId; ?>">
+                <input type="hidden" name="courseName" value="<?php echo $courseName; ?>">
+                <input type="submit" class="btn btn-primary mt-3" value="published" name="published" />
+
+                
+            </form>
         </div>
     </div>
 
@@ -215,10 +227,8 @@ $result_results = mysqli_query($conn, $query_results);
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-
-
     <script>
-        $(document).ready(function (){
+        $(document).ready(function () {
             $('#myTable').DataTable();
         });
     </script>
