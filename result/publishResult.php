@@ -1,10 +1,5 @@
 <?php
-require("../connection.php");
-
-
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require ("../connection.php");
 
 // Initialize variables
 $stdId = '';
@@ -19,6 +14,7 @@ $courseName = '';
 $semester = '';
 $examId = '';
 $examName = '';
+// $std_image = '';
 
 // Check if the student ID is provided in the URL
 if (isset($_GET['stdId'])) {
@@ -29,15 +25,20 @@ if (isset($_GET['stdId'])) {
     $result_student = mysqli_query($conn, $query_student);
     if ($result_student && mysqli_num_rows($result_student) > 0) {
         $row_student = mysqli_fetch_assoc($result_student);
-        $courseId = $row_student['courseId']; // assuming courseId is a column in tbl_student
-        $semester = $row_student['semester']; // assuming semester is a column in tbl_student
+        // $std_image = $row_student['std_image'];
+       
 
-        // Fetch course details
-        $query_course = "SELECT courseName FROM tbl_course WHERE courseId = '$courseId'";
+        // Fetch course and semester details
+        $query_course = "SELECT tbl_course.courseName, tbl_course_subject.semester 
+                         FROM tbl_course 
+                         INNER JOIN tbl_course_subject ON tbl_course.courseId = tbl_course_subject.courseId 
+                         INNER JOIN tbl_result ON tbl_course_subject.subCode = tbl_result.subCode 
+                         WHERE tbl_result.stdId = '$stdId' LIMIT 1";
         $result_course = mysqli_query($conn, $query_course);
         if ($result_course && mysqli_num_rows($result_course) > 0) {
             $row_course = mysqli_fetch_assoc($result_course);
             $courseName = $row_course['courseName'];
+            $semester = $row_course['semester'];
         }
 
         // Fetch result details
@@ -89,149 +90,173 @@ if (isset($_GET['stdId'])) {
     exit; // Terminate script execution if no student ID provided
 }
 ?>
-<!DO
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publish Student Result</title>
     <style>
-        body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+    body {
+        font-family: Poppins;
+        margin: 0;
+        padding: 0;
+    }
 
-.container {
-    max-width: 960px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.header h1 {
-    margin: 0;
-}
-
-.header h4 {
-    margin-top: 5px;
-    margin-bottom: 20px;
-}
-
-.main {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.std_details,
-.table,
-.calculated_result {
-    flex: 1;
-}
-
-.std_details label,
-.table th,
-.table td,
-.calculated_result label {
-    font-weight: bold;
-}
-
-.std_details input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.table,
-.calculated_result {
-    overflow-x: auto;
-}
-
-.table table,
-.calculated_result {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table th,
-.table td,
-.calculated_result input[type="text"] {
-    padding: 10px;
-    text-align: left;
-    border: 1px solid #ddd;
-}
-
-.table th {
-    background-color: #f2f2f2;
-}
-
-.calculated_result input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-@media screen and (max-width: 768px) {
     .container {
-        padding: 15px;
+        max-width: 960px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff; /* Blue background */
+        color: #000; /* White font color */
+        border-radius: 10px;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+        text-align: center; /* Center align header */
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .header h4 {
+        margin-top: 5px;
+        margin-bottom: 20px;
+        font-size: 18px;
     }
 
     .main {
-        flex-direction: column;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-between; /* Align items evenly */
     }
 
     .std_details,
     .table,
     .calculated_result {
-        width: 100%;
+        flex: 1;
     }
-}
 
-    </style>
+    .std_details label,
+    .table th,
+    .table td,
+    .calculated_result label {
+        font-family: Poppins;
+        font-size: 19px;
+        font-weight: bold;
+    }
+
+    .std_details input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .table {
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        margin-top: 40px;
+        margin-left: 25px;
+    }
+
+    .calculated_result {
+        flex: 1;
+        margin-top: 20px;
+        padding: 20px;
+    }
+
+    
+    .calculated_result {
+        width: 70%;
+       
+    }
+
+    .table th,
+    .table td,
+    .calculated_result input[type="text"] {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .table th {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .calculated_result input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right:25 px;
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        .main {
+            flex-direction: column;
+        }
+
+        .std_details,
+        .table,
+        .calculated_result {
+            width: 100%;
+        }
+    }
+</style>
+
 </head>
+
 <body>
-    <h1>Publish Student Result</h1>
+    <!-- <h1>Publish Student Result</h1> -->
     <div class="container">
         <div class="header">
-            <h1>JALJALA MAKWANPUR CAMPUS</h1>
-            <h4>KALPANA ROAD HETAUDA</h4>
+            <h1>HETAUDA SCHOOL OF MANAGEMENT AND SOCIAL SCIENCES</h1>
+            <h4>HETAUDA-4, MAKWANPUR</h4>
         </div>
+        <hr>
 
         <div class="main">
             <div class="std_details">
                 <label for="stdId">Student ID</label>
-                <input type="text" name="stdId" id="stdId" value="<?php echo htmlspecialchars($stdId); ?>" >
+                <input type="text" name="stdId" id="stdId" value="<?php echo htmlspecialchars($stdId); ?>" re>
 
                 <label for="stdName">Student Name</label>
-                <input type="text" name="stdName" id="stdName" value="<?php echo htmlspecialchars($row_student['stdname'] ?? ''); ?>" >
+                <input type="text" name="stdName" id="stdName"
+                    value="<?php echo htmlspecialchars($row_student['stdname'] ?? ''); ?>" readonly>
 
                 <!-- Populate image by fetching from database -->
-                <label for="stdImg">Student Image</label>
-                <?php if (!empty($row_student['std_image'])): ?>
-                    <img src="<?php echo htmlspecialchars($row_student['std_image']); ?>" alt="Student Image">
-                <?php else: ?>
-                    <p>No image available</p>
-                <?php endif; ?>
-
+                
                 <label for="courseName">Course</label>
-                <input type="text" name="courseName" id="courseName" value="<?php echo htmlspecialchars($courseName); ?>" >
+                <input type="text" name="courseName" id="courseName"
+                    value="<?php echo htmlspecialchars($courseName); ?>" readonly>
 
                 <label for="semester">Semester</label>
-                <input type="text" name="semester" id="semester" value="<?php echo htmlspecialchars($semester); ?>" >
+                <input type="text" name="semester" id="semester" value="<?php echo htmlspecialchars($semester); ?>" readonly>
 
-                <label for="examId">Exam ID</label>
-                <input type="text" name="examId" id="examId" value="<?php echo htmlspecialchars($examId); ?>" >
+                <!-- <label for="examId">Exam ID</label> -->
+                <input type="hidden" name="examId" id="examId" value="<?php echo htmlspecialchars($examId); ?>" readonly>
 
-                <label for="examName">Exam Name</label>
-                <input type="text" name="examName" id="examName" value="<?php echo htmlspecialchars($examName); ?>" >
+                <label for="examName">Exam Type</label>
+                <input type="text" name="examName" id="examName" value="<?php echo htmlspecialchars($examName); ?>" readonly>
             </div>
 
             <div class="table">
@@ -246,7 +271,7 @@ if (isset($_GET['stdId'])) {
                     </thead>
                     <tbody>
                         <?php if (count($result_subjects) > 0): ?>
-                            <?php foreach ($result_subjects as $subject) : ?>
+                            <?php foreach ($result_subjects as $subject): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($subject['subCode']); ?></td>
                                     <td><?php echo htmlspecialchars($subject['subName']); ?></td>
@@ -256,25 +281,34 @@ if (isset($_GET['stdId'])) {
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="4">No results found.</td>
+                                <td colspan="4">No results found</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
-
-                <div class="calculated_result">
-                    <label for="totalMarks">Total Marks</label>
-                    <input type="text" name="totalMarks" id="totalMarks" value="<?php echo htmlspecialchars($totalMarks); ?>" >
-
-                    <label for="percentage">Percentage</label>
-                    <input type="text" name="percentage" id="percentage" value="<?php echo htmlspecialchars($percentage); ?>" >
-
-                    <label for="remarks">Remarks</label>
-                    <input type="text" name="remarks" id="remarks" value="<?php echo htmlspecialchars($remarks); ?>" >
-                </div>
             </div>
+        </div>
+
+        <div class="calculated_result">
+          
+            <input type="hidden" name="totalTheoryMarks" id="totalTheoryMarks"
+                value="<?php echo htmlspecialchars($totalTheoryMarks); ?>" readonly>
+
+         
+            <input type="hidden" name="totalPracticalMarks" id="totalPracticalMarks"
+                value="<?php echo htmlspecialchars($totalPracticalMarks);  ?>" readonly>
+
+            <label for="totalMarks">Total Marks</label>
+            <input type="text" name="totalMarks" id="totalMarks" value="<?php echo htmlspecialchars($totalMarks); ?>" readonly>
+
+            <label for="percentage">Percentage</label>
+            <input type="text" name="percentage" id="percentage"
+                value="<?php echo htmlspecialchars(number_format($percentage, 2)); ?>">
+
+            <label for="remarks">Remarks</label>
+            <input type="text" name="remarks" id="remarks" value="<?php echo htmlspecialchars($remarks); ?>" readonly>
         </div>
     </div>
 </body>
-</html>
 
+</html>
