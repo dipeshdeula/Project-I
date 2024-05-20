@@ -1,5 +1,5 @@
 <?php
-require ("../connection.php");
+require("../connection.php");
 error_reporting(0);
 
 // Fetch result data
@@ -17,8 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-        // Refresh the page to show updated results
-        header("Location: manageResult.php");
+        
+        // After updating, redirect to publishResult.php with the stdId
+        // Assuming you want to redirect to publishResult.php for a single student
+        $firstStudentId = array_key_first($_POST['status']);
+        header("Location: publishResult.php?stdId=$firstStudentId");
         exit;
     }
 }
@@ -165,18 +168,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../adminSection/dashboard.php"><i class="fa fa-home"></i> Home</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Results</a></li>
-                <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Results</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i> Manage Results</a></li>
             </ol>
         </nav>
     </div>
 
     <div class="main">
         <div class="dashboard">
-            <?php require ('../includes/leftbar.php'); ?>
+            <?php require('../includes/leftbar.php'); ?>
         </div>
         <div class="container">
             <h4>View Result Details</h4>
-            <form method="POST" action="publishResult.php">
+            <form method="POST" action="manageResult.php">
                 <table id="myTable">
                     <thead>
                         <tr>
@@ -205,20 +208,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             echo "<td>{$row['practicalMarks']}</td>";
                             echo "<td><input type='checkbox' name='status[{$row['stdId']}][{$row['examId']}][{$row['subCode']}]' value='Published' $statusChecked></td>";
                             echo "<td>{$remarks}</td>";
-                            echo "<td><a href='updateResult.php?stdId={$row['stdId']}&examId={$row['examId']}&subCode={$row['subCode']}' class='btn-update'>Update</a> 
-                                  <a href='deleteResult.php?stdId={$row['stdId']}&examId={$row['examId']}&subCode={$row['subCode']}' class='btn-delete'>Delete</a></td>";
+                            echo "<td>
+                                    <a href='updateResult.php?stdId={$row['stdId']}&examId={$row['examId']}&subCode={$row['subCode']}' class='btn-update'>Update</a> 
+                                    <a href='deleteResult.php?stdId={$row['stdId']}&examId={$row['examId']}&subCode={$row['subCode']}' class='btn-delete'>Delete</a>
+                                  </td>";
                             echo "</tr>";
                         }
                         ?>
                     </tbody>
                 </table>
-                <!-- send stdId via url on click submit button-->
-                <input type="hidden" name="stdId" value="<?php echo $stdId; ?>">
-                <input type="hidden" name="examId" value="<?php echo $examId; ?>">
-                <input type="hidden" name="courseName" value="<?php echo $courseName; ?>">
-                <input type="submit" class="btn btn-primary mt-3" value="published" name="published" />
-
-                
+                <button type="submit" class="btn-update">Publish Selected Results</button>
             </form>
         </div>
     </div>
