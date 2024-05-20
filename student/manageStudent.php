@@ -307,6 +307,7 @@ $data = mysqli_query($conn, $query);
                             <th>Photo</th>
                             <th>Student Name</th>
                             <th>Email</th>
+                            <th>Password</th>
                             <th>Gender</th>
                             <th>Phone</th>
                             <th>Address</th>
@@ -321,6 +322,7 @@ $data = mysqli_query($conn, $query);
                                         width='100px' /></td>
                                 <td><?php echo htmlspecialchars($student['stdname']); ?></td>
                                 <td><?php echo htmlspecialchars($student['email']); ?></td>
+                                <td><?php echo htmlspecialchars($student['password']); ?></td>
                                 <td><?php echo htmlspecialchars($student['gender']); ?></td>
                                 <td><?php echo htmlspecialchars($student['phone']); ?></td>
                                 <td><?php echo htmlspecialchars($student['address']); ?></td>
