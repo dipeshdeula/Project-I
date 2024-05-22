@@ -142,7 +142,7 @@ if ($result && $result1 && $result2 && $result3) {
 <body>
     <div class="navbar">
         <h2>Student Result Management System | Admin</h2>
-        <a href="#"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        <a href="adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
     </div>
 
     <div class="dashboard">
