@@ -226,6 +226,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Results</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Results</a></li>
+                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
 
             </ol>
         </nav>
