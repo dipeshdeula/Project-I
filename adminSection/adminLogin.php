@@ -38,7 +38,6 @@ if (isset($_POST['login'])) {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,6 +49,9 @@ if (isset($_POST['login'])) {
 </head>
 
 <body>
+    
+<header>Student Result Management System</header>
+
     <div class="container">
         <label for="Login page">Admin Login Section</label>
         <hr>
@@ -62,14 +64,10 @@ if (isset($_POST['login'])) {
                 <label for="password">password</label>
                 <input type="password" name="password">
                 <br>
-                
 
-                <input type="submit" value="login" class="button" name="login" />
-              
-
+                <input type="submit" value="Login" class="button" name="login" />
             </form>
         </div>
-
     </div>
 </body>
 
