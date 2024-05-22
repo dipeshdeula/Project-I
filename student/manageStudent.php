@@ -286,6 +286,7 @@ $data = mysqli_query($conn, $query);
                 </li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-users"></i> Students</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Students</a></li>
+                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
 
             </ol>
         </nav>
