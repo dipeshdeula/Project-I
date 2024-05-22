@@ -306,7 +306,7 @@ if (isset($_POST['submit'])) {
                 </li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Courses</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Create Courses Subjects</a></li>
-
+                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
             </ol>
         </nav>
     </div>
