@@ -14,7 +14,6 @@ $courseName = '';
 $semester = '';
 $examId = '';
 $examName = '';
-// $std_image = '';
 
 // Check if the student ID is provided in the URL
 if (isset($_GET['stdId'])) {
@@ -25,8 +24,6 @@ if (isset($_GET['stdId'])) {
     $result_student = mysqli_query($conn, $query_student);
     if ($result_student && mysqli_num_rows($result_student) > 0) {
         $row_student = mysqli_fetch_assoc($result_student);
-        // $std_image = $row_student['std_image'];
-       
 
         // Fetch course and semester details
         $query_course = "SELECT tbl_course.courseName, tbl_course_subject.semester 
@@ -103,20 +100,21 @@ if (isset($_GET['stdId'])) {
         font-family: Poppins;
         margin: 0;
         padding: 0;
+        background: linear-gradient(to right, #00c6ff, #0072ff);
     }
 
     .container {
         max-width: 960px;
         margin: 20px auto;
         padding: 20px;
-        background: #fff; /* Blue background */
-        color: #000; /* White font color */
+        background: #fff;
+        color: #000;
         border-radius: 10px;
         box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
     }
 
     .header {
-        text-align: center; /* Center align header */
+        text-align: center;
     }
 
     .header h1 {
@@ -134,7 +132,7 @@ if (isset($_GET['stdId'])) {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
-        justify-content: space-between; /* Align items evenly */
+        justify-content: space-between;
     }
 
     .std_details,
@@ -176,10 +174,8 @@ if (isset($_GET['stdId'])) {
         padding: 20px;
     }
 
-    
     .calculated_result {
         width: 70%;
-       
     }
 
     .table th,
@@ -193,7 +189,7 @@ if (isset($_GET['stdId'])) {
     }
 
     .table th {
-        background-color: #000;
+        background-color: #0072ff;
         color: #fff;
     }
 
@@ -205,6 +201,21 @@ if (isset($_GET['stdId'])) {
         border-radius: 5px;
         margin-right:25 px;
     }
+
+    .btn_download {
+            padding: 10px;
+            background: #0072ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: poppins;
+        }
+
+        .btn_download:hover {
+            background: #005bb5;
+        }
 
     @media screen and (max-width: 768px) {
         .container {
@@ -221,12 +232,10 @@ if (isset($_GET['stdId'])) {
             width: 100%;
         }
     }
-</style>
-
+    </style>
 </head>
 
 <body>
-    <!-- <h1>Publish Student Result</h1> -->
     <div class="container">
         <div class="header">
             <h1>HETAUDA SCHOOL OF MANAGEMENT AND SOCIAL SCIENCES</h1>
@@ -243,20 +252,19 @@ if (isset($_GET['stdId'])) {
                 <input type="text" name="stdName" id="stdName"
                     value="<?php echo htmlspecialchars($row_student['stdname'] ?? ''); ?>" readonly>
 
-                <!-- Populate image by fetching from database -->
-                
                 <label for="courseName">Course</label>
                 <input type="text" name="courseName" id="courseName"
                     value="<?php echo htmlspecialchars($courseName); ?>" readonly>
 
                 <label for="semester">Semester</label>
-                <input type="text" name="semester" id="semester" value="<?php echo htmlspecialchars($semester); ?>" readonly>
+                <input type="text" name="semester" id="semester"
+                    value="<?php echo htmlspecialchars($semester); ?>" readonly>
 
-                <!-- <label for="examId">Exam ID</label> -->
                 <input type="hidden" name="examId" id="examId" value="<?php echo htmlspecialchars($examId); ?>" readonly>
 
                 <label for="examName">Exam Type</label>
-                <input type="text" name="examName" id="examName" value="<?php echo htmlspecialchars($examName); ?>" readonly>
+                <input type="text" name="examName" id="examName"
+                    value="<?php echo htmlspecialchars($examName); ?>" readonly>
             </div>
 
             <div class="table">
@@ -271,18 +279,18 @@ if (isset($_GET['stdId'])) {
                     </thead>
                     <tbody>
                         <?php if (count($result_subjects) > 0): ?>
-                            <?php foreach ($result_subjects as $subject): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($subject['subCode']); ?></td>
-                                    <td><?php echo htmlspecialchars($subject['subName']); ?></td>
-                                    <td><?php echo htmlspecialchars($subject['theoryMarks']); ?></td>
-                                    <td><?php echo htmlspecialchars($subject['practicalMarks']); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
+                        <?php foreach ($result_subjects as $subject): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($subject['subCode']); ?></td>
+                            <td><?php echo htmlspecialchars($subject['subName']); ?></td>
+                            <td><?php echo htmlspecialchars($subject['theoryMarks']); ?></td>
+                            <td><?php echo htmlspecialchars($subject['practicalMarks']); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
                         <?php else: ?>
-                            <tr>
-                                <td colspan="4">No results found</td>
-                            </tr>
+                        <tr>
+                            <td colspan="4">No results found</td>
+                        </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -290,23 +298,30 @@ if (isset($_GET['stdId'])) {
         </div>
 
         <div class="calculated_result">
-          
+
             <input type="hidden" name="totalTheoryMarks" id="totalTheoryMarks"
                 value="<?php echo htmlspecialchars($totalTheoryMarks); ?>" readonly>
 
-         
             <input type="hidden" name="totalPracticalMarks" id="totalPracticalMarks"
-                value="<?php echo htmlspecialchars($totalPracticalMarks);  ?>" readonly>
+                value="<?php echo htmlspecialchars($totalPracticalMarks); ?>" readonly>
 
             <label for="totalMarks">Total Marks</label>
-            <input type="text" name="totalMarks" id="totalMarks" value="<?php echo htmlspecialchars($totalMarks); ?>" readonly>
+            <input type="text" name="totalMarks" id="totalMarks" value="<?php echo htmlspecialchars($totalMarks); ?>"
+                readonly>
 
             <label for="percentage">Percentage</label>
             <input type="text" name="percentage" id="percentage"
-                value="<?php echo htmlspecialchars(number_format($percentage, 2)); ?>">
+                value="<?php echo htmlspecialchars(number_format($percentage, 2)); ?>" readonly>
 
             <label for="remarks">Remarks</label>
             <input type="text" name="remarks" id="remarks" value="<?php echo htmlspecialchars($remarks); ?>" readonly>
+        </div>
+
+        <div class="download_button">
+            <form method="get" action="generate_pdf.php">
+                <input type="hidden" name="stdId" value="<?php echo htmlspecialchars($stdId); ?>">
+                <button type="submit" class="btn_download">Download Result as PDF</button>
+            </form>
         </div>
     </div>
 </body>
