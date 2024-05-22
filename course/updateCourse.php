@@ -53,7 +53,7 @@ if (isset($_POST['update'])) {
     <!-- Existing head content -->
     <title>Update Student Class</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Additional head content -->
+
     <style>
         body {
             font-family: 'poppins';
@@ -303,6 +303,7 @@ if (isset($_POST['update'])) {
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Classes</a></li>
                 <li class="breadcrumb-item"><a href="#">Update Class</a></li>
+                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
             </ul>
         </nav>
     </div>

@@ -1,12 +1,3 @@
-<?php
-// session_start();
-// if(!isset($_SESSION['className']))
-// {
-//     header("Location:adminLogin.php");
-//     exit();
-// }
-// ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -264,6 +255,7 @@
 
         <h4>Create Courses</h4>
 
+
     </header>
 
     <div class="nav">
@@ -273,6 +265,7 @@
                 </li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Courses</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Create Courses</a></li>
+                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
 
             </ol>
         </nav>

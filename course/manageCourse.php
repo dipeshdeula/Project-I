@@ -167,7 +167,7 @@
                 </li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Courses</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Courses</a></li>
-
+                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
             </ol>
         </nav>
     </div>
