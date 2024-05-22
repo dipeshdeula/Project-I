@@ -159,6 +159,7 @@
                 </li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Exam</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Exam</a></li>
+                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
 
             </ol>
         </nav>
