@@ -30,7 +30,7 @@
  <!-- Navbar at the top with title -->
  <div class="navbar">
         <h2>Student Result Management System | Admin</h2>
-        <a href="#"><i class="bi bi-box-arrow-right"></i> Logout</a> <!-- Logout link in the navbar -->
+        <a href="adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a> <!-- Logout link in the navbar -->
     </div>
  </body>
  </html>
