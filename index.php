@@ -14,7 +14,7 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($data) == 1) {
         header("Location: result/publishResult.php?stdId=$stdId");
     } else {
-        echo "Invalid login credentials";
+        echo "<script>alert('Invalid login credentials or unpublished result');</script>";
     }
 
 }
