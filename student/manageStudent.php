@@ -198,7 +198,7 @@ $data = mysqli_query($conn, $query);
             width: 90%;
             background: #0072ff;
             color: white;
-            padding: 10px 20px;
+            padding: 10px;
             margin: 4px 2px;
             border: none;
             border-radius: 5px;
@@ -206,6 +206,8 @@ $data = mysqli_query($conn, $query);
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 5px;
+            display: flex;
+           justify-content: flex-start;;
 
         }
 
