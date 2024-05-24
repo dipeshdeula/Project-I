@@ -28,17 +28,17 @@ if (isset($_POST['register'])) {
         empty($gender) || empty($phone) || empty($address)
     ) {
         $errors[] = "All form fields must be filled!";
-    } 
+    }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid email format";
     }
 
-    if(strlen($phone) != 10) {
+    if (strlen($phone) != 10) {
         $errors[] = "Phone number must be 10 digits";
     }
-    
-    if(strlen($password) < 6) {
+
+    if (strlen($password) < 6) {
         $errors[] = "Password must be at least 6 characters";
     }
 
@@ -156,14 +156,13 @@ if (isset($_POST['register'])) {
             display: flex;
             flex-direction: row;
             /* Side-by-side elements */
-          
+
         }
 
 
         .main .container {
             height: 30%;
             width: 50%
-            
         }
 
 
@@ -223,19 +222,19 @@ if (isset($_POST['register'])) {
         }
 
         .terms p {
-            position: absolute;
-            bottom:-45px;
+            /* position: absolute; */
+            bottom: -35px;
             margin-left: 20px;
             margin-bottom: 30px;
-           
-            
-           
+
+
+
             /* Center checkbox and text */
         }
 
         /* Button Styling */
-        .input_field   .btn {
-            width:100%;
+        .input_field .btn {
+            width: 100%;
             background: #0072ff;
             /* Blue background */
             color: white;
@@ -247,7 +246,7 @@ if (isset($_POST['register'])) {
             text-transform: uppercase;
         }
 
-        .input_field  .btn:hover {
+        .input_field .btn:hover {
             background: #005bb5;
             /* Darker blue on hover */
         }
@@ -290,7 +289,8 @@ if (isset($_POST['register'])) {
                 </li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-book"></i> Subjects</a></li>
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-wrench"></i>Manage Subjects</a></li>
-                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                <li class="breadcrub-item"><a href="../adminSection/adminLogin.php"><i
+                            class="bi bi-box-arrow-right"></i> Logout</a></li>
 
             </ol>
         </nav>
@@ -329,7 +329,7 @@ if (isset($_POST['register'])) {
                         <input type="password" class="input" name="password">
                     </div>
 
-                  
+
 
                     <div class="input_field">
                         <label>Gender</label>
@@ -354,9 +354,8 @@ if (isset($_POST['register'])) {
                     </div>
 
                     <div class="input_field terms">
-                        <label class="check">
-                            <input type="checkbox" name="terms">
-                            <p>Agree to terms and conditions</p>
+                        <input type="checkbox" name="terms"> <label class="check">Agree to terms and conditions
+
                         </label>
                     </div>
 
