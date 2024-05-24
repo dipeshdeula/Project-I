@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .main .container {
             height: 50%;
-            width: 60%
+            width: 70%
         }
 
         .container {
