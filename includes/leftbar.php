@@ -191,7 +191,7 @@
                 </li>
 
                 <li>
-                    <a href="http://localhost/adminSection/adminChangePassword.php"><i class="fa fa-key"></i> Admin
+                    <a href="http://localhost/student_project/adminSection/adminChangePass.php"><i class="fa fa-key"></i> Admin
                         Change
                         Password</a>
                 </li>
