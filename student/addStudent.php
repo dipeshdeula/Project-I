@@ -247,7 +247,7 @@ if (isset($_POST['register'])) {
         }
 
         .input_field .btn:hover {
-            background: #005bb5;
+            background:red;
             /* Darker blue on hover */
         }
 
