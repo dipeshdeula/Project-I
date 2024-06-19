@@ -1,0 +1,67 @@
+<mxfile host="65bd71144e">
+    <diagram id="o-oBxSsr07MAXwp2DYh-" name="Page-1">
+        <mxGraphModel dx="832" dy="491" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="6" value="" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#0d0c0c;fontFamily=Times New Roman;fontSize=35;fontColor=#000000;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="360" y="225" width="160" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="10" y="260" width="179" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="" style="whiteSpace=wrap;html=1;fillColor=none;strokeColor=#090101;align=center;" vertex="1" parent="7">
+                    <mxGeometry width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;font size=&quot;1&quot; face=&quot;Times New Roman&quot; style=&quot;&quot; color=&quot;#000000&quot;&gt;&lt;b style=&quot;font-size: 35px;&quot;&gt;Admin&lt;/b&gt;&lt;/font&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;container=1;" vertex="1" parent="7" collapsed="1">
+                    <mxGeometry x="10" y="10" width="140" height="60" as="geometry">
+                        <mxRectangle x="39" y="20" width="90" height="40" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="8" value="&lt;font size=&quot;1&quot; face=&quot;Times New Roman&quot; style=&quot;&quot; color=&quot;#000000&quot;&gt;&lt;b style=&quot;font-size: 40px;&quot;&gt;SRMS&lt;/b&gt;&lt;/font&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;container=1;" vertex="1" collapsed="1" parent="1">
+                    <mxGeometry x="370" y="270" width="140" height="50" as="geometry">
+                        <mxRectangle x="400" y="325" width="93" height="50" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="9" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="710" y="260" width="199" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="whiteSpace=wrap;html=1;fillColor=none;strokeColor=#090101;align=center;" vertex="1" parent="9">
+                    <mxGeometry width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="&lt;font size=&quot;1&quot; face=&quot;Times New Roman&quot; style=&quot;&quot; color=&quot;#000000&quot;&gt;&lt;b style=&quot;font-size: 35px;&quot;&gt;Student&lt;/b&gt;&lt;/font&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;container=1;" vertex="1" collapsed="1" parent="9">
+                    <mxGeometry x="5" y="10" width="160" height="60" as="geometry">
+                        <mxRectangle x="39" y="20" width="90" height="40" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="12" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Times New Roman;fontSize=35;fontColor=#000000;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="2">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="301" as="sourcePoint"/>
+                        <mxPoint x="359.9999999999998" y="301" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="200" y="301"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="15" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=35;fontColor=#000000;" edge="1" parent="1" source="10" target="6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;Request for login&lt;/b&gt;&lt;/font&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=35;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="260" width="170" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="&lt;b&gt;Response&lt;/b&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=18;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="235" y="300" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;Request for Result&lt;/b&gt;&lt;/font&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=35;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="530" y="260" width="170" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="&lt;b&gt;Response&lt;/b&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=18;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="560" y="300" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="&lt;b&gt;Level-0 / Context DFD FOR SRMS&lt;/b&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=18;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="295" y="160" width="445" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
