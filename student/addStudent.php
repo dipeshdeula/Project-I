@@ -30,37 +30,37 @@ if (isset($_POST['register'])) {
         $errors[] = "All form fields must be filled!";
     }
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format";
-    }
+    // if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    //     $errors[] = "Invalid email format";
+    // }
 
-    if (strlen($phone) != 10) {
-        $errors[] = "Phone number must be 10 digits";
-    }
+    // if (strlen($phone) != 10) {
+    //     $errors[] = "Phone number must be 10 digits";
+    // }
 
-    if (strlen($password) < 6) {
-        $errors[] = "Password must be at least 6 characters";
-    }
+    // if (strlen($password) < 6) {
+    //     $errors[] = "Password must be at least 6 characters";
+    // }
 
-    if (!preg_match("/^[a-zA-Z ]*$/", $stdname)) {
-        $errors[] = "Only letters and white space allowed in student name";
-    }
+    // if (!preg_match("/^[a-zA-Z ]*$/", $stdname)) {
+    //     $errors[] = "Only letters and white space allowed in student name";
+    // }
 
-    if (!in_array($gender, array('male', 'female', 'other'))) {
-        $errors[] = "Invalid gender selection";
-    }
+    // if (!in_array($gender, array('male', 'female', 'other'))) {
+    //     $errors[] = "Invalid gender selection";
+    // }
 
-    if (!preg_match("/^[0-9]*$/", $phone)) {
-        $errors[] = "Only numbers allowed in phone number";
-    }
+    // if (!preg_match("/^[0-9]*$/", $phone)) {
+    //     $errors[] = "Only numbers allowed in phone number";
+    // }
 
-    if (!preg_match("/^[a-zA-Z0-9 ]*$/", $address)) {
-        $errors[] = "Only letters, numbers and white space allowed in address";
-    }
+    // if (!preg_match("/^[a-zA-Z0-9 ]*$/", $address)) {
+    //     $errors[] = "Only letters, numbers and white space allowed in address";
+    // }
 
-    if (!isset($_POST['terms'])) {
-        $errors[] = "Please agree to terms and conditions";
-    }
+    // if (!isset($_POST['terms'])) {
+    //     $errors[] = "Please agree to terms and conditions";
+    // }
 
     // If there are no errors, insert data into the database
     if (empty($errors)) {
@@ -247,7 +247,7 @@ if (isset($_POST['register'])) {
         }
 
         .input_field .btn:hover {
-            background:red;
+            background: red;
             /* Darker blue on hover */
         }
 
@@ -302,31 +302,36 @@ if (isset($_POST['register'])) {
         </div>
 
         <div class="container">
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="#" method="POST" enctype="multipart/form-data" onsubmit="return validation()">
                 <div class="form">
                     <div class="input_field">
                         <label>Upload Image</label>
-                        <input type="file" name="uploadfile" style="width:100%;">
+                        <input type="file" name="uploadfile" style="width:100%;" id="stdImage">
+                        <span id="stdImageErr" class="text-danger font-weight-bold"></span>
                     </div>
 
                     <div class="input_field">
                         <label>Student Name</label>
-                        <input type="text" class="input" name="stdname">
+                        <input type="text" class="input" name="stdname" id="stdname">
+                        <span id="stdnameErr" class="text-danger font-weight-bold"></span>
                     </div>
 
                     <div class="input_field">
                         <label>Student Id</label>
-                        <input type="text" class="input" name="stdId">
+                        <input type="text" class="input" name="stdId" id="stdId">
+                        <span id="stdIdErr" class="text-danger font-weight-bold"></span>
                     </div>
 
                     <div class="input_field">
                         <label>Email</label>
-                        <input type="text" class="input" name="email">
+                        <input type="text" class="input" name="email" id="email">
+                        <span id="emailErr" class="text-danger font-weight-bold"></span>
                     </div>
 
                     <div class="input_field">
                         <label>Password</label>
-                        <input type="password" class="input" name="password">
+                        <input type="password" class="input" name="password" id="password">
+                        <span id="passwordErr" class="text-danger font-weight-bold"></span>
                     </div>
 
 
@@ -345,7 +350,8 @@ if (isset($_POST['register'])) {
 
                     <div class="input_field">
                         <label>Phone</label>
-                        <input type="text" class="input" name="phone">
+                        <input type="text" class="input" name="phone" id="phone">
+                        <span id="phoneErr" class="text-danger font-weight-bold"></span>
                     </div>
 
                     <div class="input_field">
@@ -366,7 +372,92 @@ if (isset($_POST['register'])) {
             </form>
         </div>
     </div>
+    <script>
+        function validation() {
 
+            var fileInput = document.getElementById('stdImage');
+            var filePath = fileInput.value;
+            var allowedExtensions = /\.(jpg|jpeg|png)$/i;
+            if (!allowedExtensions.exec(filePath)) {
+                document.getElementById('stdImageErr').innerHTML = "Invalid file type. Only JPG, JPEG, and PNG files are allowed.";
+                fileInput.value = ''; // Clear the file input
+                return false; // Prevent form submission
+            } else {
+                // File is valid, clear any error message
+                document.getElementById('stdImageErr').innerHTML = '';
+                
+            }
+            // var stdImage = document.getElementById('stdImage').value;
+            var stdname = document.getElementById('stdname').value;
+            var stdId = document.getElementById('stdId').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var phone = document.getElementById('phone').value;
+
+            var photoCheck = /\.(jpg|png|jpeg)$/i;
+            var stdnameCheck = /^[A-Za-z. ]{3,30}$/;
+            var stdIdCheck = /^[A-za-z0-9]{4,20}/;
+            var emailCheck = /^[A-Za-z0-9]{3,}@[A-Za-z]{3,}[.]{1}[A-za-z.]{2,6}$/;
+            var passwordcheck = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+            var phoneCheck = /^[789][0-9]{10}$/;
+
+
+
+
+            //stdname validation
+            if (stdnameCheck.test(stdname)) {
+                document.getElementById('stdnameErr').innerHTML = " ";
+            }
+            else {
+                document.getElementById('stdnameErr').innerHTML = " ** User name is Invalid **";
+                return false;
+            }
+
+            //stdId validation
+            if (stdIdCheck.test(stdId)) {
+                document.getElementById('stdIdErr').innerHTML = " ";
+
+            }
+            else {
+                document.getElementById('stdIdErr').innerHTML = " ** Invalid stdId it must contain text and number **";
+                return false;
+            }
+
+            //email validation
+
+            if (emailCheck.test(email)) {
+                document.getElementById('emailErr').innerHTML = " ";
+
+            }
+            else {
+                document.getElementById('emailErr').innerHTML = " ** Invalid email Id **";
+                return false;
+            }
+
+            //password validation
+
+            if (passwordcheck.test(password)) {
+                document.getElementById('passwordErr').innerHTML = " ";
+
+            }
+            else {
+                document.getElementById('passwordErr').innerHTML = " ** Invalid Password it must contain at least 8 character with special character and number";
+                return false;
+            }
+
+            //phone validaton
+
+            if (phoneCheck.test(phone)) {
+                document.getElementById('phoneErr').innerHTML = " ";
+
+            }
+            else {
+                document.getElementById('phoneErr').innerHTML = " ** Invalid phone number it must start with 977 or 98 **";
+                return false;
+            }
+
+        }
+    </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
